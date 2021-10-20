@@ -7,12 +7,6 @@ import json
 
 
 mat = scipy.io.loadmat('data/devkit/cars_train_annos.mat')
-matt = scipy.io.loadmat('data/devkit/cars_meta.mat')
-dict = {}
-for key,val in matt.items():
-    print(key,val)
-# get name by doing --> matt['class_names'][label]
-exit(1)
 training_class = mat['annotations']['class']
 training_fname = mat['annotations']['fname']
 training_x1 = mat['annotations']['bbox_x1']
