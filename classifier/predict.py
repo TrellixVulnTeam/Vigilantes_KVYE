@@ -47,7 +47,7 @@ def predict(args):
     if args.model_name == 'vgg19':
         # base_model = vgg19.VGG19(include_top=False, weights=None, input_shape = (224,224,3)) # need specify input_shape
         preprocess_input = vgg19.preprocess_input
-    if args.model_name == 'res152':
+    if args.model_name == 'res':
         #base_model = resnet_v2.ResNet152V2(include_top=False, weights='imagenet', input_shape = (224,224,3))
         preprocess_input = resnet_v2.preprocess_input
 
@@ -70,6 +70,13 @@ def predict(args):
 
     predicted_label_probs = model.predict(test_generator, verbose=1)
     predicted_labels = np.argmax(predicted_label_probs, axis=1)
+    probs = np.max(predicted_label_probs, axis=1)
+    num = 0
+    for prob in probs:
+        print(prob,predicted_labels[num],true_labels[num])
+        num += 1
+    print(predicted_label_probs)
+    print(predicted_labels)
     print('Top 3 Accuracy = ', top_k_accuracy_score(true_labels,predicted_label_probs,k=3))
     # print(confusion_matrix(true_labels, predicted_labels))
     # print(classification_report(true_labels, predicted_labels))

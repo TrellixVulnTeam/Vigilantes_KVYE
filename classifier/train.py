@@ -72,7 +72,7 @@ def init_model(args):
         # this preprocess_input is the default preprocess func for given network, you can change it or implement your own 
         preprocess_input = vgg19.preprocess_input
     if args.model_name == 'res152':
-        base_model = resnet_v2.ResNet152V2(include_top=False, weights='imagenet', input_shape = (224,224,3))
+        base_model = resnet_v2.ResNet50V2(include_top=False, weights='imagenet', input_shape = (224,224,3))
         preprocess_input = resnet_v2.preprocess_input
 
     # initalize training image data generator
@@ -147,10 +147,10 @@ def train(model, train_generator, validation_generator, args):
     validationSteps= validation_generator.samples / args.batch_size
 
     # save the snapshot of the model to local drive
-    pretrain_model_name = 'checkpoints/pretrained_model.{epoch:02d}-{val_loss:.2f}.h5'
+    pretrain_model_name = 'checkpoints/best.h5'
     # visualize the training process
     tensorboard = TensorBoard(log_dir="logs/{}_pretrain_{}".format(args.model_name, time()), histogram_freq=0, write_graph=True)
-    checkpoint = ModelCheckpoint(pretrain_model_name, monitor='val_acc', verbose=1, save_best_only=False, save_weights_only=False, mode='auto', period=1)
+    checkpoint = ModelCheckpoint(pretrain_model_name, monitor='val_accuracy', verbose=1, save_best_only=True, save_weights_only=False, mode='auto', period=1)
     callbacks_list = [checkpoint, tensorboard]
 
     model.fit_generator(
@@ -177,7 +177,7 @@ def fine_tune(model, train_generator, validation_generator, args):
         trainable_layers = 6
     if args.model_name == 'res152':
         print("We're fine-tuning a Resnet")
-        trainable_layers = 30 # My guess
+        trainable_layers = 24 # My guess
 
     for layer in model.layers[:-1*trainable_layers]:
         layer.trainable = False
@@ -187,7 +187,7 @@ def fine_tune(model, train_generator, validation_generator, args):
 
     finetune_model_name = 'final_models/finale.h5'
     tensorboard = TensorBoard(log_dir="logs/{}_finetune_{}".format(args.model_name, time()), histogram_freq=0, write_graph=True)
-    checkpoint = ModelCheckpoint(finetune_model_name, monitor='val_acc', verbose=1, save_best_only=False, save_weights_only=False, mode='auto', period=1)
+    checkpoint = ModelCheckpoint(finetune_model_name, monitor='val_accuracy', verbose=1, save_best_only=True, save_weights_only=False, mode='auto', period=1)
     callbacks_list = [checkpoint, tensorboard]
 
     model.compile(loss="categorical_crossentropy", optimizer=optimizers.gradient_descent_v2.SGD(lr=0.0001, momentum=0.9),metrics=["accuracy"])
@@ -205,7 +205,7 @@ def fine_tune(model, train_generator, validation_generator, args):
 
 if __name__ == "__main__":
     args = parse_args()
-    model = load_model('checkpoints/best_pretrained_res.h5')
+    model = load_model('final_models/finale.h5')
     fakemodel, train_generator, validation_generator = init_model(args)
     #train(model, train_generator, validation_generator, args)
     fine_tune(model, train_generator, validation_generator, args)

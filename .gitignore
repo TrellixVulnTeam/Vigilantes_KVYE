@@ -491,3 +491,18 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Luke's stuff
+.idea/
+checkpoints/
+*.jpg
+logs/
+test/
+train/
+windowsenv/
+.json
+LICENSE
+trainOutput.txt
+final_models/
+
+
