@@ -14,7 +14,6 @@ from keras.preprocessing.image import load_img
 from keras.preprocessing.image import img_to_array
 
 from sklearn.metrics import confusion_matrix, classification_report, accuracy_score, top_k_accuracy_score
-from tqdm import tqdm
 import numpy as np
 import argparse
 import os

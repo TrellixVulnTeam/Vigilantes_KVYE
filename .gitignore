@@ -504,5 +504,6 @@ windowsenv/
 LICENSE
 trainOutput.txt
 final_models/
+node_modules/
 
 
