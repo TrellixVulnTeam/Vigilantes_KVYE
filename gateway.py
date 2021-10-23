@@ -1,5 +1,4 @@
-from predict import predict
-from licence_plate import lpn_predict
+from classifier import predict, licence_plate
 
 labels = {'Car', 'Licence Plate', 'VIN', 'Miscellaneous'}
 
@@ -11,10 +10,10 @@ def task(img, label):
         raise RuntimeError(label, ' is not a valid label')
     if label == 'Car':
         args = '' # TODO
-        top_three = predict(args)
+        top_three = predict.predict(args)
         return top_three
     elif label == 'Licence Plate':
-        lpn = lpn_predict(img)
+        lpn = licence_plate.lpn_predict(img)
         return lpn
     elif label == 'VIN':
         # Same lpn_predict function ?
