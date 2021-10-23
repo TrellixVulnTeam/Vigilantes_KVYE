@@ -1,12 +1,23 @@
 import scipy.io
 import shutil
 import os
-import cv2
-from torchvision import transforms
+#import cv2
+#from torchvision import transforms
 import json
 
 
 mat = scipy.io.loadmat('data/devkit/cars_train_annos.mat')
+labels = scipy.io.loadmat('data/devkit/cars_meta.mat')
+easy_labels = {}
+print(labels['class_names'][0])
+count = 0
+for car in labels['class_names'][0]:
+    easy_labels[count] = labels['class_names'][0][0][0]
+    count += 1
+print(easy_labels)
+with open('easy_labels.json','w') as f:
+    json.dump(easy_labels,f)
+exit(1)
 training_class = mat['annotations']['class']
 training_fname = mat['annotations']['fname']
 training_x1 = mat['annotations']['bbox_x1']
