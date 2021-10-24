@@ -23,6 +23,7 @@ class MainActivity : AppCompatActivity() {
             }
         }.launch(Manifest.permission.ACCESS_FINE_LOCATION)
         view.idgotoPDF.setOnClickListener {
+            print("Headed to pdf activity")
             startActivity(Intent(this, pdfActivity::class.java))
         }
     }
