@@ -17,6 +17,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Paint
+import android.os.Environment.getExternalStorageDirectory
 import android.view.View
 import android.widget.Button
 import androidx.core.app.ActivityCompat
@@ -138,7 +139,10 @@ class pdfActivity : AppCompatActivity() {
 
         // below line is used to set the name of
         // our PDF file and its path.
-        val file = File(Environment.getExternalStorageDirectory(), "report.pdf")
+         val documentDir =
+             Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)
+                 .toString()
+        val file = File(documentDir, "report.pdf")
         try {
             // after creating a file name we will
             // write our PDF file to that location.
