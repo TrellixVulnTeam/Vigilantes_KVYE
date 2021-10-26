@@ -7,6 +7,13 @@ import android.Manifest
 import android.content.Intent
 import android.view.View
 import edu.umich.Vigilantes.databinding.ActivityMainBinding
+import android.icu.text.SimpleDateFormat
+import android.widget.TextView
+import java.util.Date;
+
+
+//import java.text.SimpleDateFormat;
+//import java.util.Date;
 
 class MainActivity : AppCompatActivity() {
     private lateinit var view: ActivityMainBinding
@@ -15,13 +22,22 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         view = ActivityMainBinding.inflate(layoutInflater)
         setContentView(R.layout.activity_main)
+        val textView = findViewById<TextView>(R.id.date)
+        val sdf = SimpleDateFormat("yyyy.MM.dd G 'at' HH:mm:ss z")
+        val currentDateandTime: String = sdf.format(Date())
+        textView.text = currentDateandTime
 
-        registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
-            if (!granted) {
-                toast("Fine location access denied", false)
-                finish()
+        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { results ->
+            results.forEach {
+                if (!it.value) {
+                    toast("${it.key} access denied")
+                    finish()
+                }
             }
-        }.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+        }.launch(arrayOf(
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.CAMERA,
+            Manifest.permission.READ_EXTERNAL_STORAGE))
         view.idgotoPDF.setOnClickListener {
             print("Headed to pdf activity")
             startActivity(Intent(this, pdfActivity::class.java))
