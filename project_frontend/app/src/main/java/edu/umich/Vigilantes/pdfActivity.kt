@@ -27,6 +27,8 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import android.util.Log
+
+
 class pdfActivity : AppCompatActivity() {
     private lateinit var view: ActivityPdfBinding
 
@@ -70,78 +72,80 @@ class pdfActivity : AppCompatActivity() {
     fun buttonPDF(view: View) = generatePDF()
 
 
-     fun generatePDF() {
-        // creating an object variable
-        // for our PDF document.
+    fun generatePDF() {
+        // Create PDF
         val pdfDocument = PdfDocument()
+        val carReportTemplate =
+            mutableListOf(mapOf("Name" to "Subaru", "LicensePlate" to "1234 ABC"),mapOf("Name" to "Hummer", "LicensePlate" to "123 ABC"))
 
-        // two variables for paint "paint" is used
-        // for drawing shapes and we will use "title"
-        // for adding text in our PDF file.
         val paint = Paint()
-        val title = Paint()
+        val title = Paint() // for title
+        val report = Paint() // should be same for all reports
 
-        // we are adding page info to our PDF file
-        // in which we will be passing our pageWidth,
-        // pageHeight and number of pages and after that
-        // we are calling it to create our PDF.
-        val mypageInfo = PageInfo.Builder(pagewidth, pageHeight, 1).create()
+        // create title page
+        val titlePageInfo = PageInfo.Builder(pagewidth, pageHeight, 1).create()
+
+
 
         // below line is used for setting
         // start page for our PDF file.
-        val myPage = pdfDocument.startPage(mypageInfo)
+        val titlePage = pdfDocument.startPage(titlePageInfo)
 
         // creating a variable for canvas
         // from our page of PDF.
-        val canvas = myPage.canvas
+        val canvas = titlePage.canvas
 
-        // below line is used to draw our image on our PDF file.
-        // the first parameter of our drawbitmap method is
-        // our bitmap
-        // second parameter is position from left
-        // third parameter is position from top and last
-        // one is our variable for paint.
-        canvas.drawBitmap(scaledbmp!!, 56f, 40f, paint)
+        //canvas.drawBitmap(scaledbmp!!, 56f, 40f, paint) // this is from GFG, used to make an image
 
         // below line is used for adding typeface for
         // our text which we will be adding in our PDF file.
         title.typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
 
+
         // below line is used for setting text size
         // which we will be displaying in our PDF file.
         title.textSize = 15f
 
+
         // below line is sued for setting color
         // of our text inside our PDF file.
-        title.color = ContextCompat.getColor(this, R.color.purple_200)
+        title.color = ContextCompat.getColor(this, R.color.black)
 
-        // below line is used to draw text in our PDF file.
-        // the first parameter is our text, second parameter
-        // is position from start, third parameter is position from top
-        // and then we are passing our variable of paint which is title.
-        canvas.drawText("WE'RE CODING PROFESSIONALS", 209f, 100f, title)
-        canvas.drawText("CAR", 209f, 80f, title)
-
-        // similarly we are creating another text and in this
-        // we are aligning this text to center of our PDF file.
+        val dateTime = "December 12, 2021"
+        val location = "Ann Arbor, MI"
+        canvas.drawText(dateTime, 56f, 100f, title)
+        canvas.drawText(location, 56f, 80f, title)
         title.typeface = Typeface.defaultFromStyle(Typeface.NORMAL)
-        title.color = ContextCompat.getColor(this, R.color.purple_200)
-        title.textSize = 15f
-
-        // below line is used for setting
-        // our text to center of PDF.
+        title.textSize = 18f
         title.textAlign = Paint.Align.CENTER
-        canvas.drawText("This is sample document which we have created.", 396f, 560f, title)
+        canvas.drawText("CAR REPORT", 396f, 560f, title)
+        pdfDocument.finishPage(titlePage)
 
-        // after adding all attributes to our
-        // PDF file we will be finishing our page.
-        pdfDocument.finishPage(myPage)
+        val pages = mutableListOf<PdfDocument.PageInfo>()
+        var number = 2
+         // initialize page of reports
+        for (car in carReportTemplate){
+            pages.add(PageInfo.Builder(pagewidth, pageHeight, number).create())
+            number += 1
+        }
+        report.typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
+        report.textSize = 15f
+        report.color = ContextCompat.getColor(this, R.color.black)
+        var num = 0
+        for(page in pages){
+            val startedPage = pdfDocument.startPage(page)
+            val reportCanvas = startedPage.canvas
+            carReportTemplate[num]["Name"]?.let { reportCanvas.drawText(it,40f, 80f, report) }
+            carReportTemplate[num]["LicensePlate"]?.let { reportCanvas.drawText(it,40f, 120f, report) }
+            num += 1
+            pdfDocument.finishPage(startedPage)
+         }
 
         // below line is used to set the name of
         // our PDF file and its path.
-         val documentDir =
-             Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)
-                 .toString()
+        val documentDir =
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)
+                .toString()
         val file = File(documentDir, "report.pdf")
         try {
             // after creating a file name we will
