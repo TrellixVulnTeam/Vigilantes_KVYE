@@ -5,6 +5,8 @@ import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
 import android.Manifest
 import android.content.Intent
+import android.view.View
+import edu.umich.Vigilantes.databinding.ActivityMainBinding
 import android.icu.text.SimpleDateFormat
 import android.widget.Button
 import android.widget.TextView
@@ -15,11 +17,11 @@ import java.util.Date;
 //import java.util.Date;
 
 class MainActivity : AppCompatActivity() {
+    private lateinit var view: ActivityMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        setContentView(R.layout.activity_main)
-
+        view = ActivityMainBinding.inflate(layoutInflater)
         setContentView(R.layout.activity_main)
         val textView = findViewById<TextView>(R.id.date)
         val sdf = SimpleDateFormat("yyyy.MM.dd G 'at' HH:mm:ss z")
@@ -45,6 +47,11 @@ class MainActivity : AppCompatActivity() {
         reportsButton.setOnClickListener {
             val intent = Intent(this, pastReports::class.java)
             startActivity(intent)
+        view.idgotoPDF.setOnClickListener {
+            print("Headed to pdf activity")
+            startActivity(Intent(this, pdfActivity::class.java))
         }
     }
+
+    fun genPDF(view: View?) = startActivity(Intent(this, pdfActivity::class.java))
 }
