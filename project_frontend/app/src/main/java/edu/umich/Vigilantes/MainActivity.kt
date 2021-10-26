@@ -4,7 +4,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
 import android.Manifest
+import android.content.Intent
 import android.icu.text.SimpleDateFormat
+import android.widget.Button
 import android.widget.TextView
 import java.util.Date;
 
@@ -35,5 +37,14 @@ class MainActivity : AppCompatActivity() {
             Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.CAMERA,
             Manifest.permission.READ_EXTERNAL_STORAGE))
+
+        //Find past reports button
+        var reportsButton = findViewById<Button>(R.id.pastReportButton)
+
+        //Listener for past reports click
+        reportsButton.setOnClickListener {
+            val intent = Intent(this, pastReports::class.java)
+            startActivity(intent)
+        }
     }
 }
