@@ -10,32 +10,86 @@
         android:id="@+id/date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="30sp"
+        android:textAlignment="viewStart"
+        android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.905"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/postButton"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.956" />
+
+    <Button
+        android:id="@+id/addLicensePlateButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
+        android:width="360dp"
+        android:height="100dp"
         android:clickable="true"
-        android:contentDescription="@string/generate_pdf"
-        android:onClick="genPDF"
+        android:contentDescription="@string/addLicensePlate"
+        android:text="@string/addLicensePlate"
         app:backgroundTint="#FFC107"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@android:drawable/ic_input_add" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+        <!-- app:srcCompat="@android:drawable/ic_input_add"-->
+
+    <Button
+        android:id="@+id/addCarButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="130dp"
+        android:width="360dp"
+        android:height="100dp"
+        android:clickable="true"
+        android:contentDescription="@string/addCar"
+        android:text="@string/addCar"
+        app:backgroundTint="#FFC107"
+        app:layout_constraintStart_toStartOf="@id/addLicensePlateButton"
+        app:layout_constraintTop_toTopOf="@id/addLicensePlateButton" />
+
+    <Button
+        android:id="@+id/addVinNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="130dp"
+        android:width="360dp"
+        android:height="100dp"
+        android:clickable="true"
+        android:contentDescription="@string/addVin"
+        android:text="@string/addVin"
+        app:backgroundTint="#FFC107"
+        app:layout_constraintStart_toStartOf="@id/addCarButton"
+        app:layout_constraintTop_toTopOf="@id/addCarButton" />
+
+    <Button
+        android:id="@+id/getPastReports"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="130dp"
+        android:width="360dp"
+        android:height="100dp"
+        android:clickable="true"
+        android:contentDescription="@string/getPastReports"
+        android:text="@string/getPastReports"
+        app:backgroundTint="#FFC107"
+        app:layout_constraintStart_toStartOf="@id/addVinNumber"
+        app:layout_constraintTop_toTopOf="@id/addVinNumber" />
+
     <Button
         android:id="@+id/idgotoPDF"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:text="Generate PDF"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="16dp"
         android:onClick="genPDF"
-        app:srcCompat="@drawable/ic_pdf_generate"
-        />
+        android:text="Generate PDF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/ic_pdf_generate" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
