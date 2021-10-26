@@ -24,11 +24,16 @@ class MainActivity : AppCompatActivity() {
         val currentDateandTime: String = sdf.format(Date())
         textView.text = currentDateandTime
 
-        registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
-            if (!granted) {
-                toast("Fine location access denied", false)
-                finish()
+        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { results ->
+            results.forEach {
+                if (!it.value) {
+                    toast("${it.key} access denied")
+                    finish()
+                }
             }
-        }.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+        }.launch(arrayOf(
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.CAMERA,
+            Manifest.permission.READ_EXTERNAL_STORAGE))
     }
 }
