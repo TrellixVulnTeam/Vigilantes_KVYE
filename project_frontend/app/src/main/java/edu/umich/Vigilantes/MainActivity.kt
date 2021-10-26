@@ -41,12 +41,13 @@ class MainActivity : AppCompatActivity() {
             Manifest.permission.READ_EXTERNAL_STORAGE))
 
         //Find past reports button
-        var reportsButton = findViewById<Button>(R.id.pastReportButton)
+        var reportsButton = findViewById<Button>(R.id.getPastReports)
 
         //Listener for past reports click
         reportsButton.setOnClickListener {
             val intent = Intent(this, pastReports::class.java)
             startActivity(intent)
+        }
         view.idgotoPDF.setOnClickListener {
             print("Headed to pdf activity")
             startActivity(Intent(this, pdfActivity::class.java))

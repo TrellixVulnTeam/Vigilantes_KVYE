@@ -28,7 +28,7 @@ import java.io.FileOutputStream
 import java.io.IOException
 import android.util.Log
 
-
+// A lot of the permission code came from Geeks for Geeks
 class pdfActivity : AppCompatActivity() {
     private lateinit var view: ActivityPdfBinding
 
@@ -55,9 +55,7 @@ class pdfActivity : AppCompatActivity() {
 
         // below code is used for
         // checking our permissions.
-        if (checkPermission()) {
-            Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show()
-        } else {
+        if (!checkPermission()) {
             requestPermission()
         }
         view.idBtnGeneratePDF.setOnClickListener { // calling method to
@@ -148,23 +146,16 @@ class pdfActivity : AppCompatActivity() {
                 .toString()
         val file = File(documentDir, "report.pdf")
         try {
-            // after creating a file name we will
-            // write our PDF file to that location.
+            // Try writing pdf file to documents on phone
             pdfDocument.writeTo(FileOutputStream(file))
-
-            // below line is to print toast message
-            // on completion of PDF generation.
             Toast.makeText(this@pdfActivity, "PDF file generated successfully.", Toast.LENGTH_SHORT)
                 .show()
         } catch (e: IOException) {
-            // below line is used
-            // to handle error
             e.printStackTrace()
-            Toast.makeText(this@pdfActivity, "Bummer. It didn't work", Toast.LENGTH_SHORT)
+            Toast.makeText(this@pdfActivity, "Error generating PDF", Toast.LENGTH_SHORT)
                 .show()
         }
-        // after storing our pdf to that
-        // location we are closing our PDF file.
+        // Close the document
         pdfDocument.close()
     }
 

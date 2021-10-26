@@ -93,19 +93,20 @@
         app:srcCompat="@drawable/ic_pdf_generate" />
 
 
-    <Button
+    <!--Button
         android:id="@+id/pastReportButton"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="96dp"
         android:text="PAST REPORTS"
         android:textSize="24sp"
 
-        app:layout_constraintWidth_percent="0.9"
-        app:layout_constraintHeight_percent="0.1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHeight_percent="0.1"
+        app:layout_constraintHorizontal_bias="0.634"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintWidth_percent="0.9" /-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
