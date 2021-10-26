@@ -47,6 +47,8 @@ class MainActivity : AppCompatActivity() {
         reportsButton.setOnClickListener {
             val intent = Intent(this, pastReports::class.java)
             startActivity(intent)
+        }
+
         view.idgotoPDF.setOnClickListener {
             print("Headed to pdf activity")
             startActivity(Intent(this, pdfActivity::class.java))
