@@ -28,7 +28,10 @@ import java.io.FileOutputStream
 import java.io.IOException
 import android.util.Log
 
-// A lot of the permission code came from Geeks for Geeks
+// A lot of the this activity was adapted from Geeks for Geeks
+// Found at https://www.geeksforgeeks.org/how-to-generate-a-pdf-file-in-android-app/
+// Credit to the author at https://auth.geeksforgeeks.org/user/chaitanyamunje/profile
+
 class pdfActivity : AppCompatActivity() {
     private lateinit var view: ActivityPdfBinding
 
@@ -49,18 +52,13 @@ class pdfActivity : AppCompatActivity() {
         view = ActivityPdfBinding.inflate(layoutInflater)
         setContentView(R.layout.activity_pdf)
 
-        // initializing our variables.
+        // initializing pdf button
         generatePDFbtn = findViewById(R.id.idBtnGeneratePDF)
-        scaledbmp = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(resources, R.drawable.ic_action_name), 140, 140, false)
 
-        // below code is used for
-        // checking our permissions.
         if (!checkPermission()) {
             requestPermission()
         }
-        view.idBtnGeneratePDF.setOnClickListener { // calling method to
-            // generate our PDF file.
-
+        view.idBtnGeneratePDF.setOnClickListener { // genPDF
             generatePDF()
         }
 
@@ -169,7 +167,6 @@ class pdfActivity : AppCompatActivity() {
     }
 
     private fun requestPermission() {
-        // requesting permissions if not provided.
         ActivityCompat.requestPermissions(
             this,
             arrayOf(permission.WRITE_EXTERNAL_STORAGE, permission.READ_EXTERNAL_STORAGE),

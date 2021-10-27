@@ -1,5 +1,5 @@
 from keras.preprocessing import image
-from keras.applications import vgg16
+from keras.applications import efficientnet
 from keras.applications import vgg19
 from keras.applications import resnet_v2
 from keras.applications import inception_v3
@@ -49,13 +49,14 @@ def predict(args):
     if args.model_name == 'res':
         #base_model = resnet_v2.ResNet152V2(include_top=False, weights='imagenet', input_shape = (224,224,3))
         preprocess_input = resnet_v2.preprocess_input
+    if args.model_name == 'efficient':
+        preprocess_input = efficientnet.preprocess_input
 
     # load test data
     test_datagen = image.ImageDataGenerator(
         preprocessing_function=preprocess_input)
     test_generator = test_datagen.flow_from_directory(
         args.test_dir,
-        target_size = (args.img_size, args.img_size),
         batch_size = 1,
         shuffle = False,
         class_mode = None)  # 'categorical')
@@ -65,7 +66,7 @@ def predict(args):
     true_labels = test_generator.classes
 
     # load model
-    model = load_model(args.model_weight_name)
+    model = load_model('final_models/modelo')
 
     predicted_label_probs = model.predict(test_generator, verbose=1)
     predicted_labels = np.argmax(predicted_label_probs, axis=1)

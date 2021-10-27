@@ -24,10 +24,10 @@ training_x1 = mat['annotations']['bbox_x1']
 training_y1 = mat['annotations']['bbox_y1']
 training_x2 = mat['annotations']['bbox_x2']
 training_y2 = mat['annotations']['bbox_y2']
-print(training_x1[0][0][0][0])
+"""print(training_x1[0][0][0][0])
 print(training_x2[0][0][0][0])
 print(training_y1[0][0][0][0])
-print(training_y2[0][0][0][0])
+print(training_y2[0][0][0][0])"""
 mat = scipy.io.loadmat('data/devkit/cars_test_annos_withlabels.mat')
 testing_class = mat['annotations']['class']
 testing_fname = mat['annotations']['fname']
@@ -43,8 +43,7 @@ for idx, cls in enumerate(training_class[0]):
     cls = cls[0][0]
     fname = training_fname[0][idx][0]
     img = cv2.imread(training_source+str(fname))
-    img = img[training_y1[0][idx][0][0]:training_y2[0][idx][0][0],training_x1[0][idx][0][0]:training_x2[0][idx][0][0]]
-    img = cv2.resize(img,[224,224])
+    img = img[training_y1[0][idx][0][0]:training_y2[0][idx][0][0], training_x1[0][idx][0][0]:training_x2[0][idx][0][0]]
     output_path = os.path.join(training_output, str(cls))
     output_path = os.path.abspath(output_path)
     if not os.path.exists(output_path):
