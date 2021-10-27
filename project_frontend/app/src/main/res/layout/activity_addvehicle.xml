@@ -8,11 +8,12 @@
     android:layout_height="match_parent">
 
     <ImageView
-        android:id="@+id/addCarImageButton"
+        android:id="@+id/addPlateImageButton"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="16dp"
         android:clickable="true"
+        android:background="@color/black"
 
         app:backgroundTint="#FFC107"
         app:layout_constraintEnd_toEndOf="parent"
@@ -22,19 +23,18 @@
         app:layout_constraintWidth_percent="0.9" />
 
     <ImageView
-        android:id="@+id/addPlateImageButton"
+        android:id="@+id/addCarImageButton"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="16dp"
         android:clickable="true"
-        android:text="Take Car Plate Photo"
-        android:textSize="32sp"
+        android:background="@color/black"
 
         app:backgroundTint="#FFC107"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHeight_percent="0.25"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/addCarImageButton"
+        app:layout_constraintTop_toBottomOf="@id/addPlateImageButton"
         app:layout_constraintWidth_percent="0.9" />
 
     <ImageView
@@ -43,14 +43,13 @@
         android:layout_height="0dp"
         android:layout_marginTop="16dp"
         android:clickable="true"
-        android:text="Take VIN Photo"
-        android:textSize="32sp"
+        android:background="@color/black"
 
         app:backgroundTint="#FFC107"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHeight_percent="0.25"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/addPlateImageButton"
+        app:layout_constraintTop_toBottomOf="@id/addCarImageButton"
         app:layout_constraintWidth_percent="0.9" />
 
     <Button

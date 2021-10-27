@@ -15,8 +15,11 @@ import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.isNotEmpty
 
 class addVehicle : AppCompatActivity() {
+    private var popupExists = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -30,13 +33,22 @@ class addVehicle : AppCompatActivity() {
 
         //Listener for clicks
         carButton.setOnClickListener {
-            createPopUp(1)
+            if(!popupExists) {
+                createPopUp(1)
+                popupExists = true
+            }
         }
         plateButton.setOnClickListener {
-            createPopUp(2)
+            if(!popupExists) {
+                createPopUp(2)
+                popupExists = true
+            }
         }
         vinButton.setOnClickListener {
-            createPopUp(3)
+            if(!popupExists) {
+                createPopUp(3)
+                popupExists = true
+            }
         }
         continueButton.setOnClickListener {
 
@@ -55,7 +67,7 @@ class addVehicle : AppCompatActivity() {
         popupWindow.elevation = 10.0F
 
         val slideIn = Slide()
-        slideIn.slideEdge = Gravity.TOP
+        slideIn.slideEdge = Gravity.START
         popupWindow.exitTransition = slideIn
 
         val slideOut = Slide()
@@ -81,6 +93,7 @@ class addVehicle : AppCompatActivity() {
             }
             //Dismiss popup window after
             popupWindow.dismiss()
+            popupExists = false
         }
         //Gallery option chosen
         galleryOpt.setOnClickListener{
@@ -99,6 +112,7 @@ class addVehicle : AppCompatActivity() {
             }
             //Dismiss popup window after
             popupWindow.dismiss()
+            popupExists = false
         }
 
         //Display popup window
