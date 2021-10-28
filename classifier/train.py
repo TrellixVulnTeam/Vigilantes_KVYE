@@ -85,7 +85,7 @@ def init_model(args):
     # initalize training image data generator
     # you can also specify data augmentation here
     train_datagen = image.ImageDataGenerator(
-        #preprocessing_function=preprocess_input,
+        preprocessing_function=preprocess_input,
         # rotation_range=30,
         # shear_range=0.1,
         # zoom_range=0.1,
@@ -95,19 +95,19 @@ def init_model(args):
 
     # initalize validation image data generator
     # you can also specify data augmentation here
-    validation_datagen = image.ImageDataGenerator()
+    validation_datagen = image.ImageDataGenerator(
+        preprocessing_function=preprocess_input
+    )
 
     train_generator = train_datagen.flow_from_directory(
         args.train_dir,
         batch_size=batch_size,
         class_mode='categorical',
-        target_size=(224,224),
         shuffle=True)
 
     validation_generator = validation_datagen.flow_from_directory(
         args.val_dir,
         batch_size=batch_size,
-        target_size=(224, 224),
         class_mode='categorical')
 
     # fix base_model layers
@@ -209,7 +209,7 @@ def fine_tune(model, train_generator, validation_generator, args):
     model.fit_generator(
         train_generator,
         steps_per_epoch=stepsPerEpoch,
-        epochs=args.epochs + 50,
+        epochs=args.epochs + 30,
         callbacks = callbacks_list,
         validation_data = validation_generator,
         validation_steps=validationSteps)
