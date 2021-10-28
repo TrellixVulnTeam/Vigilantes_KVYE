@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity() {
 
         //Find past reports button
         var reportsButton = findViewById<Button>(R.id.getPastReports)
-
+        var carButton = findViewById<Button>(R.id.addCarButton)
         //Listener for past reports click
         reportsButton.setOnClickListener {
             val intent = Intent(this, pastReports::class.java)
@@ -51,6 +51,9 @@ class MainActivity : AppCompatActivity() {
         view.idgotoPDF.setOnClickListener {
             print("Headed to pdf activity")
             startActivity(Intent(this, pdfActivity::class.java))
+        }
+        carButton.setOnClickListener {
+            startActivity(Intent(this, addVehicle::class.java))
         }
     }
 
