@@ -8,6 +8,7 @@ import android.content.Intent
 import android.view.View
 import edu.umich.Vigilantes.databinding.ActivityMainBinding
 import android.icu.text.SimpleDateFormat
+import android.util.Log
 import android.widget.Button
 import android.widget.TextView
 import java.util.Date;
@@ -21,6 +22,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Log.d("ONCREATE", "onCreate for MainActivity")
         view = ActivityMainBinding.inflate(layoutInflater)
         setContentView(R.layout.activity_main)
         val textView = findViewById<TextView>(R.id.date)

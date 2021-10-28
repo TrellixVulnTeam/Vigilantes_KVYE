@@ -1,30 +1,74 @@
 package edu.umich.Vigilantes
 
 import android.app.Activity
+import android.content.ComponentName
+import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.provider.MediaStore
 import android.transition.Slide
 import android.transition.TransitionManager
+import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.widget.*
+import androidx.activity.ComponentActivity
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isNotEmpty
+import edu.umich.Vigilantes.databinding.ActivityAddvehicleBinding
 
 class addVehicle : AppCompatActivity() {
+    private lateinit var view: ActivityAddvehicleBinding
+    private lateinit var forCropResult: ActivityResultLauncher<Intent>
+    private lateinit var takePicture: ActivityResultLauncher<Uri>
     private var popupExists = false
+    private var imageUri: Uri? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        Log.d("ONCREATE", "onCreate for addVehicle")
         setContentView(R.layout.activity_addvehicle)
 
+        view = ActivityAddvehicleBinding.inflate(layoutInflater)
+
+        forCropResult =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                if (result.resultCode == Activity.RESULT_OK) {
+                    result.data?.data.let {
+                        imageUri?.run {
+                            if (!toString().contains("ORIGINAL")) {
+                                // delete uncropped photo taken for posting
+                                contentResolver.delete(this, null, null)
+                            }
+                        }
+                        imageUri = it
+                        imageUri?.let { view.previewCarImage.display(it) } // TODO: Generalize
+                    }
+                } else {
+                    Log.d("Crop", result.resultCode.toString())
+                }
+            }
+        if (!packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
+            toast("Device has no camera!")
+            return
+        }
+        val cropIntent = initCropIntent()
+        takePicture = registerForActivityResult(ActivityResultContracts.TakePicture())
+        { success ->
+            if (success) {
+                doCrop(cropIntent)
+            } else {
+                Log.d("TakePicture", "failed")
+            }
+        } // CHECK
         //Find buttons
         var carButton = findViewById<ImageView>(R.id.addCarImageButton)
         var plateButton = findViewById<ImageView>(R.id.addPlateImageButton)
@@ -33,6 +77,7 @@ class addVehicle : AppCompatActivity() {
 
         //Listener for clicks
         carButton.setOnClickListener {
+            Log.d("CARBUTTON", "carButton clicked")
             if(!popupExists) {
                 createPopUp(1)
                 popupExists = true
@@ -55,8 +100,22 @@ class addVehicle : AppCompatActivity() {
         }
     }
 
+    private fun mediaStoreAlloc(mediaType: String): Uri? {
+        val values = ContentValues()
+        values.put(MediaStore.MediaColumns.MIME_TYPE, mediaType)
+        values.put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_PICTURES)
+
+        return contentResolver.insert(
+            if (mediaType.contains("video"))
+                MediaStore.Video.Media.EXTERNAL_CONTENT_URI
+            else
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+            values)
+    }
+
     private fun createPopUp(picType : Int) {
         //Initialize popup window
+        Log.d("createPopUp", "Calling createPopUp")
         val inflater:LayoutInflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val view = inflater.inflate(R.layout.photo_popup_box, null)
         val popupWindow = PopupWindow(
@@ -79,7 +138,9 @@ class addVehicle : AppCompatActivity() {
         //Camera option chosen
         cameraOpt.setOnClickListener{
             //Implement camera
-
+            Log.d("CAMERA", "Camera chosen")
+            imageUri = mediaStoreAlloc("image/jpeg") // Do something here?
+            takePicture.launch(imageUri)
             when(picType) {
                 1 -> {
 
@@ -119,4 +180,44 @@ class addVehicle : AppCompatActivity() {
         var root_layout = findViewById<ConstraintLayout>(R.id.root_layout)
         popupWindow.showAtLocation(root_layout, Gravity.CENTER, 0, 0)
     }
+
+    private fun initCropIntent(): Intent? {
+        // Is there any published Activity on device to do image cropping?
+        val intent = Intent("com.android.camera.action.CROP")
+        intent.type = "image/*"
+        val listofCroppers = packageManager.queryIntentActivities(intent, 0)
+        // No image cropping Activity published
+        if (listofCroppers.size == 0) {
+            toast("Device does not support image cropping")
+            return null
+        }
+
+        intent.component = ComponentName(
+            listofCroppers[0].activityInfo.packageName,
+            listofCroppers[0].activityInfo.name)
+
+        // create a square crop box:
+        intent.putExtra("outputX", 500)
+            .putExtra("outputY", 500)
+            .putExtra("aspectX", 1)
+            .putExtra("aspectY", 1)
+            // enable zoom and crop
+            .putExtra("scale", true)
+            .putExtra("crop", true)
+            .putExtra("return-data", true)
+
+        return intent
+    } // From EECS 441 Lab 1
+
+    private fun doCrop(intent: Intent?) {
+        intent ?: run {
+            imageUri?.let { view.previewCarImage.display(it) }
+            return
+        }
+
+        imageUri?.let {
+            intent.data = it
+            forCropResult.launch(intent)
+        }
+    } // Ditto
 }

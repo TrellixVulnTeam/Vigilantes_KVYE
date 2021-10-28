@@ -70,14 +70,17 @@ def lpn_predict(img=None):
     kernel = np.ones((2, 1), np.uint8)
     img = cv2.erode(gray, kernel, iterations=1)
     img = cv2.dilate(img, kernel, iterations=1)
-    
+    img = cv2.bitwise_not(img)
+    cv2.imwrite('testing.png', img)
     plate = pytesseract.image_to_string(img, lang='eng', config=("txt "+config_str))
-    plate = plate.replace(" ", "")
-    plate = plate.lower()
-    for i in range(len(states)):
-        states[i] = states[i].lower()
-    while plate.find("\n\n") != -1:
-        plate = plate.replace("\n\n", "\n")
+    print(plate)
+    # plate = plate.replace(" ", "")
+    # print(plate)
+    # plate = plate.lower()
+    # for i in range(len(states)):
+    #     states[i] = states[i].lower()
+    # while plate.find("\n\n") != -1:
+    #     plate = plate.replace("\n\n", "\n")
 
     words = plate.split('\n')
     print(words)
@@ -94,4 +97,4 @@ def lpn_predict(img=None):
     
 
 if __name__ == '__main__':
-    lpn_predict()
+    lpn_predict(cv2.imread('test_michigan.png'))
