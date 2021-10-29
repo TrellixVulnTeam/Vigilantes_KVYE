@@ -42,6 +42,7 @@ class addVehicle : AppCompatActivity() {
         forCropResult =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                 if (result.resultCode == Activity.RESULT_OK) {
+                    Log.d("CROPPING", "Cropping")
                     result.data?.data.let {
                         imageUri?.run {
                             if (!toString().contains("ORIGINAL")) {
