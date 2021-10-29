@@ -71,5 +71,5 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    //fun genPDF(view: View?) = startActivity(Intent(this, pdfActivity::class.java))
+    fun genPDF(view: View?) = startActivity(Intent(this, pdfActivity::class.java))
 }
