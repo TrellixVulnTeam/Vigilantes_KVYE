@@ -18,7 +18,7 @@ from time import time
 from numpy.random import seed
 seed(42) # keras seed fixing import
 from tensorflow import random
-seed(42) # tensorflow seed fixing
+random.set_seed(1)
 import numpy
 
 from skimage import exposure, color
@@ -78,7 +78,7 @@ def init_model(args):
         base_model = vgg19.VGG19(include_top=False, weights='imagenet', input_shape = (224,224,3))
         preprocess_input = vgg19.preprocess_input
     if args.model_name == 'res':
-        base_model = resnet_v2.ResNet50V2(include_top=False, weights='imagenet')
+        base_model = resnet_v2.ResNet50V2(include_top=False, weights='imagenet', input_shape = (224,224,3))
         preprocess_input = resnet_v2.preprocess_input
     if args.model_name == 'efficient':
         base_model = efficientnet.EfficientNetB0(include_top=False, weights='imagenet')
@@ -106,12 +106,14 @@ def init_model(args):
 
     train_generator = train_datagen.flow_from_directory(
         args.train_dir,
+        target_size=(224,224),
         batch_size=batch_size,
         class_mode='categorical',
         shuffle=True)
 
     validation_generator = validation_datagen.flow_from_directory(
         args.val_dir,
+        target_size=(224, 224),
         batch_size=batch_size,
         class_mode='categorical')
 
@@ -219,7 +221,7 @@ def fine_tune(model, train_generator, validation_generator, args):
     model.fit_generator(
         train_generator,
         steps_per_epoch=stepsPerEpoch,
-        epochs=args.epochs + 50,
+        epochs=args.epochs + 40,
         callbacks = callbacks_list,
         validation_data = validation_generator,
         validation_steps=validationSteps)

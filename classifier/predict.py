@@ -21,7 +21,7 @@ import glob
 from numpy.random import seed
 seed(42) # keras seed fixing import
 from tensorflow import random
-seed(42) # tensorflow seed fixing
+random.set_seed(1)
 
 from keras import backend as K
 K.set_image_data_format('channels_last')
@@ -62,6 +62,7 @@ def predict(args):
     test_generator = test_datagen.flow_from_directory(
         args.test_dir,
         batch_size = 1,
+        target_size=(224,224),
         shuffle = False,
         class_mode = None)  # 'categorical')
 
