@@ -48,6 +48,8 @@ class MainActivity : AppCompatActivity() {
         var vinButton = findViewById<Button>(R.id.addVinNumberButton)
         var reportsButton = findViewById<Button>(R.id.getPastReports)
 
+        var debugButton = findViewById<Button>(R.id.debugButton)
+
         //Listener button clicks
         carButton.setOnClickListener {
             val intent = Intent(this, addVehicle::class.java)
@@ -63,6 +65,10 @@ class MainActivity : AppCompatActivity() {
         }
         reportsButton.setOnClickListener {
             val intent = Intent(this, pastReports::class.java)
+            startActivity(intent)
+        }
+        debugButton.setOnClickListener {
+            val intent = Intent(this, addParticipantForm::class.java)   //Change view to view being tested
             startActivity(intent)
         }
 
