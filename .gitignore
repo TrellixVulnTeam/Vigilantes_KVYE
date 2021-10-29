@@ -496,6 +496,8 @@ dmypy.json
 .idea/
 checkpoints/
 *.jpg
+*.pth
+*train_config.json
 logs/
 test/
 train/
@@ -503,6 +505,5 @@ windowsenv/
 trainOutput.txt
 final_models/
 node_modules/
-model_best.pth
 
 
