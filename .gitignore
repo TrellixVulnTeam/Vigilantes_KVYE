@@ -500,9 +500,8 @@ logs/
 test/
 train/
 windowsenv/
-.json
-LICENSE
 trainOutput.txt
 final_models/
+node_modules/
 
 

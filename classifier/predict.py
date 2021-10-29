@@ -14,7 +14,6 @@ from keras.preprocessing.image import load_img
 from keras.preprocessing.image import img_to_array
 
 from sklearn.metrics import confusion_matrix, classification_report, accuracy_score, top_k_accuracy_score
-from tqdm import tqdm
 import numpy as np
 import argparse
 import os
@@ -77,10 +76,12 @@ def predict(args):
         num += 1
     print(predicted_label_probs)
     print(predicted_labels)
-    print('Top 3 Accuracy = ', top_k_accuracy_score(true_labels,predicted_label_probs,k=3))
+    top_three = top_k_accuracy_score(true_labels,predicted_label_probs,k=3)
+    print('Top 3 Accuracy = ', top_three)
     # print(confusion_matrix(true_labels, predicted_labels))
     # print(classification_report(true_labels, predicted_labels))
     print("Accuracy = ", accuracy_score(true_labels, predicted_labels))
+    return top_three
 
 
 if __name__ == "__main__":
