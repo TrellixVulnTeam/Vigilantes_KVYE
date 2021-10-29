@@ -94,6 +94,22 @@
         app:layout_constraintTop_toTopOf="@id/getPastReports" />
 
     <Button
+        android:id="@+id/startReportButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="90dp"
+        android:layout_marginLeft="260dp"
+        android:width="100dp"
+        android:height="65dp"
+        android:clickable="true"
+        android:text="Start Report"
+        android:contentDescription="@string/startReport"
+        app:backgroundTint="#FFC107"
+        app:srcCompat="@android:drawable/ic_input_add"
+        app:layout_constraintStart_toStartOf="@id/debugButton"
+        app:layout_constraintTop_toTopOf="@id/debugButton" />
+
+    <Button
         android:id="@+id/idgotoPDF"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -105,5 +121,4 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@drawable/ic_pdf_generate" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>
