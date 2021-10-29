@@ -26,6 +26,7 @@
         android:layout_height="0dp"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="16dp"
+        android:clickable="true"
         android:text="SAVE"
         android:textSize="24sp"
         android:background="@color/purple_700"
@@ -87,6 +88,8 @@
                     app:layout_constraintEnd_toEndOf="parent">
 
                     <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/nameInput"
+                        android:textColor="@color/purple_700"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
                 </com.google.android.material.textfield.TextInputLayout>
@@ -115,6 +118,8 @@
                     app:layout_constraintEnd_toEndOf="parent">
 
                     <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/addrInput"
+                        android:textColor="@color/purple_700"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
                 </com.google.android.material.textfield.TextInputLayout>
@@ -132,6 +137,8 @@
                     app:layout_constraintTop_toBottomOf="@+id/AddrField">
 
                     <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/zipInput"
+                        android:textColor="@color/purple_700"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
                 </com.google.android.material.textfield.TextInputLayout>
@@ -159,6 +166,8 @@
                     app:layout_constraintTop_toBottomOf="@+id/AddrField">
 
                     <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/cityInput"
+                        android:textColor="@color/purple_700"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
                 </com.google.android.material.textfield.TextInputLayout>
@@ -176,6 +185,8 @@
                     app:layout_constraintTop_toBottomOf="@+id/AddrField">
 
                     <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/stateInput"
+                        android:textColor="@color/purple_700"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
                 </com.google.android.material.textfield.TextInputLayout>
@@ -204,6 +215,8 @@
                     app:layout_constraintEnd_toEndOf="parent">
 
                     <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/licenseInput"
+                        android:textColor="@color/purple_700"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
                 </com.google.android.material.textfield.TextInputLayout>
@@ -246,6 +259,8 @@
                     app:layout_constraintEnd_toEndOf="parent">
 
                     <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/insuranceInput"
+                        android:textColor="@color/purple_700"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
                 </com.google.android.material.textfield.TextInputLayout>
@@ -273,6 +288,8 @@
                     app:layout_constraintTop_toBottomOf="@+id/line5">
 
                     <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/policyInput"
+                        android:textColor="@color/purple_700"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
                 </com.google.android.material.textfield.TextInputLayout>
@@ -290,6 +307,8 @@
                     app:layout_constraintTop_toBottomOf="@+id/line5">
 
                     <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/expirationInput"
+                        android:textColor="@color/purple_700"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
                 </com.google.android.material.textfield.TextInputLayout>
@@ -318,6 +337,8 @@
                     app:layout_constraintEnd_toEndOf="parent">
 
                     <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/agentNumberInput"
+                        android:textColor="@color/purple_700"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
                 </com.google.android.material.textfield.TextInputLayout>
