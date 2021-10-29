@@ -65,6 +65,9 @@
             android:name=".addVehicle">
         </activity>
         <activity
+            android:name=".startReport">
+        </activity>
+        <activity
             android:name=".addParticipantForm"
             android:theme="@style/Theme.Design.NoActionBar">
         </activity>
