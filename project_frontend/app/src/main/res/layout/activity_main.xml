@@ -80,18 +80,18 @@
         app:layout_constraintTop_toTopOf="@id/addVinNumberButton" />
 
     <!--DEBUGGING BUTTON, DO NOT REMOVE-->
-    <Button
-        android:id="@+id/debugButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="130dp"
-        android:width="360dp"
-        android:height="100dp"
-        android:clickable="true"
-        android:text="FOR DEBUGGING ONLY"
-        app:backgroundTint="#FFC107"
-        app:layout_constraintStart_toStartOf="@id/getPastReports"
-        app:layout_constraintTop_toTopOf="@id/getPastReports" />
+<!--    <Button-->
+<!--        android:id="@+id/debugButton"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="130dp"-->
+<!--        android:width="360dp"-->
+<!--        android:height="100dp"-->
+<!--        android:clickable="true"-->
+<!--        android:text="FOR DEBUGGING ONLY"-->
+<!--        app:backgroundTint="#FFC107"-->
+<!--        app:layout_constraintStart_toStartOf="@id/getPastReports"-->
+<!--        app:layout_constraintTop_toTopOf="@id/getPastReports" />-->
 
 <!--    <Button-->
 <!--        android:id="@+id/startReportButton"-->

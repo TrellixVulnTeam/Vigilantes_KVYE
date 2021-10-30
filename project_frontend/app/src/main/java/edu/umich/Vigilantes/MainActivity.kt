@@ -49,7 +49,7 @@ class MainActivity : AppCompatActivity() {
         var reportsButton = findViewById<Button>(R.id.getPastReports)
 //        var startReportButton = findViewById<Button>(R.id.startReportButton)
 
-        var debugButton = findViewById<Button>(R.id.debugButton)
+//        var debugButton = findViewById<Button>(R.id.debugButton)
 
         //Listener button clicks
         carButton.setOnClickListener {
@@ -68,10 +68,10 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, pastReports::class.java)
             startActivity(intent)
         }
-        debugButton.setOnClickListener {
-            val intent = Intent(this, reportParticipantInfo::class.java)   //Change page to page being tested
-            startActivity(intent)
-        }
+//        debugButton.setOnClickListener {
+//            val intent = Intent(this, reportParticipantInfo::class.java)   //Change page to page being tested
+//            startActivity(intent)
+//        }
 //        startReportButton.setOnClickListener {
 //            val intent = Intent(this, startReport::class.java)
 //            startActivity(intent)
