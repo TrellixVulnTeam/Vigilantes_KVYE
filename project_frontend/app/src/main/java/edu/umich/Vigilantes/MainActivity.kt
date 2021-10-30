@@ -69,19 +69,18 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
         debugButton.setOnClickListener {
-            val intent = Intent(this, addParticipantForm::class.java)   //Change view to view being tested
+            val intent = Intent(this, reportParticipantInfo::class.java)   //Change page to page being tested
             startActivity(intent)
         }
 //        startReportButton.setOnClickListener {
 //            val intent = Intent(this, startReport::class.java)
 //            startActivity(intent)
 //        }
-
         view.idgotoPDF.setOnClickListener {
             print("Headed to pdf activity")
             startActivity(Intent(this, pdfActivity::class.java))
         }
     }
 
-    //fun genPDF(view: View?) = startActivity(Intent(this, pdfActivity::class.java))
+    fun genPDF(view: View?) = startActivity(Intent(this, pdfActivity::class.java))
 }
