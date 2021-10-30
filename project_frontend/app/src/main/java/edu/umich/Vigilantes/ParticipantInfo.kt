@@ -1,5 +1,9 @@
 package edu.umich.Vigilantes
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
+@Parcelize
 data class ParticipantInfo(
     var name: String? = null,
     var addr: String? = null,
@@ -11,4 +15,4 @@ data class ParticipantInfo(
     var policy: String? = null,
     var expiration: String? = null,
     var agentNumber: String? = null
-)
+) : Parcelable

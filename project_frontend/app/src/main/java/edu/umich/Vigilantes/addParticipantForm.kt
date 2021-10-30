@@ -1,5 +1,6 @@
 package edu.umich.Vigilantes
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
@@ -30,6 +31,7 @@ class addParticipantForm : AppCompatActivity() {
         val saveButton = findViewById<Button>(R.id.saveButton)
 
         saveButton.setOnClickListener {
+            //Create ParticipantInfo object
             var par = ParticipantInfo(
                 nameEntry.getText().toString(),
                 addrEntry.getText().toString(),
@@ -42,6 +44,12 @@ class addParticipantForm : AppCompatActivity() {
                 expirationEntry.getText().toString(),
                 agentNumberEntry.getText().toString()
             )
+
+            //Set result to ParticipantInfo object and return to previous view
+            val intent = Intent()
+            intent.putExtra("Participant Info", par)
+            setResult(RESULT_OK, intent)
+            finish()
         }
     }
 }
