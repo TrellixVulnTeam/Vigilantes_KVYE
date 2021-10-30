@@ -47,7 +47,7 @@ class MainActivity : AppCompatActivity() {
         var plateButton = findViewById<Button>(R.id.addLicensePlateButton)
         var vinButton = findViewById<Button>(R.id.addVinNumberButton)
         var reportsButton = findViewById<Button>(R.id.getPastReports)
-        var startReportButton = findViewById<Button>(R.id.startReportButton)
+//        var startReportButton = findViewById<Button>(R.id.startReportButton)
 
         var debugButton = findViewById<Button>(R.id.debugButton)
 
@@ -72,10 +72,10 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, addParticipantForm::class.java)   //Change view to view being tested
             startActivity(intent)
         }
-        startReportButton.setOnClickListener {
-            val intent = Intent(this, startReport::class.java)
-            startActivity(intent)
-        }
+//        startReportButton.setOnClickListener {
+//            val intent = Intent(this, startReport::class.java)
+//            startActivity(intent)
+//        }
 
         view.idgotoPDF.setOnClickListener {
             print("Headed to pdf activity")
