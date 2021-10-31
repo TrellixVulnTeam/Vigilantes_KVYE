@@ -33,6 +33,7 @@ class addParticipantForm : AppCompatActivity() {
         saveButton.setOnClickListener {
             //Create ParticipantInfo object
             var par = ParticipantInfo(
+                0,
                 nameEntry.getText().toString(),
                 addrEntry.getText().toString(),
                 zipEntry.getText().toString(),

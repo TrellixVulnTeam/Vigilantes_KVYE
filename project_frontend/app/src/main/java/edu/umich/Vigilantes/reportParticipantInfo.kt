@@ -4,7 +4,10 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
+import android.widget.LinearLayout
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 
@@ -36,10 +39,34 @@ class reportParticipantInfo : AppCompatActivity() {
                 if (participant != null) {
                     participant.name?.let { it1 -> Log.d("Participant added ", it1) }
                     reportParticipants.add(participant) //Add retrieved participant to list of participants
+                    updateListDisplay()
                 }
             }
             else {
                 Log.d("debug message", "Participant Info lost")
             }
         }
+
+    private fun updateListDisplay() {
+        for(participant in reportParticipants) {
+            if(participant.id?.let { findViewById<Button>(it) } == null) {
+                val button = Button(this)
+                button.layoutParams = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+                )
+                button.text = participant.name
+
+                val id = View.generateViewId();
+
+                button.setId(id)
+                participant.id = id
+                Log.d("uid", participant.id.toString())
+
+
+                val listDisplay = findViewById<LinearLayout>(R.id.participantList)
+                listDisplay.addView(button)
+            }
+        }
+    }
 }
