@@ -6,17 +6,25 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.LinearLayout
+import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import edu.umich.Vigilantes.databinding.ActivityMainBinding
+import edu.umich.Vigilantes.databinding.ActivityReportParticipantBinding
+import kotlinx.android.synthetic.main.activity_report_participant.*
 
-class reportParticipantInfo : AppCompatActivity() {
-    private var reportParticipants: MutableList<ParticipantInfo> = mutableListOf()
+class reportParticipantInfo : AppCompatActivity(), participantAdapter.OnItemClickListener {
+    private val reportParticipants: MutableList<ParticipantInfo> = mutableListOf()
+    private val adapter = participantAdapter(reportParticipants, this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_report_participant)
+
+        recycler_view.adapter = adapter
+        recycler_view.layoutManager = LinearLayoutManager(this)
+        recycler_view.setHasFixedSize(true)
 
         val addParticipantButton = findViewById<Button>(R.id.addParticipantButton)
 
@@ -39,7 +47,7 @@ class reportParticipantInfo : AppCompatActivity() {
                 if (participant != null) {
                     participant.name?.let { it1 -> Log.d("Participant added ", it1) }
                     reportParticipants.add(participant) //Add retrieved participant to list of participants
-                    updateListDisplay()
+                    adapter.notifyItemInserted(reportParticipants.size) //Update list
                 }
             }
             else {
@@ -47,26 +55,8 @@ class reportParticipantInfo : AppCompatActivity() {
             }
         }
 
-    private fun updateListDisplay() {
-        for(participant in reportParticipants) {
-            if(participant.id?.let { findViewById<Button>(it) } == null) {
-                val button = Button(this)
-                button.layoutParams = LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.WRAP_CONTENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT
-                )
-                button.text = participant.name
-
-                val id = View.generateViewId();
-
-                button.setId(id)
-                participant.id = id
-                Log.d("uid", participant.id.toString())
-
-
-                val listDisplay = findViewById<LinearLayout>(R.id.participantList)
-                listDisplay.addView(button)
-            }
-        }
+    override fun onItemClick(position: Int) {
+        Toast.makeText(this, "Item $position clicked", Toast.LENGTH_LONG).show()
+        val clickedItem: ParticipantInfo = reportParticipants[position]
     }
 }

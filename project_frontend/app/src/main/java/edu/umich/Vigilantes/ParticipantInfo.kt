@@ -12,6 +12,7 @@ data class ParticipantInfo(
     var city: String? = null,
     var state: String? = null,
     var license: String? = null,
+    var phone: String? = null,
     var insurance: String? = null,
     var policy: String? = null,
     var expiration: String? = null,

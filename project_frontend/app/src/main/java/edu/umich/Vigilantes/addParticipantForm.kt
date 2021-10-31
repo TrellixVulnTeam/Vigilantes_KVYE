@@ -21,6 +21,7 @@ class addParticipantForm : AppCompatActivity() {
         val cityEntry = findViewById<EditText>(R.id.cityInput)
         val stateEntry = findViewById<EditText>(R.id.stateInput)
         val licenseEntry = findViewById<EditText>(R.id.licenseInput)
+        val phoneEntry = findViewById<EditText>(R.id.phoneInput)
 
         val insuranceEntry = findViewById<EditText>(R.id.insuranceInput)
         val policyEntry = findViewById<EditText>(R.id.policyInput)
@@ -40,6 +41,7 @@ class addParticipantForm : AppCompatActivity() {
                 cityEntry.getText().toString(),
                 stateEntry.getText().toString(),
                 licenseEntry.getText().toString(),
+                phoneEntry.getText().toString(),
                 insuranceEntry.getText().toString(),
                 policyEntry.getText().toString(),
                 expirationEntry.getText().toString(),
