@@ -496,6 +496,8 @@ dmypy.json
 .idea/
 checkpoints/
 *.jpg
+*.pth
+*train_config.json
 logs/
 test/
 train/

@@ -113,7 +113,6 @@ def init_model(args):
 
     validation_generator = validation_datagen.flow_from_directory(
         args.val_dir,
-        target_size=(224, 224),
         batch_size=batch_size,
         class_mode='categorical')
 
@@ -221,7 +220,7 @@ def fine_tune(model, train_generator, validation_generator, args):
     model.fit_generator(
         train_generator,
         steps_per_epoch=stepsPerEpoch,
-        epochs=args.epochs + 40,
+        epochs=args.epochs + 30,
         callbacks = callbacks_list,
         validation_data = validation_generator,
         validation_steps=validationSteps)

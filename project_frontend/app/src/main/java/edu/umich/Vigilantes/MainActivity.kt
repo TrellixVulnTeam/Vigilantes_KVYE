@@ -8,6 +8,7 @@ import android.content.Intent
 import android.view.View
 import edu.umich.Vigilantes.databinding.ActivityMainBinding
 import android.icu.text.SimpleDateFormat
+import android.util.Log
 import android.widget.Button
 import android.widget.TextView
 import java.util.Date;
@@ -21,6 +22,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Log.d("ONCREATE", "onCreate for MainActivity")
         view = ActivityMainBinding.inflate(layoutInflater)
         setContentView(R.layout.activity_main)
         val textView = findViewById<TextView>(R.id.date)
@@ -40,21 +42,40 @@ class MainActivity : AppCompatActivity() {
             Manifest.permission.CAMERA,
             Manifest.permission.READ_EXTERNAL_STORAGE))
 
-        //Find past reports button
-        var reportsButton = findViewById<Button>(R.id.getPastReports)
+        //Find buttons
         var carButton = findViewById<Button>(R.id.addCarButton)
-        //Listener for past reports click
+        var plateButton = findViewById<Button>(R.id.addLicensePlateButton)
+        var vinButton = findViewById<Button>(R.id.addVinNumberButton)
+        var reportsButton = findViewById<Button>(R.id.getPastReports)
+        var debugButton = findViewById<Button>(R.id.debugButton)
+
+
+        //Listener button clicks
+        carButton.setOnClickListener {
+            val intent = Intent(this, addVehicle::class.java)
+            startActivity(intent)
+        }
+        plateButton.setOnClickListener {
+            val intent = Intent(this, addVehicle::class.java)
+            startActivity(intent)
+        }
+        vinButton.setOnClickListener {
+            val intent = Intent(this, addVehicle::class.java)
+            startActivity(intent)
+        }
         reportsButton.setOnClickListener {
             val intent = Intent(this, pastReports::class.java)
             startActivity(intent)
         }
+        debugButton.setOnClickListener {
+            val intent = Intent(this, reportParticipantInfo::class.java)   //Change page to page being tested
+            startActivity(intent)
+        }
+        /*
         view.idgotoPDF.setOnClickListener {
             print("Headed to pdf activity")
             startActivity(Intent(this, pdfActivity::class.java))
-        }
-        carButton.setOnClickListener {
-            startActivity(Intent(this, addVehicle::class.java))
-        }
+        }*/
     }
 
     fun genPDF(view: View?) = startActivity(Intent(this, pdfActivity::class.java))
