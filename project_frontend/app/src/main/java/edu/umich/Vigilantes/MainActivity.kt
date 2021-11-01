@@ -47,7 +47,6 @@ class MainActivity : AppCompatActivity() {
         var plateButton = findViewById<Button>(R.id.addLicensePlateButton)
         var vinButton = findViewById<Button>(R.id.addVinNumberButton)
         var reportsButton = findViewById<Button>(R.id.getPastReports)
-
         var debugButton = findViewById<Button>(R.id.debugButton)
 
 

@@ -18,6 +18,10 @@ import numpy as np
 import argparse
 import os
 import glob
+from numpy.random import seed
+seed(42) # keras seed fixing import
+from tensorflow import random
+random.set_seed(1)
 
 from keras import backend as K
 K.set_image_data_format('channels_last')
@@ -58,6 +62,7 @@ def predict(args):
     test_generator = test_datagen.flow_from_directory(
         args.test_dir,
         batch_size = 1,
+        target_size=(224,224),
         shuffle = False,
         class_mode = None)  # 'categorical')
 
@@ -66,7 +71,7 @@ def predict(args):
     true_labels = test_generator.classes
 
     # load model
-    model = load_model('final_models/modelo')
+    model = load_model('checkpoints/best.h5')
 
     predicted_label_probs = model.predict(test_generator, verbose=1)
     predicted_labels = np.argmax(predicted_label_probs, axis=1)

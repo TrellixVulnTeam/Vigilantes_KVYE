@@ -505,5 +505,5 @@ windowsenv/
 trainOutput.txt
 final_models/
 node_modules/
-
+*.pth
 
