@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
 
+    android:id="@+id/root_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:theme="@style/Theme.MaterialComponents"
@@ -20,22 +21,42 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <Button
-        android:id="@+id/saveButton"
+    <LinearLayout
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_centerHorizontal="true"
+        android:layout_height="64dp"
+        android:gravity="center"
+        android:orientation="horizontal"
         android:layout_marginBottom="16dp"
-        android:clickable="true"
-        android:text="SAVE"
-        android:textSize="24sp"
-        android:background="@color/purple_700"
+        android:elevation="10dp"
 
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHeight_percent="0.08"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintWidth_percent="0.9" />
+        app:layout_constraintWidth_percent="0.92">
+
+        <Button
+            android:id="@+id/disdelButton"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="1"
+            android:text="DISCARD"
+            android:textSize="24sp"
+            android:background="@color/teal_700" />
+
+        <Button
+            android:id="@+id/saveButton"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"
+            android:text="SAVE"
+            android:textSize="24sp"
+            android:background="@color/purple_700" />
+
+    </LinearLayout>
 
     <ScrollView
         android:id="@+id/scroll"

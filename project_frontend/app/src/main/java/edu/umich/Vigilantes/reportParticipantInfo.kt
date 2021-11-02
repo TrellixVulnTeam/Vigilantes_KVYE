@@ -78,8 +78,32 @@ class reportParticipantInfo : AppCompatActivity(), participantAdapter.OnItemClic
                     adapter.notifyItemChanged(editedParticipant.position!!) //Update list at returned position
                 }
             }
+            else if(it.resultCode == 66) {  //If participant is deleted
+                //Retrieve ParticipantInfo object from call
+                val deletedParticipant = it.data?.getParcelableExtra<ParticipantInfo>("Participant Info")
+                if (deletedParticipant?.position != null) {
+                    Log.d("debug message", "participant at position " + deletedParticipant.position + " deleted")
+                    reportParticipants.removeAt(deletedParticipant.position!!)
+                    updatePositions(deletedParticipant.position!!)
+                    adapter.notifyItemRemoved(deletedParticipant.position!!)
+                    adapter.notifyItemRangeChanged(deletedParticipant.position!!, reportParticipants.size)
+                }
+            }
+            else if(it.resultCode == Activity.RESULT_CANCELED) {    //If changes are discarded
+                Log.d("debug message", "participant edit changes discarded")
+            }
             else {
                 Log.d("debug message", "participant edit failed")
             }
         }
+
+    //Used to update participant's positions in list after a deletion
+    private fun updatePositions(position: Int) {
+        for((index, participant) in reportParticipants.withIndex()) {
+            if(index >= position) {
+                participant.position = index
+                Log.d("debug message", "participant ${participant.name} is now at position ${participant.position}")
+            }
+        }
+    }
 }
