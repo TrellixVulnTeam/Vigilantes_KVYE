@@ -49,7 +49,7 @@ def main(config):
     torch.save(model,"saved/final.pth")
 
     ## PRINT OUTPUT ##
-    img = Image.open("00001.jpg").convert('RGB')
+    img = Image.open("00076.jpg").convert('RGB')
     #trans2 = transforms.Resize((299,299))
     #trans3 = transforms.ToTensor()
     normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406],
@@ -62,10 +62,11 @@ def main(config):
     ])
     im_tense = preprocessing(img)
     im_tense.to('cuda')
+    model.to('cpu')
     torch.save(model, "saved/cpufinal.pth")
     model.eval()
     output = model(im_tense.expand(1,im_tense.shape[0],im_tense.shape[1],im_tense.shape[2]))
-    print(topk(output,10))
+    print(topk(output,3))
 
 
 if __name__ == '__main__':
