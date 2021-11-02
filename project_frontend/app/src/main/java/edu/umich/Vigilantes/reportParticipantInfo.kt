@@ -31,9 +31,17 @@ class reportParticipantInfo : AppCompatActivity(), participantAdapter.OnItemClic
         addParticipantButton.setOnClickListener {
             val participant = ParticipantInfo()
             val intent = Intent(this, addParticipantForm::class.java)
-            intent.putExtra("Participant info", participant)
+            intent.putExtra("Participant info", participant)    //Parcelize participant info
             addParticipant.launch(intent)
         }
+    }
+
+    override fun onItemClick(position: Int) {
+        val clickedItem: ParticipantInfo = reportParticipants[position]
+        Log.d("Message", "Participant " + clickedItem.name + " clicked")
+        val intent = Intent(this, addParticipantForm::class.java)
+        intent.putExtra("Existing Participant", clickedItem)    //Parcelize participant info
+        editParticipant.launch(intent)
     }
 
     private val addParticipant =
@@ -46,8 +54,10 @@ class reportParticipantInfo : AppCompatActivity(), participantAdapter.OnItemClic
                 Log.d("debug message", "Participant Info received")
                 if (participant != null) {
                     participant.name?.let { it1 -> Log.d("Participant added ", it1) }
+                    participant.position = reportParticipants.size  //Update participant position in list
+                    Log.d("participant", participant.name + " is now at position " + participant.position)
                     reportParticipants.add(participant) //Add retrieved participant to list of participants
-                    adapter.notifyItemInserted(reportParticipants.size) //Update list
+                    adapter.notifyItemInserted(reportParticipants.size) //Update last participant in list
                 }
             }
             else {
@@ -55,8 +65,21 @@ class reportParticipantInfo : AppCompatActivity(), participantAdapter.OnItemClic
             }
         }
 
-    override fun onItemClick(position: Int) {
-        Toast.makeText(this, "Item $position clicked", Toast.LENGTH_LONG).show()
-        val clickedItem: ParticipantInfo = reportParticipants[position]
-    }
+    private val editParticipant =
+        registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) {
+            if (it.resultCode == Activity.RESULT_OK) {
+                //Retrieve ParticipantInfo object from call
+                val editedParticipant = it.data?.getParcelableExtra<ParticipantInfo>("Participant Info")
+                Log.d("debug message", "participant edited successfully")
+                if (editedParticipant != null) {
+                    reportParticipants[editedParticipant.position!!] = editedParticipant    //Update participant at returned position
+                    adapter.notifyItemChanged(editedParticipant.position!!) //Update list at returned position
+                }
+            }
+            else {
+                Log.d("debug message", "participant edit failed")
+            }
+        }
 }
