@@ -75,6 +75,10 @@
             android:name=".reportParticipantInfo"
             android:theme="@style/Theme.Design.NoActionBar">
         </activity>
+        <activity
+            android:name=".participantPreview"
+            android:theme="@style/Theme.Design.NoActionBar">
+        </activity>
     </application>
 
 </manifest>

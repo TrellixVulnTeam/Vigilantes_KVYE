@@ -79,7 +79,7 @@ class addParticipantForm : AppCompatActivity() {
 
 
         val saveButton = findViewById<Button>(R.id.saveButton)
-        val disdelButton = findViewById<Button>(R.id.disdelButton)
+        val discardButton = findViewById<Button>(R.id.disdelButton)
 
         saveButton.setOnClickListener {
             Log.d("debug message", "save button pressed")
@@ -106,84 +106,11 @@ class addParticipantForm : AppCompatActivity() {
             finish()
         }
 
-        disdelButton.setOnClickListener {
-            if(!popupExists) {
-                createPopup(position)
-            }
-        }
-    }
-
-    private fun createPopup(position: Int) {
-        //Initialize popup window
-        popupExists = true
-        Log.d("createPopUp", "Calling createPopUp")
-        val inflater: LayoutInflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val view = inflater.inflate(R.layout.disdel_popup_box, null)
-        val popupWindow = PopupWindow(
-            view,
-            LinearLayout.LayoutParams.WRAP_CONTENT,
-            LinearLayout.LayoutParams.WRAP_CONTENT)
-        //Set popup window on top of parent view
-        popupWindow.elevation = 10.0F
-
-        val slideIn = Slide()
-        slideIn.slideEdge = Gravity.START
-        popupWindow.exitTransition = slideIn
-
-        val slideOut = Slide()
-        slideOut.slideEdge = Gravity.RIGHT
-        popupWindow.exitTransition = slideOut
-
-        val discardOpt = view.findViewById<Button>(R.id.discardOption)
-        val deleteOpt = view.findViewById<Button>(R.id.deleteOption)
-
-        discardOpt.setOnClickListener {
-            popupExists = false
-            popupWindow.dismiss()
+        discardButton.setOnClickListener {
+            Log.d("debug message", "discard button pressed")
+            val intent = Intent()
             setResult(RESULT_CANCELED, intent)
             finish()
         }
-        deleteOpt.setOnClickListener {
-            popupExists = false
-            popupWindow.dismiss()
-
-            val nameEntry = findViewById<EditText>(R.id.nameInput)
-            val addrEntry = findViewById<EditText>(R.id.addrInput)
-            val zipEntry  = findViewById<EditText>(R.id.zipInput)
-            val cityEntry = findViewById<EditText>(R.id.cityInput)
-            val stateEntry = findViewById<EditText>(R.id.stateInput)
-            val licenseEntry = findViewById<EditText>(R.id.licenseInput)
-            val phoneEntry = findViewById<EditText>(R.id.phoneInput)
-
-            val insuranceEntry = findViewById<EditText>(R.id.insuranceInput)
-            val policyEntry = findViewById<EditText>(R.id.policyInput)
-            val expirationEntry = findViewById<EditText>(R.id.expirationInput)
-            val agentNumberEntry = findViewById<EditText>(R.id.agentNumberInput)
-
-            //Create ParticipantInfo object
-            var par = ParticipantInfo(
-                position,
-                nameEntry.getText().toString(),
-                addrEntry.getText().toString(),
-                zipEntry.getText().toString(),
-                cityEntry.getText().toString(),
-                stateEntry.getText().toString(),
-                licenseEntry.getText().toString(),
-                phoneEntry.getText().toString(),
-                insuranceEntry.getText().toString(),
-                policyEntry.getText().toString(),
-                expirationEntry.getText().toString(),
-                agentNumberEntry.getText().toString()
-            )
-
-            val intent = Intent()
-            intent.putExtra("Participant Info", par)
-            setResult(66, intent)
-            finish()
-        }
-
-        //Display popup window
-        var root_layout = findViewById<ConstraintLayout>(R.id.root_layout)
-        popupWindow.showAtLocation(root_layout, Gravity.CENTER, 0, 0)
     }
 }

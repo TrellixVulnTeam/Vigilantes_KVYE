@@ -37,10 +37,9 @@ class reportParticipantInfo : AppCompatActivity(), participantAdapter.OnItemClic
     }
 
     override fun onItemClick(position: Int) {
-        val clickedItem: ParticipantInfo = reportParticipants[position]
-        Log.d("Message", "Participant " + clickedItem.name + " clicked")
-        val intent = Intent(this, addParticipantForm::class.java)
-        intent.putExtra("Existing Participant", clickedItem)    //Parcelize participant info
+        val participant = reportParticipants[position]
+        val intent = Intent(this, participantPreview::class.java)
+        intent.putExtra("Existing Participant", participant)
         editParticipant.launch(intent)
     }
 
@@ -71,7 +70,7 @@ class reportParticipantInfo : AppCompatActivity(), participantAdapter.OnItemClic
         ) {
             if (it.resultCode == Activity.RESULT_OK) {
                 //Retrieve ParticipantInfo object from call
-                val editedParticipant = it.data?.getParcelableExtra<ParticipantInfo>("Participant Info")
+                val editedParticipant = it.data?.getParcelableExtra<ParticipantInfo>("Edited Participant")
                 Log.d("debug message", "participant edited successfully")
                 if (editedParticipant != null) {
                     reportParticipants[editedParticipant.position!!] = editedParticipant    //Update participant at returned position
@@ -80,13 +79,13 @@ class reportParticipantInfo : AppCompatActivity(), participantAdapter.OnItemClic
             }
             else if(it.resultCode == 66) {  //If participant is deleted
                 //Retrieve ParticipantInfo object from call
-                val deletedParticipant = it.data?.getParcelableExtra<ParticipantInfo>("Participant Info")
-                if (deletedParticipant?.position != null) {
-                    Log.d("debug message", "participant at position " + deletedParticipant.position + " deleted")
-                    reportParticipants.removeAt(deletedParticipant.position!!)
-                    updatePositions(deletedParticipant.position!!)
-                    adapter.notifyItemRemoved(deletedParticipant.position!!)
-                    adapter.notifyItemRangeChanged(deletedParticipant.position!!, reportParticipants.size)
+                val deletedIndex = it.data?.getIntExtra("Delete index", -1)
+                Log.d("debug message", "participant at position $deletedIndex deleted")
+                if (deletedIndex != null) {
+                    reportParticipants.removeAt(deletedIndex)
+                    updatePositions(deletedIndex)
+                    adapter.notifyItemRemoved(deletedIndex)
+                    adapter.notifyItemRangeChanged(deletedIndex, reportParticipants.size)
                 }
             }
             else if(it.resultCode == Activity.RESULT_CANCELED) {    //If changes are discarded
