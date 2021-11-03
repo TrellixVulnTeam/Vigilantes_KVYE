@@ -8,4 +8,5 @@
     <string name="previewCarImage">Preview Car Image</string>
     <string name="continueButton">Continue</string>
     <string name="startReport">StartReport</string>
+    <string name="addLocation">Add Location</string>
 </resources>

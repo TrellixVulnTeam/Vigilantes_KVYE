@@ -79,6 +79,19 @@
         app:layout_constraintStart_toStartOf="@id/addVinNumberButton"
         app:layout_constraintTop_toTopOf="@id/addVinNumberButton" />
 
+    <Button
+        android:id="@+id/addLocationButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="130dp"
+        android:width="360dp"
+        android:height="100dp"
+        android:clickable="true"
+        android:text="Add Location"
+        app:backgroundTint="#FFC107"
+        app:layout_constraintStart_toStartOf="@id/getPastReports"
+        app:layout_constraintTop_toTopOf="@id/getPastReports" />
+
     <!--DEBUGGING BUTTON, DO NOT REMOVE-->
     <Button
         android:id="@+id/debugButton"
