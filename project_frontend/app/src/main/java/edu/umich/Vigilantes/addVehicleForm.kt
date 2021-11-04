@@ -22,10 +22,10 @@ class addVehicleForm : AppCompatActivity() {
 
         setContentView(R.layout.activity_addvehicle_form)
 
-        //Retrieve participant info if participant is existing
+        //Retrieve vehicle info if vehicle is existing
         val retrVehicle = intent.getParcelableExtra<VehicleInfo>("Existing Vehicle")
         var position = 0
-        //If participant is pre-existing
+        //If vehicle is pre-existing
         if (retrVehicle != null) {
             retrVehicle.makemodel?.let { Log.d("Vehicle being edited", it) }
             val makemodelEntry = findViewById<EditText>(R.id.makemodelInput)
@@ -61,7 +61,7 @@ class addVehicleForm : AppCompatActivity() {
 
         saveButton.setOnClickListener {
             Log.d("debug message", "save button pressed")
-            //Create ParticipantInfo object
+            //Create VehicleInfo object
             var veh = VehicleInfo(
                 position,
                 makemodelEntry.getText().toString(),
@@ -71,7 +71,7 @@ class addVehicleForm : AppCompatActivity() {
                 colorEntry.getText().toString()
             )
 
-            //Set result to ParticipantInfo object and return to previous view
+            //Set result to VehicleInfo object and return to previous view
             val intent = Intent()
             intent.putExtra("Vehicle Info", veh)
             setResult(RESULT_OK, intent)

@@ -31,7 +31,7 @@ class reportVehicleInfo : AppCompatActivity(), vehicleAdapter.OnItemClickListene
         addVehicleButton.setOnClickListener {
             val vehicle = VehicleInfo()
             val intent = Intent(this, addVehicleForm::class.java)
-            intent.putExtra("Vehicle Info", vehicle)    //Parcelize participant info
+            intent.putExtra("Vehicle Info", vehicle)    //Parcelize vehicle info
             addVehicle.launch(intent)
         }
     }
@@ -48,15 +48,15 @@ class reportVehicleInfo : AppCompatActivity(), vehicleAdapter.OnItemClickListene
             ActivityResultContracts.StartActivityForResult()
         ) {
             if(it.resultCode == Activity.RESULT_OK) {
-                //Retrieve ParticipantInfo object from call
+                //Retrieve VehicleInfo object from call
                 val vehicle = it.data?.getParcelableExtra<VehicleInfo>("Vehicle Info")
                 Log.d("debug message", "Vehicle Info received")
                 if (vehicle != null) {
                     vehicle.makemodel?.let { it1 -> Log.d("Vehicle added ", it1) }
-                    vehicle.position = reportVehicles.size  //Update participant position in list
+                    vehicle.position = reportVehicles.size  //Update vehicle position in list
                     Log.d("vehicle", vehicle.makemodel + " is now at position " + vehicle.position)
-                    reportVehicles.add(vehicle) //Add retrieved participant to list of participants
-                    adapter.notifyItemInserted(reportVehicles.size) //Update last participant in list
+                    reportVehicles.add(vehicle) //Add retrieved vehicle to list of vehicle
+                    adapter.notifyItemInserted(reportVehicles.size) //Update last vehicle in list
                 }
             }
             else {
@@ -69,16 +69,16 @@ class reportVehicleInfo : AppCompatActivity(), vehicleAdapter.OnItemClickListene
             ActivityResultContracts.StartActivityForResult()
         ) {
             if (it.resultCode == Activity.RESULT_OK) {
-                //Retrieve ParticipantInfo object from call
+                //Retrieve VehicleInfo object from call
                 val editedVehicle = it.data?.getParcelableExtra<VehicleInfo>("Edited Vehicle")
                 Log.d("debug message", "participant edited successfully")
                 if (editedVehicle != null) {
-                    reportVehicles[editedVehicle.position!!] = editedVehicle    //Update participant at returned position
+                    reportVehicles[editedVehicle.position!!] = editedVehicle    //Update vehicle at returned position
                     adapter.notifyItemChanged(editedVehicle.position!!) //Update list at returned position
                 }
             }
-            else if(it.resultCode == 66) {  //If participant is deleted
-                //Retrieve ParticipantInfo object from call
+            else if(it.resultCode == 66) {  //If vehicle is deleted
+                //Retrieve VehicleInfo object from call
                 val deletedIndex = it.data?.getIntExtra("Delete index", -1)
                 Log.d("debug message", "vehicle at position $deletedIndex deleted")
                 if (deletedIndex != null) {
@@ -96,7 +96,7 @@ class reportVehicleInfo : AppCompatActivity(), vehicleAdapter.OnItemClickListene
             }
         }
 
-    //Used to update participant's positions in list after a deletion
+    //Used to update vehicle's positions in list after a deletion
     private fun updatePositions(position: Int) {
         for((index, vehicle) in reportVehicles.withIndex()) {
             if(index >= position) {

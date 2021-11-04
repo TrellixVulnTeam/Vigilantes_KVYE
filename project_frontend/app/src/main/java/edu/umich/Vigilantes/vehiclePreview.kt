@@ -15,7 +15,7 @@ class vehiclePreview : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_vehicle_preview)
 
-        //Retrieve participant info if participant is existing
+        //Retrieve vehicle info if participant is existing
         val retrVehicle = intent.getParcelableExtra<VehicleInfo>("Existing Vehicle")
         if(retrVehicle != null) {
             val makemodelPreview = findViewById<TextView>(R.id.makemodelPreview)
@@ -24,7 +24,7 @@ class vehiclePreview : AppCompatActivity() {
             val VINPreview = findViewById<TextView>(R.id.VINPreview)
             val colorPreview = findViewById<TextView>(R.id.colorPreview)
 
-            //Prevew participant information
+            //Preview vehicle information
             makemodelPreview.setText(retrVehicle.makemodel)
             yearPreview.setText(retrVehicle.year)
             plateNumberPreview.setText(retrVehicle.plateNumber)
@@ -56,7 +56,7 @@ class vehiclePreview : AppCompatActivity() {
             ActivityResultContracts.StartActivityForResult()
         ) {
             if (it.resultCode == Activity.RESULT_OK) {
-                //Retrieve ParticipantInfo object from call
+                //Retrieve VehicleInfo object from call
                 val editedVehicle = it.data?.getParcelableExtra<VehicleInfo>("Vehicle Info")
                 Log.d("debug message", "vehicle edited successfully")
                 if (editedVehicle != null) {
