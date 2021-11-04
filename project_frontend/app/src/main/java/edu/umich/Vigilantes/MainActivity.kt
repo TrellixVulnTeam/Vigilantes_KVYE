@@ -20,6 +20,8 @@ import java.util.Date;
 class MainActivity : AppCompatActivity() {
     private lateinit var view: ActivityMainBinding
 
+    private var reportList: MutableList<reportObj> = mutableListOf()    //List of reports
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d("ONCREATE", "onCreate for MainActivity")
