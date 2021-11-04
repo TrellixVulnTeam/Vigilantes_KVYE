@@ -16,7 +16,6 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import com.google.android.material.button.MaterialButton
 
 class addParticipantForm : AppCompatActivity() {
-    private var popupExists = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

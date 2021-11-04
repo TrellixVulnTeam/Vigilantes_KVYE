@@ -72,6 +72,18 @@
             android:name=".addLoc">
         </activity>
         <activity
+            android:name=".addVehicleForm"
+            android:theme="@style/Theme.Design.NoActionBar">
+        </activity>
+        <activity
+            android:name=".reportVehicleInfo"
+            android:theme="@style/Theme.Design.NoActionBar">
+        </activity>
+        <activity
+            android:name=".vehiclePreview"
+            android:theme="@style/Theme.Design.NoActionBar">
+        </activity>
+        <activity
             android:name=".addParticipantForm"
             android:theme="@style/Theme.Design.NoActionBar">
         </activity>
