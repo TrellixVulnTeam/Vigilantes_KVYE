@@ -95,6 +95,18 @@
             android:name=".participantPreview"
             android:theme="@style/Theme.Design.NoActionBar">
         </activity>
+        <activity
+            android:name=".addWitnessForm"
+            android:theme="@style/Theme.Design.NoActionBar">
+        </activity>
+        <activity
+            android:name=".reportWitnessInfo"
+            android:theme="@style/Theme.Design.NoActionBar">
+        </activity>
+        <activity
+            android:name=".witnessPreview"
+            android:theme="@style/Theme.Design.NoActionBar">
+        </activity>
     </application>
 
 </manifest>
