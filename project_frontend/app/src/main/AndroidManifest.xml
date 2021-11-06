@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="edu.umich.Vigilantes">
 
     <!--
@@ -65,7 +66,45 @@
             android:name=".addVehicle">
         </activity>
         <activity
+            android:name=".startReport">
+        </activity>
+        <activity
+            android:name=".addLoc">
+        </activity>
+        <activity
+            android:name=".addVehicleForm"
+            android:theme="@style/Theme.Design.NoActionBar">
+        </activity>
+        <activity
+            android:name=".reportVehicleInfo"
+            android:theme="@style/Theme.Design.NoActionBar">
+        </activity>
+        <activity
+            android:name=".vehiclePreview"
+            android:theme="@style/Theme.Design.NoActionBar">
+        </activity>
+        <activity
             android:name=".addParticipantForm"
+            android:theme="@style/Theme.Design.NoActionBar">
+        </activity>
+        <activity
+            android:name=".reportParticipantInfo"
+            android:theme="@style/Theme.Design.NoActionBar">
+        </activity>
+        <activity
+            android:name=".participantPreview"
+            android:theme="@style/Theme.Design.NoActionBar">
+        </activity>
+        <activity
+            android:name=".addWitnessForm"
+            android:theme="@style/Theme.Design.NoActionBar">
+        </activity>
+        <activity
+            android:name=".reportWitnessInfo"
+            android:theme="@style/Theme.Design.NoActionBar">
+        </activity>
+        <activity
+            android:name=".witnessPreview"
             android:theme="@style/Theme.Design.NoActionBar">
         </activity>
     </application>

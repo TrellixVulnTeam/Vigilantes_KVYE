@@ -5,6 +5,7 @@ from keras.applications import vgg16
 from keras.applications import vgg19
 from keras.applications import resnet_v2
 from keras.applications import efficientnet
+from keras.applications import nasnet
 from keras.applications.resnet import ResNet50
 from keras.applications.resnet import ResNet152
 from keras.applications import inception_v3
@@ -14,6 +15,11 @@ from keras import optimizers
 from keras.callbacks import TensorBoard, ModelCheckpoint
 import argparse
 from time import time
+from numpy.random import seed
+seed(42) # keras seed fixing import
+from tensorflow import random
+random.set_seed(1)
+import numpy
 
 from skimage import exposure, color
 
@@ -47,7 +53,7 @@ def parse_args():
     ap.add_argument("-m","--model_name",type=str, default='vgg19', help="model name")
     ap.add_argument("-s","--suffix",type=str, default='laioffer', help="suffix for model name model name")
     ap.add_argument("-b","--batch_size",type=int, default=32, help="training batch size")
-    ap.add_argument("-e","--epochs", type=int, default=20, help="training epochs")
+    ap.add_argument("-e","--epochs", type=int, default=5, help="training epochs")
     # ap.add_argument("-g","--epochs", type=int, default=20, help="training epochs")
 
     args = ap.parse_args()
@@ -69,25 +75,22 @@ def init_model(args):
 
     # load base model
     if args.model_name == 'vgg19':
-        base_model = vgg19.VGG19(include_top=False, weights='imagenet', input_shape = (224,224,3)) # need specify input_shape
-        # this preprocess_input is the default preprocess func for given network, you can change it or implement your own 
+        base_model = vgg19.VGG19(include_top=False, weights='imagenet', input_shape = (224,224,3))
         preprocess_input = vgg19.preprocess_input
-    if args.model_name == 'res152':
+    if args.model_name == 'res':
         base_model = resnet_v2.ResNet50V2(include_top=False, weights='imagenet', input_shape = (224,224,3))
         preprocess_input = resnet_v2.preprocess_input
     if args.model_name == 'efficient':
-        base_model = efficientnet.EfficientNetB0(include_top=False, weights='imagenet', input_shape = (224,224,3))
-        preprocess_input = efficientnet.preprocess_input
+        base_model = efficientnet.EfficientNetB0(include_top=False, weights='imagenet')
+        #preprocess_input = efficientnet.preprocess_input
+    if args.model_name == 'nas':
+        base_model = nasnet.NASNetLarge(include_top=False,weights='imagenet')
+        preprocess_input = nasnet.preprocess_input
 
     # initalize training image data generator
     # you can also specify data augmentation here
     train_datagen = image.ImageDataGenerator(
-        # width_shift_range=0.1,
-        # height_shift_range=0.1,
-        # samplewise_center=True,
-        # samplewise_std_normalization=True,
-        # rescale=1./255,
-        preprocessing_function=preprocess_input, # preprocess_input,
+        preprocessing_function=preprocess_input,
         # rotation_range=30,
         # shear_range=0.1,
         # zoom_range=0.1,
@@ -98,21 +101,18 @@ def init_model(args):
     # initalize validation image data generator
     # you can also specify data augmentation here
     validation_datagen = image.ImageDataGenerator(
-        # samplewise_center=True,
-        # samplewise_std_normalization=True
-        # rescale=1./255
-        preprocessing_function=preprocess_input # preprocess_input
-        )
+        preprocessing_function=preprocess_input
+    )
 
     train_generator = train_datagen.flow_from_directory(
         args.train_dir,
-        target_size=(args.img_size, args.img_size),
+        target_size=(224,224),
         batch_size=batch_size,
-        class_mode='categorical')
+        class_mode='categorical',
+        shuffle=True)
 
     validation_generator = validation_datagen.flow_from_directory(
         args.val_dir,
-        target_size=(args.img_size, args.img_size),
         batch_size=batch_size,
         class_mode='categorical')
 
@@ -122,7 +122,7 @@ def init_model(args):
 
     # added some customized layers for your own data
 
-    if args.model_name == 'vgg19' or args.model_name == 'res152':
+    if args.model_name == 'vgg19' or args.model_name == 'res':
         x = base_model.output
         x = GlobalAveragePooling2D(name='avg_pool')(x)
         x = Dense(256, activation='relu', name='fc2-pretrain')(x)
@@ -159,7 +159,9 @@ def train(model, train_generator, validation_generator, args):
     # save the snapshot of the model to local drive
     pretrain_model_name = 'checkpoints/best.h5'
     # visualize the training process
-    tensorboard = TensorBoard(log_dir="logs/{}_pretrain_{}".format(args.model_name, time()), histogram_freq=0, write_graph=True)
+    tensorboard = TensorBoard(log_dir="logs/{}_pretrain_{}".format(args.model_name, time()), histogram_freq=0, write_graph=True,write_images=True,write_steps_per_second=True)
+    tensorboard.set_model(model)
+
     checkpoint = ModelCheckpoint(pretrain_model_name, monitor='val_accuracy', verbose=1, save_best_only=True, save_weights_only=False, mode='auto', period=1)
     callbacks_list = [checkpoint, tensorboard]
 
@@ -170,6 +172,12 @@ def train(model, train_generator, validation_generator, args):
         callbacks = callbacks_list,
         validation_data = validation_generator,
         validation_steps=validationSteps)
+    model.save("final_models/modelo",save_format='tf')
+    reconstructed_model = load_model("final_models/modelo",custom_objects=model.get_config())
+    numpy.testing.assert_allclose(
+        model.predict(validation_generator), reconstructed_model.predict(validation_generator)
+    )
+    print('PASSED')
 
 
 def fine_tune(model, train_generator, validation_generator, args):
@@ -185,20 +193,20 @@ def fine_tune(model, train_generator, validation_generator, args):
     # for specific architectures, define number of trainable layers
     if args.model_name == 'vgg19':
         trainable_layers = 6
-    if args.model_name == 'res152':
+    elif args.model_name == 'res':
         print("We're fine-tuning a Resnet")
         trainable_layers = 24 # My guess
     else:
         trainable_layers = 20
 
-    """for layer in model.layers[:-1*trainable_layers]:
+    for layer in model.layers[:-1*trainable_layers]:
         layer.trainable = False
 
     for layer in model.layers[-1*trainable_layers:]:
-        layer.trainable = True"""
-    for layer in model.layers[-20:]:
+        layer.trainable = True
+    """for layer in model.layers[-20:]:
         if not isinstance(layer, BatchNormalization):
-            layer.trainable = True
+            layer.trainable = True"""
 
     finetune_model_name = 'final_models/finale.h5'
     tensorboard = TensorBoard(log_dir="logs/{}_finetune_{}".format(args.model_name, time()), histogram_freq=0, write_graph=True)
@@ -212,7 +220,7 @@ def fine_tune(model, train_generator, validation_generator, args):
     model.fit_generator(
         train_generator,
         steps_per_epoch=stepsPerEpoch,
-        epochs=args.epochs + 50,
+        epochs=args.epochs + 30,
         callbacks = callbacks_list,
         validation_data = validation_generator,
         validation_steps=validationSteps)

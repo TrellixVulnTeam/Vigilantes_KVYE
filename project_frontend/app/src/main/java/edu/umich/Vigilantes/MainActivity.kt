@@ -20,6 +20,8 @@ import java.util.Date;
 class MainActivity : AppCompatActivity() {
     private lateinit var view: ActivityMainBinding
 
+    private var reportList: MutableList<reportObj> = mutableListOf()    //List of reports
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d("ONCREATE", "onCreate for MainActivity")
@@ -47,8 +49,9 @@ class MainActivity : AppCompatActivity() {
         var plateButton = findViewById<Button>(R.id.addLicensePlateButton)
         var vinButton = findViewById<Button>(R.id.addVinNumberButton)
         var reportsButton = findViewById<Button>(R.id.getPastReports)
-
         var debugButton = findViewById<Button>(R.id.debugButton)
+        var locationButton = findViewById<Button>(R.id.addLocationButton)
+
 
         //Listener button clicks
         carButton.setOnClickListener {
@@ -67,16 +70,20 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, pastReports::class.java)
             startActivity(intent)
         }
-        debugButton.setOnClickListener {
-            val intent = Intent(this, addParticipantForm::class.java)   //Change view to view being tested
+        locationButton.setOnClickListener {
+            val intent = Intent(this, addLoc::class.java)
             startActivity(intent)
         }
-
+        debugButton.setOnClickListener {
+            val intent = Intent(this, reportWitnessInfo::class.java)   //Change page to page being tested
+            startActivity(intent)
+        }
+        /*
         view.idgotoPDF.setOnClickListener {
             print("Headed to pdf activity")
             startActivity(Intent(this, pdfActivity::class.java))
-        }
+        }*/
     }
 
-    //fun genPDF(view: View?) = startActivity(Intent(this, pdfActivity::class.java))
+    fun genPDF(view: View?) = startActivity(Intent(this, pdfActivity::class.java))
 }
