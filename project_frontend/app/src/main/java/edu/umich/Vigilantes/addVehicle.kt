@@ -24,6 +24,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isNotEmpty
 import edu.umich.Vigilantes.databinding.ActivityAddvehicleBinding
+import java.net.URI
 
 class addVehicle : AppCompatActivity() {
     private lateinit var view: ActivityAddvehicleBinding
@@ -31,6 +32,10 @@ class addVehicle : AppCompatActivity() {
     private lateinit var takePicture: ActivityResultLauncher<Uri>
     private var popupExists = false
     private var imageUri: Uri? = null
+    private var carImageUri: Uri? = null
+    private var plateImageUri: Uri? = null
+    private var choice: Int = 0
+    var report : Bundle = Bundle()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,14 +49,38 @@ class addVehicle : AppCompatActivity() {
                 if (result.resultCode == Activity.RESULT_OK) {
                     Log.d("CROPPING", "Cropping")
                     result.data?.data.let {
-                        imageUri?.run {
-                            if (!toString().contains("ORIGINAL")) {
-                                // delete uncropped photo taken for posting
-                                contentResolver.delete(this, null, null)
+                        if(choice == 0){
+                            imageUri?.run {
+                                if (!toString().contains("ORIGINAL")) {
+                                    // delete uncropped photo taken for posting
+                                    contentResolver.delete(this, null, null)
+                                }
                             }
+                            imageUri = it
+                            report.putParcelable("vin",imageUri)
                         }
-                        imageUri = it
-                        imageUri?.let { view.previewCarImage.display(it) } // TODO: Generalize
+                        else if (choice == 1){
+                            plateImageUri?.run {
+                                if (!toString().contains("ORIGINAL")) {
+                                    // delete uncropped photo taken for posting
+                                    contentResolver.delete(this, null, null)
+                                }
+                            }
+                            plateImageUri = it
+                            report.putParcelable("plate",plateImageUri)
+                        }
+                        else{
+                            carImageUri?.run {
+                                if (!toString().contains("ORIGINAL")) {
+                                    // delete uncropped photo taken for posting
+                                    contentResolver.delete(this, null, null)
+                                }
+                            }
+                            carImageUri = it
+                            report.putParcelable("car",carImageUri)
+                        }
+
+                        //imageUri?.let { view.addCarImageButton.display(it) } // TODO: Generalize
                     }
                 } else {
                     Log.d("Crop", result.resultCode.toString())
@@ -71,33 +100,35 @@ class addVehicle : AppCompatActivity() {
             }
         } // CHECK
         //Find buttons
-        var carButton = findViewById<ImageView>(R.id.addCarImageButton)
-        var plateButton = findViewById<ImageView>(R.id.addPlateImageButton)
-        var vinButton = findViewById<ImageView>(R.id.addVINImageButton)
+        var carButton = findViewById<Button>(R.id.addCarImageButton)
+        var plateButton = findViewById<Button>(R.id.addPlateImageButton)
+        var vinButton = findViewById<Button>(R.id.addVINImageButton)
         var continueButton = findViewById<Button>(R.id.ContinueButton)
 
         //Listener for clicks
         carButton.setOnClickListener {
             Log.d("CARBUTTON", "carButton clicked")
-            if(!popupExists) {
-                createPopUp(1)
-                popupExists = true
-            }
+            choice = 2;
+            carImageUri = mediaStoreAlloc("image/jpeg")
+            takePicture.launch(carImageUri)
+            carButton.setCompoundDrawablesWithIntrinsicBounds(0,0,android.R.drawable.checkbox_on_background,0)
+
         }
         plateButton.setOnClickListener {
-            if(!popupExists) {
-                createPopUp(2)
-                popupExists = true
-            }
+            choice = 1;
+            plateImageUri = mediaStoreAlloc("image/jpeg")
+            takePicture.launch(plateImageUri)
+            plateButton.setCompoundDrawablesWithIntrinsicBounds(0,0,android.R.drawable.checkbox_on_background,0)
         }
         vinButton.setOnClickListener {
-            if(!popupExists) {
-                createPopUp(3)
-                popupExists = true
-            }
+            choice = 0;
+            imageUri = mediaStoreAlloc("image/jpeg")
+            takePicture.launch(imageUri)
+            vinButton.setCompoundDrawablesWithIntrinsicBounds(0,0,android.R.drawable.checkbox_on_background,0)
         }
         continueButton.setOnClickListener {
-
+            val intent = Intent(this, MainActivity::class.java)   //Change page to page being tested
+            startActivity(intent)
         }
     }
 
@@ -114,7 +145,7 @@ class addVehicle : AppCompatActivity() {
             values)
     }
 
-    private fun createPopUp(picType : Int) {
+    /*private fun createPopUp(picType : Int) {
         //Initialize popup window
         Log.d("createPopUp", "Calling createPopUp")
         val inflater:LayoutInflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
@@ -180,7 +211,7 @@ class addVehicle : AppCompatActivity() {
         //Display popup window
         var root_layout = findViewById<ConstraintLayout>(R.id.root_layout)
         popupWindow.showAtLocation(root_layout, Gravity.CENTER, 0, 0)
-    }
+    }*/
 
     private fun initCropIntent(): Intent? {
         // Is there any published Activity on device to do image cropping?
@@ -212,13 +243,38 @@ class addVehicle : AppCompatActivity() {
 
     private fun doCrop(intent: Intent?) {
         intent ?: run {
-            imageUri?.let { view.previewCarImage.display(it) }
+            //imageUri?.let { view.addCarImageButton.display(it) }
             return
         }
 
-        imageUri?.let {
-            intent.data = it
-            forCropResult.launch(intent)
+        if(choice == 0){
+            imageUri?.let { // Vin
+                intent.data = it
+                forCropResult.launch(intent)
+            }
         }
+        else if(choice == 1){
+            plateImageUri?.let { // Plate
+                intent.data = it
+                forCropResult.launch(intent)
+            }
+        }
+        else{
+            carImageUri?.let { // Plate
+                intent.data = it
+                forCropResult.launch(intent)
+            }
+        }
+
     } // Ditto
+    fun sendToPDF(){
+        val reportIntent: Intent = Intent(this,pdfActivity::class.java)
+        reportIntent.putExtras(report)
+        startActivity(reportIntent)
+    }
+    fun sendToResultsPage(){
+        val reportIntent: Intent = Intent(this,recognizeActivity::class.java)
+        reportIntent.putExtras(report)
+        startActivity(reportIntent)
+    }
 }
