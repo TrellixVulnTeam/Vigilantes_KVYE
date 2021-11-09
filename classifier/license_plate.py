@@ -78,27 +78,29 @@ def lpn_predict(img=None):
     possible = set()
     for x in sizes:
         for y in sizes:
-            print(x, y)
-            temp = cv2.resize(img, None, fx=x, fy=y)
-            cv2.imwrite('lplates/testing.png', temp)
-            plate = pytesseract.image_to_string(temp, lang='eng', config=("txt "+config_str))
-            words = plate.split('\n')
-            #print(words)
-            # From https://stackoverflow.com/questions/49001670/remove-elements-contains-lowercase-null-from-list
-            words_kept = [word for word in words if all([letter in punctuation+ascii_uppercase+digits+' ' for letter in word]) and word]
-            for w in words_kept:
-                word = ""
-                non_space = False
-                space = 0
-                for letter in w:
-                    if letter not in punctuation:
-                        word += letter
-                    if letter != ' ':
-                        non_space = True
-                    else:
-                        space += 1
-                if non_space and space <= 1:
-                    possible.add(word)
+            for z in range(-30, 30):
+                print(x, y, z)
+                temp = cv2.resize(img, None, fx=x, fy=y)
+                temp = temp.rotate(z)
+                cv2.imwrite('lplates/testing.png', temp)
+                plate = pytesseract.image_to_string(temp, lang='eng', config=("txt "+config_str))
+                words = plate.split('\n')
+                #print(words)
+                # From https://stackoverflow.com/questions/49001670/remove-elements-contains-lowercase-null-from-list
+                words_kept = [word for word in words if all([letter in punctuation+ascii_uppercase+digits+' ' for letter in word]) and word]
+                for w in words_kept:
+                    word = ""
+                    non_space = False
+                    space = 0
+                    for letter in w:
+                        if letter not in punctuation:
+                            word += letter
+                        if letter != ' ':
+                            non_space = True
+                        else:
+                            space += 1
+                    if non_space and space <= 1:
+                        possible.add(word)
 
     # plate = plate.replace(" ", "")
     # print(plate)
