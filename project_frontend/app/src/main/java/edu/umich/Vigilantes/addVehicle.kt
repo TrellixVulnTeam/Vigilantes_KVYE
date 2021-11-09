@@ -78,6 +78,7 @@ class addVehicle : AppCompatActivity() {
                             }
                             carImageUri = it
                             report.putParcelable("car",carImageUri)
+                            sendToResultsPage()
                         }
 
                         //imageUri?.let { view.addCarImageButton.display(it) } // TODO: Generalize

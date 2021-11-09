@@ -30,7 +30,7 @@ object reportStore {
         val mpFD = MultipartBody.Builder().setType(MultipartBody.FORM)
         imageUri?.run {
             toFile()?.let {
-                mpFD.addFormDataPart("image", "image",
+                mpFD.addFormDataPart("image", "carImage",
                     it.asRequestBody("image/jpeg".toMediaType()))
             }
         }
