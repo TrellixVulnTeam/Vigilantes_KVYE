@@ -75,7 +75,9 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
         debugButton.setOnClickListener {
-            val intent = Intent(this, reportWitnessInfo::class.java)   //Change page to page being tested
+            var report = reportObj()
+            val intent = Intent(this, reportVehicleInfo::class.java)   //Change page to page being tested
+            intent.putExtra("Report Info", report)
             startActivity(intent)
         }
         /*

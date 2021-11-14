@@ -26,6 +26,7 @@
         android:orientation="vertical"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
+        android:elevation="1dp"
 
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -36,7 +37,7 @@
             android:layout_height="wrap_content"
             android:text="EDIT"
             android:layout_weight="1"
-            android:layout_marginBottom="8dp">
+            android:layout_marginBottom="4dp">
 
         </Button>
 
@@ -45,7 +46,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="DELETE"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:layout_marginBottom="4dp">
 
         </Button>
 
@@ -66,6 +68,7 @@
         android:orientation="vertical"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
+        android:overScrollMode="never"
 
         app:layout_constraintTop_toBottomOf="@+id/toolbar"
         app:layout_constraintBottom_toBottomOf="parent">
@@ -142,10 +145,10 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/vehicle_recycler_view"
-                android:padding="4dp"
                 android:clipToPadding="false"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:overScrollMode="never"
 
                 app:layout_constraintTop_toBottomOf="@id/vehicleSection"
 
@@ -167,10 +170,10 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/participant_recycler_view"
-                android:padding="4dp"
                 android:clipToPadding="false"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:overScrollMode="never"
 
                 app:layout_constraintTop_toBottomOf="@id/participantsSection"
 
@@ -192,10 +195,10 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/witness_recycler_view"
-                android:padding="4dp"
                 android:clipToPadding="false"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:overScrollMode="never"
 
                 app:layout_constraintTop_toBottomOf="@id/witnessesSection"
 

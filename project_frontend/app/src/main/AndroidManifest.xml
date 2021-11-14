@@ -107,6 +107,10 @@
             android:name=".witnessPreview"
             android:theme="@style/Theme.Design.NoActionBar">
         </activity>
+        <activity
+            android:name=".reportPreview"
+            android:theme="@style/Theme.Design.NoActionBar">
+        </activity>
     </application>
 
 </manifest>
