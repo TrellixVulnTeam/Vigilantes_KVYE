@@ -15,24 +15,39 @@ import edu.umich.Vigilantes.databinding.ActivityReportParticipantBinding
 import kotlinx.android.synthetic.main.activity_report_participant.*
 
 class reportParticipantInfo : AppCompatActivity(), participantAdapter.OnItemClickListener {
-    private val reportParticipants: MutableList<ParticipantInfo> = mutableListOf()
-    private val adapter = participantAdapter(reportParticipants, this)
+    private lateinit var report: reportObj
+    private lateinit var reportParticipants: MutableList<ParticipantInfo>
+    private lateinit var adapter: participantAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_report_participant)
+
+        //Retrieve current report information
+        report = intent.getParcelableExtra("Report Info")!!
+        reportParticipants = report?.getParticipants()  //Get participants list from report
+        adapter = participantAdapter(reportParticipants, this)
 
         recycler_view.adapter = adapter
         recycler_view.layoutManager = LinearLayoutManager(this)
         recycler_view.setHasFixedSize(true)
 
         val addParticipantButton = findViewById<Button>(R.id.addParticipantButton)
+        val continueButton = findViewById<Button>(R.id.continueButton)
 
         addParticipantButton.setOnClickListener {
             val participant = ParticipantInfo()
             val intent = Intent(this, addParticipantForm::class.java)
             intent.putExtra("Participant info", participant)    //Parcelize participant info
             addParticipant.launch(intent)
+        }
+
+        continueButton.setOnClickListener {
+            report?.setParticipants(reportParticipants) //Set updated vehicles list to report
+            //Send report to next page
+            val intent = Intent(this, reportWitnessInfo::class.java)
+            intent.putExtra("Report Info", report)  //Parcelize report
+            startActivity(intent)
         }
     }
 
