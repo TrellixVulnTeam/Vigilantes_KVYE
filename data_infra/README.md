@@ -1,4 +1,4 @@
-# Welcome to your CDK TypeScript project!
+# Vigilantes Data Infra!
 
 This is a blank project for TypeScript development with CDK.
 
