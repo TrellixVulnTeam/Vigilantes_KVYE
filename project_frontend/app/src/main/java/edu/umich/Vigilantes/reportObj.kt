@@ -6,6 +6,7 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 data class reportObj(
     var position: Int = 0,
+    var deletion: Boolean? = false,
     var datetime: String? = "",
     var location: String? = "",
     var incidentDesc: String? = "",
@@ -13,6 +14,10 @@ data class reportObj(
     var participantList: MutableList<ParticipantInfo> = mutableListOf(),
     var witnessList: MutableList<WitnessInfo> = mutableListOf()
 ) : Parcelable {
+    fun setForDeletion() {
+        this.deletion = true
+    }
+
     fun setDateTime(datetime: String) {
         this.datetime = datetime
     }

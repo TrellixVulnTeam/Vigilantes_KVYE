@@ -1,9 +1,18 @@
 package edu.umich.Vigilantes
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
+import android.transition.Slide
+import android.util.Log
+import android.view.Gravity
+import android.view.LayoutInflater
 import android.widget.Button
+import android.widget.LinearLayout
+import android.widget.PopupWindow
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_report_preview.*
 
@@ -17,6 +26,8 @@ class reportPreview : AppCompatActivity() {
     private lateinit var vAdapter: fullVehicleAdapter
     private lateinit var pAdapter: fullParticipantAdapter
     private lateinit var wAdapter: fullWitnessAdapter
+
+    private var popupExists = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,15 +71,67 @@ class reportPreview : AppCompatActivity() {
         val exportButton = findViewById<Button>(R.id.exportButton)
 
         editButton.setOnClickListener {
-
+            //Return to vehicles page
+            val intent = Intent(this, reportVehicleInfo::class.java)
+            intent.putExtra("Report Info", report)  //Parcelize report
+            startActivity(intent)
+            finish()
         }
 
         deleteButton.setOnClickListener {
-
+            if(!popupExists) {
+                createPopUp()
+                popupExists = true
+            }
         }
 
         exportButton.setOnClickListener {
 
         }
+    }
+
+    private fun createPopUp() {
+        //Initialize popup window
+        Log.d("createPopUp", "Calling createPopUp")
+        val inflater: LayoutInflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val view = inflater.inflate(R.layout.delete_popup_box, null)
+        val popupWindow = PopupWindow(
+            view,
+            LinearLayout.LayoutParams.WRAP_CONTENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT)
+        //Set popup window on top of parent view
+        popupWindow.elevation = 10.0F
+
+        val slideIn = Slide()
+        slideIn.slideEdge = Gravity.START
+        popupWindow.exitTransition = slideIn
+
+        val slideOut = Slide()
+        slideOut.slideEdge = Gravity.RIGHT
+        popupWindow.exitTransition = slideOut
+
+        val deleteOpt = view.findViewById<Button>(R.id.DeleteOption)
+        val cancelOpt = view.findViewById<Button>(R.id.CancelOption)
+        //Delete option chosen
+        deleteOpt.setOnClickListener{
+            report.setForDeletion() //Set report for deletion
+
+            popupWindow.dismiss()
+            popupExists = false
+
+            val intent = Intent(this, MainActivity::class.java)
+            intent.putExtra("Report Info", report)  //Parcelize report
+            startActivity(intent)
+            finish()
+        }
+        //Cancel option chosen
+        cancelOpt.setOnClickListener{
+            popupWindow.dismiss()
+            popupExists = false
+        }
+
+        //Display popup window
+        var root_layout = findViewById<ConstraintLayout>(R.id.root_layout)
+        popupWindow.showAtLocation(root_layout, Gravity.CENTER, 0, 0)
     }
 }

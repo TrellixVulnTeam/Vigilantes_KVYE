@@ -19,7 +19,6 @@ import java.util.Date;
 
 class MainActivity : AppCompatActivity() {
     private lateinit var view: ActivityMainBinding
-
     private var reportList: MutableList<reportObj> = mutableListOf()    //List of reports
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,6 +42,11 @@ class MainActivity : AppCompatActivity() {
             Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.CAMERA,
             Manifest.permission.READ_EXTERNAL_STORAGE))
+
+        //Retrieve list of reports
+        if(intent.extras != null) {
+            //reportList = intent.getParcelableExtra("Report List")!!
+        }
 
         //Find buttons
         var carButton = findViewById<Button>(R.id.addCarButton)
@@ -76,7 +80,9 @@ class MainActivity : AppCompatActivity() {
         }
         debugButton.setOnClickListener {
             var report = reportObj()
+            var list = reportList
             val intent = Intent(this, reportVehicleInfo::class.java)   //Change page to page being tested
+
             intent.putExtra("Report Info", report)
             startActivity(intent)
         }
