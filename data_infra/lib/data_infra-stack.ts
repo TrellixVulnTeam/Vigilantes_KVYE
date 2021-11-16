@@ -2,6 +2,7 @@ import * as cdk from "@aws-cdk/core";
 import * as s3 from "@aws-cdk/aws-s3";
 import * as lambda from "@aws-cdk/aws-lambda";
 import { PythonFunction } from "@aws-cdk/aws-lambda-python";
+import { Duration } from "@aws-cdk/core";
 
 export class DataInfraStack extends cdk.Stack {
 	constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
@@ -54,6 +55,8 @@ export class DataInfraStack extends cdk.Stack {
 				environment: {
 					DEST_BUCKET_NAME: scrapedImagesBucket.bucketName,
 				},
+				timeout: Duration.minutes(15),
+				memorySize: 1024
 			}
 		);
 
