@@ -1,19 +1,15 @@
-#import cv2
+import cv2
 import pytesseract
 import numpy as np
 import os
 from PIL import Image
+import sys
+from string import *
+
 
 #pytesseract.pytesseract.tesseract_cmd = r'/mnt/c/Program Files/Tesseract-OCR/tesseract.exe'
 
-def main():
-    # img = cv2.imread('test_license_plate.png')
-    # gray = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
-    # gray, img_bin = cv2.threshold(gray,128,255,cv2.THRESH_BINARY | cv2.THRESH_OTSU)
-    # gray = cv2.bitwise_not(img_bin)
-    # kernel = np.ones((2, 1), np.uint8)
-    # img = cv2.erode(gray, kernel, iterations=1)
-    # img = cv2.dilate(img, kernel, iterations=1)
+def lpn_predict(img=None):
     states = [
         "Alabama",
         "Alaska",
@@ -69,28 +65,62 @@ def main():
 
     config_str = "-l eng --oem 4 --psm 8"
     #print() #, lang = 'eng', config ='--psm 0 txt'))
-    img = Image.open('number.jpg')
-    plate = pytesseract.image_to_string(img, lang='eng', config=("txt "+config_str))
-    plate = plate.replace(" ", "")
-    plate = plate.lower()
-    for i in range(len(states)):
-        states[i] = states[i].lower()
-    while plate.find("\n\n") != -1:
-        plate = plate.replace("\n\n", "\n")
+    #img = cv2.imread('test_michigan.png')
+    #img = cv2.resize(img, dsize=(img.shape[1], img.shape[0]))
+    gray = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
+    gray, img_bin = cv2.threshold(gray,128,255,cv2.THRESH_BINARY | cv2.THRESH_OTSU)
+    gray = cv2.bitwise_not(img_bin)
+    kernel = np.ones((2, 1), np.uint8)
+    img = cv2.erode(gray, kernel, iterations=1)
+    img = cv2.dilate(img, kernel, iterations=1)
+    img = cv2.bitwise_not(img)
+    sizes = np.arange(0.1, 1, 0.2)
+    possible = set()
+    for x in sizes:
+        for y in sizes:
+            for z in range(-30, 30):
+                print(x, y, z)
+                temp = cv2.resize(img, None, fx=x, fy=y)
+                temp = temp.rotate(z)
+                cv2.imwrite('lplates/testing.png', temp)
+                plate = pytesseract.image_to_string(temp, lang='eng', config=("txt "+config_str))
+                words = plate.split('\n')
+                #print(words)
+                # From https://stackoverflow.com/questions/49001670/remove-elements-contains-lowercase-null-from-list
+                words_kept = [word for word in words if all([letter in punctuation+ascii_uppercase+digits+' ' for letter in word]) and word]
+                for w in words_kept:
+                    word = ""
+                    non_space = False
+                    space = 0
+                    for letter in w:
+                        if letter not in punctuation:
+                            word += letter
+                        if letter != ' ':
+                            non_space = True
+                        else:
+                            space += 1
+                    if non_space and space <= 1:
+                        possible.add(word)
 
-    words = plate.split('\n')
-    print(words)
-    final_state = None
-    for word in words:
-        for state in states:
-            if word.find(state) != -1:
-                final_state = state
-    print("final_state:", final_state)
-    print()
+    # plate = plate.replace(" ", "")
+    # print(plate)
+    # plate = plate.lower()
+    # for i in range(len(states)):
+    #     states[i] = states[i].lower()
+    # while plate.find("\n\n") != -1:
+    #     plate = plate.replace("\n\n", "\n")
 
+    # words = plate.split('\n')
+    # print(words)
+    # final_state = None
+    # for word in words:
+    #     for state in states:
+    #         if word.find(state) != -1:
+    #             final_state = state
+    # print("final_state:", final_state)
 
-
-    
+    print(possible)
 
 if __name__ == '__main__':
-    main()
+    lpn_predict(cv2.imread(sys.argv[1]))
+    #predict_source()

@@ -1,5 +1,5 @@
 from keras.preprocessing import image
-from keras.applications import vgg16
+from keras.applications import efficientnet
 from keras.applications import vgg19
 from keras.applications import resnet_v2
 from keras.applications import inception_v3
@@ -14,11 +14,14 @@ from keras.preprocessing.image import load_img
 from keras.preprocessing.image import img_to_array
 
 from sklearn.metrics import confusion_matrix, classification_report, accuracy_score, top_k_accuracy_score
-from tqdm import tqdm
 import numpy as np
 import argparse
 import os
 import glob
+from numpy.random import seed
+seed(42) # keras seed fixing import
+from tensorflow import random
+random.set_seed(1)
 
 from keras import backend as K
 K.set_image_data_format('channels_last')
@@ -50,14 +53,16 @@ def predict(args):
     if args.model_name == 'res':
         #base_model = resnet_v2.ResNet152V2(include_top=False, weights='imagenet', input_shape = (224,224,3))
         preprocess_input = resnet_v2.preprocess_input
+    if args.model_name == 'efficient':
+        preprocess_input = efficientnet.preprocess_input
 
     # load test data
     test_datagen = image.ImageDataGenerator(
         preprocessing_function=preprocess_input)
     test_generator = test_datagen.flow_from_directory(
         args.test_dir,
-        target_size = (args.img_size, args.img_size),
         batch_size = 1,
+        target_size=(224,224),
         shuffle = False,
         class_mode = None)  # 'categorical')
 
@@ -66,7 +71,7 @@ def predict(args):
     true_labels = test_generator.classes
 
     # load model
-    model = load_model(args.model_weight_name)
+    model = load_model('checkpoints/best.h5')
 
     predicted_label_probs = model.predict(test_generator, verbose=1)
     predicted_labels = np.argmax(predicted_label_probs, axis=1)
@@ -77,10 +82,12 @@ def predict(args):
         num += 1
     print(predicted_label_probs)
     print(predicted_labels)
-    print('Top 3 Accuracy = ', top_k_accuracy_score(true_labels,predicted_label_probs,k=3))
+    top_three = top_k_accuracy_score(true_labels,predicted_label_probs,k=3)
+    print('Top 3 Accuracy = ', top_three)
     # print(confusion_matrix(true_labels, predicted_labels))
     # print(classification_report(true_labels, predicted_labels))
     print("Accuracy = ", accuracy_score(true_labels, predicted_labels))
+    return top_three
 
 
 if __name__ == "__main__":

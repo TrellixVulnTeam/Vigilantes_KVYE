@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Car Scanner</string>
+    <string name="generate_pdf">Generate PDF</string>
+    <string name="addLicensePlate">Add License Plate</string>
+    <string name="addCar">Add Car</string>
+    <string name="addVin">Add VIN</string>
+    <string name="getPastReports">Get Past Reports</string>
+    <string name="previewCarImage">Preview Car Image</string>
+    <string name="continueButton">Continue</string>
+    <string name="startReport">StartReport</string>
+    <string name="addLocation">Add Location</string>
+</resources>
