@@ -35,6 +35,7 @@ class reportPreview : AppCompatActivity() {
 
         //Retrieve current report information
         report = intent.getParcelableExtra("Report Info")!!
+        var reportList = intent.getParcelableExtra<reportList>("Report List")!!
         reportVehicles = report?.getVehicles()  //Get vehicles list from report
         reportParticipants = report?.getParticipants()  //Get participants list from report
         reportWitnesses = report?.getWitnesses()  //Get witnesses list from report
@@ -73,6 +74,7 @@ class reportPreview : AppCompatActivity() {
         editButton.setOnClickListener {
             //Return to vehicles page
             val intent = Intent(this, reportVehicleInfo::class.java)
+            intent.putExtra("Report List", reportList)
             intent.putExtra("Report Info", report)  //Parcelize report
             startActivity(intent)
             finish()
@@ -80,7 +82,7 @@ class reportPreview : AppCompatActivity() {
 
         deleteButton.setOnClickListener {
             if(!popupExists) {
-                createPopUp()
+                createPopUp(reportList)
                 popupExists = true
             }
         }
@@ -90,7 +92,7 @@ class reportPreview : AppCompatActivity() {
         }
     }
 
-    private fun createPopUp() {
+    private fun createPopUp(reportList: reportList) {
         //Initialize popup window
         Log.d("createPopUp", "Calling createPopUp")
         val inflater: LayoutInflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
@@ -114,13 +116,13 @@ class reportPreview : AppCompatActivity() {
         val cancelOpt = view.findViewById<Button>(R.id.CancelOption)
         //Delete option chosen
         deleteOpt.setOnClickListener{
-            report.setForDeletion() //Set report for deletion
+            reportList.deleteReport(report) //Delete report
 
             popupWindow.dismiss()
             popupExists = false
 
             val intent = Intent(this, MainActivity::class.java)
-            intent.putExtra("Report Info", report)  //Parcelize report
+            intent.putExtra("Report List", reportList)  //Parcelize report
             startActivity(intent)
             finish()
         }

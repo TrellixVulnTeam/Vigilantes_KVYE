@@ -19,7 +19,7 @@ import java.util.Date;
 
 class MainActivity : AppCompatActivity() {
     private lateinit var view: ActivityMainBinding
-    private var reportList: MutableList<reportObj> = mutableListOf()    //List of reports
+    private var reportList: reportList = reportList()    //List of reports
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,7 +45,7 @@ class MainActivity : AppCompatActivity() {
 
         //Retrieve list of reports
         if(intent.extras != null) {
-            //reportList = intent.getParcelableExtra("Report List")!!
+            reportList = intent.getParcelableExtra("Report List")!!
         }
 
         //Find buttons
@@ -80,9 +80,8 @@ class MainActivity : AppCompatActivity() {
         }
         debugButton.setOnClickListener {
             var report = reportObj()
-            var list = reportList
             val intent = Intent(this, reportVehicleInfo::class.java)   //Change page to page being tested
-
+            intent.putExtra("Report List", reportList)
             intent.putExtra("Report Info", report)
             startActivity(intent)
         }

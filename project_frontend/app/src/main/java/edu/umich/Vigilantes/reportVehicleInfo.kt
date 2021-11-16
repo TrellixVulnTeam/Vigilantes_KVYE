@@ -23,7 +23,8 @@ class reportVehicleInfo : AppCompatActivity(), vehicleAdapter.OnItemClickListene
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_report_vehicle)
 
-        //Retrieve current report information
+        //Retrieve current report and report list information
+        var reportList = intent.getParcelableExtra<reportList>("Report List")!!
         report = intent.getParcelableExtra("Report Info")!!
         reportVehicles = report?.getVehicles()  //Get vehicles list from report
         adapter = vehicleAdapter(reportVehicles, this)
@@ -46,6 +47,7 @@ class reportVehicleInfo : AppCompatActivity(), vehicleAdapter.OnItemClickListene
             report?.setVehicles(reportVehicles) //Set updated vehicles list to report
             //Send report to next page
             val intent = Intent(this, reportParticipantInfo::class.java)
+            intent.putExtra("Report List", reportList)
             intent.putExtra("Report Info", report)  //Parcelize report
             startActivity(intent)
         }

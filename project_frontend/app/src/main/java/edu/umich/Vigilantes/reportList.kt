@@ -16,11 +16,33 @@ data class reportList(
         return this.reportList.size
     }
 
-    fun addReport(report: reportObj) {
-        this.reportList.add(report)
+    fun find(report: reportObj): Int {
+        for(r in reportList) {
+            if(r.UID == report.UID) {
+                return r.getPos()
+            }
+        }
+        return -1
     }
 
-    fun deleteReport(position: Int) {
-        this.reportList.removeAt(position)
+    fun addReport(report: reportObj) {
+        var r = report
+        r.setPos(getLength())
+        this.reportList.add(r)
+    }
+
+    fun editReport(report: reportObj) {
+        this.reportList[report.getPos()] = report
+    }
+
+    fun deleteReport(report: reportObj) {
+        this.reportList.removeAt(report.getPos())
+        updatePositions()
+    }
+
+    private fun updatePositions() {
+        for((index, report) in reportList.withIndex()) {
+            report.setPos(index)
+        }
     }
 }

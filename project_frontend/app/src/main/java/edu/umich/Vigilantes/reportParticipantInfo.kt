@@ -24,6 +24,7 @@ class reportParticipantInfo : AppCompatActivity(), participantAdapter.OnItemClic
         setContentView(R.layout.activity_report_participant)
 
         //Retrieve current report information
+        var reportList = intent.getParcelableExtra<reportList>("Report List")!!
         report = intent.getParcelableExtra("Report Info")!!
         reportParticipants = report?.getParticipants()  //Get participants list from report
         adapter = participantAdapter(reportParticipants, this)
@@ -46,6 +47,7 @@ class reportParticipantInfo : AppCompatActivity(), participantAdapter.OnItemClic
             report?.setParticipants(reportParticipants) //Set updated vehicles list to report
             //Send report to next page
             val intent = Intent(this, reportWitnessInfo::class.java)
+            intent.putExtra("Report List", reportList)
             intent.putExtra("Report Info", report)  //Parcelize report
             startActivity(intent)
         }
