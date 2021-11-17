@@ -2,9 +2,11 @@ package edu.umich.Vigilantes
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
+import java.util.*
 
 @Parcelize
 data class reportObj(
+    var UID: UUID = UUID.randomUUID(),
     var position: Int = 0,
     var datetime: String? = "",
     var location: String? = "",
@@ -13,6 +15,14 @@ data class reportObj(
     var participantList: MutableList<ParticipantInfo> = mutableListOf(),
     var witnessList: MutableList<WitnessInfo> = mutableListOf()
 ) : Parcelable {
+    fun setPos(position: Int) {
+        this.position = position
+    }
+
+    fun getPos(): Int {
+        return this.position
+    }
+
     fun setDateTime(datetime: String) {
         this.datetime = datetime
     }

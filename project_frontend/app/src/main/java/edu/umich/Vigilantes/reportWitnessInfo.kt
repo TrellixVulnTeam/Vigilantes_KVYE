@@ -25,6 +25,7 @@ class reportWitnessInfo : AppCompatActivity(), witnessAdapter.OnItemClickListene
         setContentView(R.layout.activity_report_witness)
 
         //Retrieve current report information
+        var reportList = intent.getParcelableExtra<reportList>("Report List")!!
         report = intent.getParcelableExtra("Report Info")!!
         reportWitnesses = report?.getWitnesses()  //Get witnesses list from report
         adapter = witnessAdapter(reportWitnesses, this)
@@ -45,8 +46,17 @@ class reportWitnessInfo : AppCompatActivity(), witnessAdapter.OnItemClickListene
 
         generateReportButton.setOnClickListener {
             report?.setWitnesses(reportWitnesses) //Set updated witnesses list to report
+
+            if(reportList.find(report) != -1) {
+                reportList.editReport(report)       //If exists, edit report
+            }
+            else {
+                reportList.addReport(report)        //If not exists, add report
+            }
+
             //Send report to next page
             val intent = Intent(this, reportPreview::class.java)
+            intent.putExtra("Report List", reportList)
             intent.putExtra("Report Info", report)  //Parcelize report
             startActivity(intent)
         }

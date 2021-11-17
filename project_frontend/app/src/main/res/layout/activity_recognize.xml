@@ -6,32 +6,35 @@
     android:layout_height="match_parent"
     tools:context=".recognizeActivity">
 
-    <ImageView
+    <Button
         android:id="@+id/carThree"
         android:layout_width="195dp"
         android:layout_height="116dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="380dp"
+        android:text="Select Car 3"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_baseline_directions_car_120" />
 
-    <ImageView
+    <Button
         android:id="@+id/carTwo"
         android:layout_width="195dp"
         android:layout_height="116dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="208dp"
+        android:text="Select Car 2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_baseline_directions_car_120" />
 
-    <ImageView
+    <Button
         android:id="@+id/carOne"
         android:layout_width="195dp"
         android:layout_height="116dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="25dp"
+        android:text="Select Car 1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_baseline_directions_car_120" />
