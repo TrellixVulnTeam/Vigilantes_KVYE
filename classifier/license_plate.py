@@ -6,6 +6,8 @@ from PIL import Image
 import sys
 from string import *
 import glob
+from autocorrect import Speller
+import re
 
 
 #pytesseract.pytesseract.tesseract_cmd = r'/mnt/c/Program Files/Tesseract-OCR/tesseract.exe'
@@ -177,6 +179,7 @@ def results_parse(words):
     for i in range(len(states)):
         states[i] = states[i].lower() # inefficient, i know
     for word in words:
+        word = re.sub(r'\W+', '', word)
         for state in states:
             if word.find(state) != -1:
                 final_state = state
@@ -193,6 +196,7 @@ def clean(plate):
 
 def ensemble(img,kernel): # Can be made clean by passing functions and *args maybe to a helper
     config_str = "-l eng --oem 4 --psm 7 --print-parameters"
+    originalimg = img
     state = results_parse(clean(pytesseract.image_to_string(img, lang='eng', config=("txt " + config_str))))
     if state is not None:
         return state
@@ -234,7 +238,7 @@ def ensemble(img,kernel): # Can be made clean by passing functions and *args may
     return None
 
 def predict_state():
-    config_str = "-l eng --oem 4 --psm 7 --print-parameters"
+    config_str = "-l eng --oem 4 --psm 11 --print-parameters"
     success = 0
     kernel = np.ones((2, 1), np.uint8)
     for file in glob.glob("plate_test/*"):
@@ -247,14 +251,17 @@ def predict_state():
             topcenter = originalimg[10:int(height/3),int(15/100*width):int(85/100*width)]
             bottom = originalimg[int(2*height/3):height-10,0:width]
             botcenter = originalimg[int(2*height/3):height-10,int(15/100*width):int(85/100*width)]
+            firstthirds = originalimg[10:int(height/3),0:int(2*width/3)]
+            noright = originalimg[10:int(height/3),0:int(4*width/5)]
         except:
             print("Really poor image. Please retake")
-        if success == 0:
+        print(file.split('\\'))
+        if file.split('\\')[1].split('-')[0] == 'illinois':
             cv2.imwrite("topcrop.jpg",top)
             cv2.imwrite("botcrop.jpg", bottom)
             cv2.imwrite("botcenter.jpg", botcenter)
             cv2.imwrite("topcenter.jpg", topcenter)
-        crops = [originalimg,top,bottom,topcenter,botcenter]
+        crops = [originalimg,top,bottom,topcenter,botcenter,firstthirds,noright]
         for crop in crops:
             response = ensemble(crop,kernel)
             if response is not None:
@@ -282,8 +289,10 @@ def predict_state():
             cv2.imwrite('failures/'+file, img)'''
     print("Accuracy:", success / len(glob.glob("plate_test/*")))
 
+#def generate_json():
 
 if __name__ == '__main__':
+
     #lpn_predict(cv2.imread(sys.argv[1]))
     predict_state()
     #predict_source()
