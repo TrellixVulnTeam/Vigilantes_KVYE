@@ -191,7 +191,7 @@ def clean(plate):
     words = plate.split('\n')
     return words
 
-def ensemble(img,kernel):
+def ensemble(img,kernel): # Can be made clean by passing functions and *args maybe to a helper
     config_str = "-l eng --oem 4 --psm 7 --print-parameters"
     state = results_parse(clean(pytesseract.image_to_string(img, lang='eng', config=("txt " + config_str))))
     if state is not None:
@@ -220,8 +220,6 @@ def ensemble(img,kernel):
     if state is not None:
         return state
 
-    return None
-
     # img = cv2.bitwise_not(img) BAD accuracy change
     img = cv2.erode(img, kernel, iterations=1)
     cv2.imwrite("erode.jpg", img)
@@ -233,6 +231,7 @@ def ensemble(img,kernel):
     state = results_parse(clean(pytesseract.image_to_string(img, lang='eng', config=("txt " + config_str))))
     if state is not None:
         return 1
+    return None
 
 def predict_state():
     config_str = "-l eng --oem 4 --psm 7 --print-parameters"
@@ -243,9 +242,19 @@ def predict_state():
         originalimg = cv2.imread(file)
         height = originalimg.shape[0]
         width = originalimg.shape[1]
-        top = originalimg[0:int(height/3),0:width]
-        bottom = originalimg[int(2*height/3):height,0:width]
-        crops = [originalimg,top,bottom]
+        try:
+            top = originalimg[10:int(height/3),0:width]
+            topcenter = originalimg[10:int(height/3),int(15/100*width):int(85/100*width)]
+            bottom = originalimg[int(2*height/3):height-10,0:width]
+            botcenter = originalimg[int(2*height/3):height-10,int(15/100*width):int(85/100*width)]
+        except:
+            print("Really poor image. Please retake")
+        if success == 0:
+            cv2.imwrite("topcrop.jpg",top)
+            cv2.imwrite("botcrop.jpg", bottom)
+            cv2.imwrite("botcenter.jpg", botcenter)
+            cv2.imwrite("topcenter.jpg", topcenter)
+        crops = [originalimg,top,bottom,topcenter,botcenter]
         for crop in crops:
             response = ensemble(crop,kernel)
             if response is not None:
