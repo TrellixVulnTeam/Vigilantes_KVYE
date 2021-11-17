@@ -4,6 +4,7 @@ import numpy as np
 import os
 from PIL import Image
 import sys
+import matplotlib.pyplot as plt
 from string import *
 
 
@@ -65,11 +66,11 @@ def lpn_predict(img=None):
 
     config_str = "-l eng --oem 4 --psm 8"
     #print() #, lang = 'eng', config ='--psm 0 txt'))
-    #img = cv2.imread('test_michigan.png')
+    #img = cv2.imread("sample.jpg")
     #img = cv2.resize(img, dsize=(img.shape[1], img.shape[0]))
-    gray = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
-    gray, img_bin = cv2.threshold(gray,128,255,cv2.THRESH_BINARY | cv2.THRESH_OTSU)
-    gray = cv2.bitwise_not(img_bin)
+    img2 = cv2.imread(img, cv2.IMREAD_GRAYSCALE)
+    #gray, img_bin = cv2.threshold(gray,128,255,cv2.THRESH_BINARY | cv2.THRESH_OTSU)
+    gray = cv2.bitwise_not(img2)#img_bin)
     kernel = np.ones((2, 1), np.uint8)
     img = cv2.erode(gray, kernel, iterations=1)
     img = cv2.dilate(img, kernel, iterations=1)
@@ -78,12 +79,14 @@ def lpn_predict(img=None):
     possible = set()
     for x in sizes:
         for y in sizes:
-            for z in range(-30, 30):
+            for z in [1]:#range(-30, 30):
                 print(x, y, z)
                 temp = cv2.resize(img, None, fx=x, fy=y)
-                temp = temp.rotate(z)
+                #temp = cv2.cv.rotate(temp, z)
                 cv2.imwrite('lplates/testing.png', temp)
-                plate = pytesseract.image_to_string(temp, lang='eng', config=("txt "+config_str))
+                print(Image.open('lplates/testing.png'))
+                plate = pytesseract.image_to_string(Image.open('lplates/testing.png'), lang='eng', config=("txt "+config_str))
+                print(plate)
                 words = plate.split('\n')
                 #print(words)
                 # From https://stackoverflow.com/questions/49001670/remove-elements-contains-lowercase-null-from-list
@@ -122,5 +125,6 @@ def lpn_predict(img=None):
     print(possible)
 
 if __name__ == '__main__':
-    lpn_predict(cv2.imread(sys.argv[1]))
+    print(sys.argv[1])
+    lpn_predict(sys.argv[1])
     #predict_source()
