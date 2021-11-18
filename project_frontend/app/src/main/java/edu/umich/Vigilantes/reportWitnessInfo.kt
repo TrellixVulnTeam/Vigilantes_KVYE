@@ -16,24 +16,49 @@ import kotlinx.android.synthetic.main.activity_report_participant.*
 import android.text.method.ScrollingMovementMethod;
 
 class reportWitnessInfo : AppCompatActivity(), witnessAdapter.OnItemClickListener {
-    private val reportWitnesses: MutableList<WitnessInfo> = mutableListOf()
-    private val adapter = witnessAdapter(reportWitnesses, this)
+    private lateinit var report: reportObj
+    private lateinit var reportWitnesses: MutableList<WitnessInfo>
+    private lateinit var adapter: witnessAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_report_witness)
+
+        //Retrieve current report information
+        var reportList = intent.getParcelableExtra<reportList>("Report List")!!
+        report = intent.getParcelableExtra("Report Info")!!
+        reportWitnesses = report?.getWitnesses()  //Get witnesses list from report
+        adapter = witnessAdapter(reportWitnesses, this)
 
         recycler_view.adapter = adapter
         recycler_view.layoutManager = LinearLayoutManager(this)
         recycler_view.setHasFixedSize(true)
 
         val addWitnessButton = findViewById<Button>(R.id.addWitnessButton)
+        val generateReportButton = findViewById<Button>(R.id.generateReportButton)
 
         addWitnessButton.setOnClickListener {
             val witness = WitnessInfo()
             val intent = Intent(this, addWitnessForm::class.java)
             intent.putExtra("Witness Info", witness)    //Parcelize witness info
             addWitness.launch(intent)
+        }
+
+        generateReportButton.setOnClickListener {
+            report?.setWitnesses(reportWitnesses) //Set updated witnesses list to report
+
+            if(reportList.find(report) != -1) {
+                reportList.editReport(report)       //If exists, edit report
+            }
+            else {
+                reportList.addReport(report)        //If not exists, add report
+            }
+
+            //Send report to next page
+            val intent = Intent(this, reportPreview::class.java)
+            intent.putExtra("Report List", reportList)
+            intent.putExtra("Report Info", report)  //Parcelize report
+            startActivity(intent)
         }
 
         val incidentDescription = findViewById<TextView>(R.id.incidentDescription)

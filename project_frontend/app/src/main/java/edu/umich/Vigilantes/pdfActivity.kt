@@ -54,6 +54,8 @@ class pdfActivity : AppCompatActivity() {
 
         // initializing pdf button
         generatePDFbtn = findViewById(R.id.idBtnGeneratePDF)
+        val report = intent.extras
+
 
         if (!checkPermission()) {
             requestPermission()

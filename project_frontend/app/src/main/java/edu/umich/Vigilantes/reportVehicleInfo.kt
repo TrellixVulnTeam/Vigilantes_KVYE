@@ -15,24 +15,41 @@ import edu.umich.Vigilantes.databinding.ActivityReportParticipantBinding
 import kotlinx.android.synthetic.main.activity_report_participant.*
 
 class reportVehicleInfo : AppCompatActivity(), vehicleAdapter.OnItemClickListener {
-    private val reportVehicles: MutableList<VehicleInfo> = mutableListOf()
-    private val adapter = vehicleAdapter(reportVehicles, this)
+    private lateinit var report: reportObj
+    private lateinit var reportVehicles: MutableList<VehicleInfo>
+    private lateinit var adapter: vehicleAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_report_vehicle)
+
+        //Retrieve current report and report list information
+        var reportList = intent.getParcelableExtra<reportList>("Report List")!!
+        report = intent.getParcelableExtra("Report Info")!!
+        reportVehicles = report?.getVehicles()  //Get vehicles list from report
+        adapter = vehicleAdapter(reportVehicles, this)
 
         recycler_view.adapter = adapter
         recycler_view.layoutManager = LinearLayoutManager(this)
         recycler_view.setHasFixedSize(true)
 
         val addVehicleButton = findViewById<Button>(R.id.addVehicleButton)
+        val continueButton = findViewById<Button>(R.id.continueButton)
 
         addVehicleButton.setOnClickListener {
             val vehicle = VehicleInfo()
             val intent = Intent(this, addVehicleForm::class.java)
             intent.putExtra("Vehicle Info", vehicle)    //Parcelize vehicle info
             addVehicle.launch(intent)
+        }
+
+        continueButton.setOnClickListener {
+            report?.setVehicles(reportVehicles) //Set updated vehicles list to report
+            //Send report to next page
+            val intent = Intent(this, reportParticipantInfo::class.java)
+            intent.putExtra("Report List", reportList)
+            intent.putExtra("Report Info", report)  //Parcelize report
+            startActivity(intent)
         }
     }
 
