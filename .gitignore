@@ -493,7 +493,6 @@ dmypy.json
 # Luke's stuff
 .idea/
 checkpoints/
-*.jpg
 *.pth
 *train_config.json
 logs/

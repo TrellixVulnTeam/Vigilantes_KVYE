@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
+    <Button
         android:id="@+id/addPlateImageButton"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -16,15 +16,17 @@
         android:clickable="true"
 
         android:contentDescription="@string/addLicensePlate"
+        android:text="Take License Plate Photo"
         app:backgroundTint="#FFC107"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHeight_percent="0.25"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintWidth_percent="0.9"
-        tools:ignore="SpeakableTextPresentCheck" />
+        android:gravity="center"
+        android:drawableRight="@android:drawable/checkbox_off_background"/>
 
-    <ImageView
+    <Button
         android:id="@+id/addCarImageButton"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -33,15 +35,16 @@
         android:clickable="true"
 
         android:contentDescription="@string/addCar"
+        android:text="Take Car Photo"
         app:backgroundTint="#FFC107"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHeight_percent="0.25"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/addPlateImageButton"
         app:layout_constraintWidth_percent="0.9"
-        tools:ignore="SpeakableTextPresentCheck" />
+        android:drawableRight="@android:drawable/checkbox_off_background"/>
 
-    <ImageView
+    <Button
         android:id="@+id/addVINImageButton"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -50,12 +53,14 @@
         android:clickable="true"
 
         android:contentDescription="@string/addVin"
+        android:text="Take VIN Photo"
         app:backgroundTint="#FFC107"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHeight_percent="0.25"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/addCarImageButton"
-        app:layout_constraintWidth_percent="0.9" />
+        app:layout_constraintWidth_percent="0.9"
+        android:drawableRight="@android:drawable/checkbox_off_background"/>
 
     <Button
         android:id="@+id/ContinueButton"
@@ -73,20 +78,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/addVINImageButton"
         app:layout_constraintWidth_percent="0.9" />
-
-    <ImageView
-        android:id="@+id/previewCarImage"
-        android:layout_width="370dp"
-        android:layout_height="182dp"
-        android:layout_marginEnd="24dp"
-        android:contentDescription="@string/previewCarImage"
-        app:layout_constraintBottom_toBottomOf="@+id/addCarImageButton"
-        app:layout_constraintEnd_toEndOf="@+id/addCarImageButton"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/addCarImageButton"
-        app:layout_constraintTop_toTopOf="@+id/addCarImageButton"
-        app:layout_constraintVertical_bias="1.0"
-        tools:ignore="ImageContrastCheck"
-        tools:src="@drawable/ic_launcher_background" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
