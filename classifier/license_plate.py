@@ -145,51 +145,49 @@ def clean(plate):
     words = plate.split('\n')
     return words
 
-def ensemble(img,kernel): # Can be made clean by passing functions and *args maybe to a helper
-    config_str = "-l eng --oem 4 --psm 7 --print-parameters"
-    originalimg = img
-    state = results_parse(clean(pytesseract.image_to_string(img, lang='eng', config=("txt " + config_str))))
+def ensemble(img,kernel,oem,psm): # Can be made clean by passing functions and *args maybe to a helper
+    config_str = "--oem {} --psm {}".format(oem,psm)
+    state = results_parse(clean(pytesseract.image_to_string(img, lang='eng', config=(config_str))))
     if state is not None:
         return state
     img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    state = results_parse(clean(pytesseract.image_to_string(img, lang='eng', config=("txt " + config_str))))
+    state = results_parse(clean(pytesseract.image_to_string(img, lang='eng', config=(config_str))))
     if state is not None:
         return state
     thr = cv2.adaptiveThreshold(img, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
                                 cv2.THRESH_BINARY_INV, 11, 2)
-    state = results_parse(clean(pytesseract.image_to_string(thr, lang='eng', config=("txt " + config_str))))
+    state = results_parse(clean(pytesseract.image_to_string(thr, lang='eng', config=(config_str))))
     if state is not None:
         return state
     if state is not None:
         return state
     img = cv2.fastNlMeansDenoising(img, None, 7, 15)
-    state = results_parse(clean(pytesseract.image_to_string(img, lang='eng', config=("txt " + config_str))))
+    state = results_parse(clean(pytesseract.image_to_string(img, lang='eng', config=(config_str))))
     if state is not None:
         return state
     filter = cv2.GaussianBlur(img, (3, 3), 0)
-    state = results_parse(clean(pytesseract.image_to_string(filter, lang='eng', config=("txt " + config_str))))
+    state = results_parse(clean(pytesseract.image_to_string(filter, lang='eng', config=(config_str))))
     if state is not None:
         return state
     img = cv2.addWeighted(filter, 0.5, img, 0.5, 0)
-    state = results_parse(clean(pytesseract.image_to_string(img, lang='eng', config=("txt " + config_str))))
+    state = results_parse(clean(pytesseract.image_to_string(img, lang='eng', config=(config_str))))
     if state is not None:
         return state
 
     # img = cv2.bitwise_not(img) BAD accuracy change
     img = cv2.erode(img, kernel, iterations=1)
     cv2.imwrite("erode.jpg", img)
-    state = results_parse(clean(pytesseract.image_to_string(img, lang='eng', config=("txt " + config_str))))
+    state = results_parse(clean(pytesseract.image_to_string(img, lang='eng', config=(config_str))))
     if state is not None:
         return 1
     img = cv2.dilate(img, kernel, iterations=1)
     cv2.imwrite("dilate.jpg", img)
-    state = results_parse(clean(pytesseract.image_to_string(img, lang='eng', config=("txt " + config_str))))
+    state = results_parse(clean(pytesseract.image_to_string(img, lang='eng', config=(config_str))))
     if state is not None:
-        return 1
+        return state
     return None
 
 def predict_state():
-    config_str = "-l eng --oem 4 --psm 11 --print-parameters"
     success = 0
     kernel = np.ones((2, 1), np.uint8)
     for file in glob.glob("plate_test/*"):
@@ -214,31 +212,16 @@ def predict_state():
             cv2.imwrite("topcenter.jpg", topcenter)
         crops = [originalimg,top,bottom,topcenter,botcenter,firstthirds,noright]
         for crop in crops:
-            response = ensemble(crop,kernel)
+            response = ensemble(crop,kernel,3,7)
             if response is not None:
                 success += 1
                 print(response)
                 correct = True
                 break
-
-
-        #cv2.imwrite("gray.jpg",img_gray)
-        #cv2.imwrite("blur.jpg", img_blur)
-        #cv2.imwrite("denoise.jpg",img_denoise)
-        #sobelx = cv2.Sobel(src=img_blur, ddepth=cv2.CV_64F, dx=1, dy=0, ksize=3)
-        #sobely = cv2.Sobel(src=img_blur, ddepth=cv2.CV_64F, dx=0, dy=1, ksize=3)
-        #sobelxy = cv2.Sobel(src=img_blur, ddepth=cv2.CV_64F, dx=1, dy=1, ksize=3)
-        #sobelxy = Image.fromarray(sobelxy)
-        #sobelxy = sobelxy.convert('RGB')
-        '''plate = pytesseract.image_to_string(img, lang='eng', config=("txt "+config_str))
-        words = clean(plate)
-        if(results_parse(words)):
-            success += 1
-            continue
-        if not correct:
-            path,file = file.split('\\')
-            cv2.imwrite('failures/'+file, img)'''
     print("Accuracy:", success / len(glob.glob("plate_test/*")))
+    '''if not correct:
+        path,file = file.split('\\')
+        cv2.imwrite('failures/'+file, img)'''
 
 """def most_common_level(levels):
     return max(set(levels), key = levels.count)"""
@@ -295,9 +278,31 @@ def predict_lpn():
             print('Continue')
             resp = input()
     print("Accuracy:", success / len(glob.glob("plate_test/*")))
+
+def state_inference(originalimg):
+    success = 0
+    kernel = np.ones((2, 1), np.uint8)
+    height,width = originalimg.shape
+    try:
+        top = originalimg[10:int(height / 3), 0:width]
+        topcenter = originalimg[10:int(height / 3), int(15 / 100 * width):int(85 / 100 * width)]
+        bottom = originalimg[int(2 * height / 3):height - 10, 0:width]
+        botcenter = originalimg[int(2 * height / 3):height - 10, int(15 / 100 * width):int(85 / 100 * width)]
+        firstthirds = originalimg[10:int(height / 3), 0:int(2 * width / 3)]
+        noright = originalimg[10:int(height / 3), 0:int(4 * width / 5)]
+    except:
+        return None
+    crops = [originalimg, top, bottom, topcenter, botcenter, firstthirds, noright]
+    for crop in crops:
+        response = ensemble(crop, kernel, 3, 7)
+        if response is not None:
+            success += 1
+            return response
+    return 'michigan' # Default
+
 if __name__ == '__main__':
 
     #lpn_predict(cv2.imread(sys.argv[1]))
-    #predict_state()
+    predict_state()
     predict_lpn()
     #predict_source()
