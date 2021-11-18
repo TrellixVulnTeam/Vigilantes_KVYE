@@ -6,6 +6,7 @@ from PIL import Image
 import sys
 from string import *
 import glob
+from pytesseract import Output
 from autocorrect import Speller
 import re
 
@@ -13,58 +14,6 @@ import re
 #pytesseract.pytesseract.tesseract_cmd = r'/mnt/c/Program Files/Tesseract-OCR/tesseract.exe'
 
 def lpn_predict(img=None):
-    states = [
-        "Alabama",
-        "Alaska",
-        "Arizona",
-        "Arkansas",
-        "California",
-        "Colorado",
-        "Connecticut",
-        "Delaware",
-        "Florida",
-        "Georgia",
-        "Hawaii",
-        "Idaho",
-        "Illinois",
-        "Indiana",
-        "Iowa",
-        "Kansas",
-        "Kentucky",
-        "Louisiana",
-        "Maine",
-        "Maryland",
-        "Massachusetts",
-        "Michigan",
-        "Minnesota",
-        "Mississippi",
-        "Missouri",
-        "Montana",
-        "Nebraska",
-        "Nevada",
-        "New Hampshire",
-        "New Jersey",
-        "New Mexico",
-        "New York",
-        "North Carolina",
-        "North Dakota",
-        "Ohio",
-        "Oklahoma",
-        "Oregon",
-        "Pennsylvania",
-        "Rhode Island",
-        "South Carolina",
-        "South Dakota",
-        "Tennessee",
-        "Texas",
-        "Utah",
-        "Vermont",
-        "Virginia",
-        "Washington",
-        "West Virginia",
-        "Wisconsin",
-        "Wyoming",
-    ]
 
     config_str = "-l eng --oem 4 --psm 8 --print-parameters"
     #print() #, lang = 'eng', config ='--psm 0 txt'))
@@ -291,10 +240,64 @@ def predict_state():
             cv2.imwrite('failures/'+file, img)'''
     print("Accuracy:", success / len(glob.glob("plate_test/*")))
 
-#def generate_json():
+"""def most_common_level(levels):
+    return max(set(levels), key = levels.count)"""
 
+def plurality_vote(images): # Please use an odd number of
+    config_str = "--oem 3 --psm 8"
+    strings = []
+    for image in images:
+        plate = pytesseract.image_to_string(image, lang='eng', config=(config_str), output_type=Output.STRING)
+        plate = re.sub(r'\W+', '', plate)
+        strings.append(plate)
+    strings = [string for string in strings if len(string) >= 5 and len(string) <= 8]
+    if (len(strings) == 0):
+        return None
+    else:
+        dict = {}
+        maxstring, maxnum = '',0
+        for string in strings:
+            dict[string] = dict.get(string,0) + 1
+            if dict[string] >= maxnum:
+                if(dict[string] > maxnum):
+                    maxstring = string
+                else:
+                    if(len(string) > len(maxstring)):
+                        maxstring = string
+                maxnum = dict[string]
+        return maxstring
+
+
+def predict_lpn():
+    success = 0
+    for file in glob.glob("plate_test/*"):
+        origimg = cv2.imread(file)
+        origimg = cv2.resize(origimg, None, fx=1.2, fy=1.2, interpolation=cv2.INTER_CUBIC)
+        height = origimg.shape[0]
+        width = origimg.shape[1]
+        img = origimg[int(25/100*height):int(85/100*height),0:width]
+        aggressive_cut = origimg[int(25 / 100 * height):int(85 / 100 * height), int(5 / 100 * width):int(95 / 100 * width)]
+        img2 = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        cv2.imwrite("example.jpg",img)
+        kernel = np.ones((2, 1), np.uint8)
+        img3 = cv2.erode(img, kernel, iterations=1) # No good
+        img4 = cv2.dilate(img, kernel, iterations=1) # No good
+        img5 = cv2.fastNlMeansDenoising(img, None, 7, 15)
+        plate = plurality_vote([img2,aggressive_cut])
+
+        #print(plate)
+        print("Predicted:",plate)
+        print("Correct: ", file.split('\\')[1].split('-')[1].split('.')[0].upper())
+        if plate == file.split('\\')[1].split('-')[1].split('.')[0].upper():
+            success += 1
+        resp = None
+        while resp is not None:
+            print('Continue')
+            resp = input()
+    print("Accuracy:", success / len(glob.glob("plate_test/*")))
 if __name__ == '__main__':
 
     #lpn_predict(cv2.imread(sys.argv[1]))
-    predict_state()
+    #predict_state()
+    predict_lpn()
     #predict_source()
