@@ -35,6 +35,9 @@ class addVehicle : AppCompatActivity() {
     private var carImageUri: Uri? = null
     private var plateImageUri: Uri? = null
     private var choice: Int = 0
+    private var check1: Boolean = false
+    private var check2: Boolean = false
+    private var check3: Boolean = false
     var report : Bundle = Bundle()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -113,18 +116,20 @@ class addVehicle : AppCompatActivity() {
             carImageUri = mediaStoreAlloc("image/jpeg")
             takePicture.launch(carImageUri)
             carButton.setCompoundDrawablesWithIntrinsicBounds(0,0,android.R.drawable.checkbox_on_background,0)
-
+            check2 = true
         }
         plateButton.setOnClickListener {
             choice = 1;
             plateImageUri = mediaStoreAlloc("image/jpeg")
             takePicture.launch(plateImageUri)
+            check1 = true
             plateButton.setCompoundDrawablesWithIntrinsicBounds(0,0,android.R.drawable.checkbox_on_background,0)
         }
         vinButton.setOnClickListener {
             choice = 0;
             imageUri = mediaStoreAlloc("image/jpeg")
             takePicture.launch(imageUri)
+            check3 = true;
             vinButton.setCompoundDrawablesWithIntrinsicBounds(0,0,android.R.drawable.checkbox_on_background,0)
         }
         continueButton.setOnClickListener {
@@ -273,9 +278,38 @@ class addVehicle : AppCompatActivity() {
         reportIntent.putExtras(report)
         startActivity(reportIntent)
     }
-    fun sendToResultsPage(){
+    private fun sendToResultsPage(){
         val reportIntent: Intent = Intent(this,recognizeActivity::class.java)
         reportIntent.putExtras(report)
         startActivity(reportIntent)
+    }
+
+    override fun onSaveInstanceState(savedInstanceState: Bundle) {
+        super.onSaveInstanceState(savedInstanceState)
+        savedInstanceState.putParcelable("carImageUri", carImageUri)
+        savedInstanceState.putBoolean("check1",check1)
+        savedInstanceState.putBoolean("check2",check2)
+        savedInstanceState.putBoolean("check3",check3)
+
+    }
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        carImageUri = savedInstanceState.getParcelable<Uri>("carImageUri")
+
+        check1 = savedInstanceState.getBoolean("check1",check1)
+        check2 = savedInstanceState.getBoolean("check2",check2)
+        check3 = savedInstanceState.getBoolean("check3",check3)
+        var carButton = findViewById<Button>(R.id.addCarImageButton)
+        var plateButton = findViewById<Button>(R.id.addPlateImageButton)
+        var vinButton = findViewById<Button>(R.id.addVINImageButton)
+        if(check1){
+            plateButton.setCompoundDrawablesWithIntrinsicBounds(0,0,android.R.drawable.checkbox_on_background,0)
+        }
+        if(check2){
+            carButton.setCompoundDrawablesWithIntrinsicBounds(0,0,android.R.drawable.checkbox_on_background,0)
+        }
+        if(check3){
+            vinButton.setCompoundDrawablesWithIntrinsicBounds(0,0,android.R.drawable.checkbox_on_background,0)
+        }
     }
 }
