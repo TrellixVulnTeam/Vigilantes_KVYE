@@ -6,13 +6,9 @@ import android.os.Bundle
 import edu.umich.Vigilantes.reportStore.postImages
 import android.content.Context
 import android.content.Intent
-import kotlinx.serialization.json.*
-import com.google.gson.*
 import edu.umich.Vigilantes.databinding.ActivityRecognizeBinding
 import edu.umich.Vigilantes.reportStore.carLabels
 import android.widget.*
-import kotlinx.android.synthetic.main.activity_recognize.*
-import kotlinx.android.synthetic.main.list_report.*
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
@@ -39,6 +35,7 @@ class recognizeActivity : AppCompatActivity() {
                 val debugInfo = carLabels[0]
                 val debugdInfo = carLabels[1]
             }
+            finish()
         }
         val car1button = findViewById<Button>(R.id.carOne)
         val car2button = findViewById<Button>(R.id.carTwo)
