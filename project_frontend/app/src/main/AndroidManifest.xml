@@ -59,7 +59,8 @@
         </activity>
         <activity
             android:name=".pastReports"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/Theme.Design.NoActionBar">
         </activity>
         <activity
             android:name=".pdfActivity">

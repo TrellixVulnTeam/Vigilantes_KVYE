@@ -54,11 +54,12 @@ class reportWitnessInfo : AppCompatActivity(), witnessAdapter.OnItemClickListene
                 reportList.addReport(report)        //If not exists, add report
             }
 
-            //Send report to next page
-            val intent = Intent(this, reportPreview::class.java)
-            intent.putExtra("Report List", reportList)
+            //Return updated report/list to MainActivity
+            val intent = Intent()
+            //intent.putExtra("Report List", reportList)
             intent.putExtra("Report Info", report)  //Parcelize report
-            startActivity(intent)
+            setResult(441, intent)
+            finish()
         }
 
         val incidentDescription = findViewById<TextView>(R.id.incidentDescription)
@@ -134,4 +135,22 @@ class reportWitnessInfo : AppCompatActivity(), witnessAdapter.OnItemClickListene
             }
         }
     }
+
+    private val proceed =
+        registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) {
+            if(it.resultCode == 441) {
+                //If report is completed, retrieve report list
+                val reportList = it.data?.getParcelableExtra<reportList>("Report List")
+
+                val intent = Intent()
+                intent.putExtra("Report List", reportList)
+                setResult(441, intent)
+                finish()
+            }
+            else {
+                Log.d("debug message", "Report List lost")
+            }
+        }
 }

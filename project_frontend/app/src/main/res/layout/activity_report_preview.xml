@@ -15,7 +15,7 @@
         android:background="@color/purple_700"
         android:elevation="1dp"
 
-        app:title="Report Prevew"
+        app:title="Report Preview"
         app:titleTextColor="@android:color/white"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
