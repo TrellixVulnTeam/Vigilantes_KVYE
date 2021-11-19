@@ -286,12 +286,18 @@ def predict_lpn():
         img3 = cv2.erode(img, kernel, iterations=1) # No good
         img4 = cv2.dilate(img, kernel, iterations=1) # No good
         img5 = cv2.fastNlMeansDenoising(img, None, 7, 15)
-        plate = plurality_vote([img2,aggressive_cut])
+        choices = [img2, aggressive_cut]
+        sizes = np.arange(0.3, 1, 0.3)
+        for x in sizes:
+            for y in sizes:
+                choices.append(cv2.resize(img2, None, fx=x, fy=y))
+        plate = plurality_vote(choices)
 
         #print(plate)
         print("Predicted:",plate)
-        print("Correct: ", file.split('\\')[1].split('-')[1].split('.')[0].upper())
-        if plate == file.split('\\')[1].split('-')[1].split('.')[0].upper():
+        delimiter = '/'
+        print("Correct: ", file.split(delimiter)[1].split('-')[1].split('.')[0].upper())
+        if plate == file.split(delimiter)[1].split('-')[1].split('.')[0].upper():
             success += 1
         resp = None
         while resp is not None:
