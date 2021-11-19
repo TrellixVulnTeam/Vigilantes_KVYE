@@ -49,7 +49,7 @@ class reportParticipantInfo : AppCompatActivity(), participantAdapter.OnItemClic
             val intent = Intent(this, reportWitnessInfo::class.java)
             intent.putExtra("Report List", reportList)
             intent.putExtra("Report Info", report)  //Parcelize report
-            startActivity(intent)
+            proceed.launch(intent)
         }
     }
 
@@ -122,4 +122,23 @@ class reportParticipantInfo : AppCompatActivity(), participantAdapter.OnItemClic
             }
         }
     }
+
+    private val proceed =
+        registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) {
+            if(it.resultCode == 441) {
+                //If report is completed, retrieve report list
+                val reportList = it.data?.getParcelableExtra<reportList>("Report List")
+                val report = it.data?.getParcelableExtra<reportObj>("Report Info")
+
+                val intent = Intent()
+                intent.putExtra("Report Info", report)
+                setResult(441, intent)
+                finish()
+            }
+            else {
+                Log.d("debug message", "Report List lost")
+            }
+        }
 }

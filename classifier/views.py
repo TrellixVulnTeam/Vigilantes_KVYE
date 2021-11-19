@@ -8,13 +8,14 @@ from numpy.random import seed
 from numpy import expand_dims
 import cv2
 import numpy as np
+from license_plate import plurality_vote,state_inference
 seed(42) # keras seed fixing import
 from tensorflow import random,reverse,convert_to_tensor
 from tensorflow import stack
 random.set_seed(1)
 from keras import backend as K
 K.set_image_data_format('channels_last')
-if __name__ == "__main__":
+def car_predict():
     model = load_model("checkpoints/best.h5")
     img = cv2.imread("train/185/00683.jpg")
     img = expand_dims(img,axis=0)
@@ -41,3 +42,14 @@ if __name__ == "__main__":
     prediction = math.argmax(prediction,axis=1)[0].numpy()
     print(prediction)
     print(data[str(prediction)])
+if __name__ == "__main__":
+    img = cv2.imread("example.jpg")
+    img = cv2.resize(img, None, fx=1.2, fy=1.2, interpolation=cv2.INTER_CUBIC)
+    height, width = img.shape
+    img = img[int(25 / 100 * height):int(85 / 100 * height), 0:width]
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    plate = plurality_vote([img])  # Just use one function for now
+    response = {}
+    response['lpn'] = plate
+    response['state'] = state_inference(img)
+    return JsonResponse(response)
