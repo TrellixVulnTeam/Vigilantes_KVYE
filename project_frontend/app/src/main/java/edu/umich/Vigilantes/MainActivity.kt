@@ -72,6 +72,7 @@ class MainActivity : AppCompatActivity() {
         }
         reportsButton.setOnClickListener {
             val intent = Intent(this, pastReports::class.java)
+            intent.putExtra("Report List", reportList)
             startActivity(intent)
         }
         locationButton.setOnClickListener {
@@ -83,7 +84,7 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, reportVehicleInfo::class.java)   //Change page to page being tested
             intent.putExtra("Report List", reportList)
             intent.putExtra("Report Info", report)
-            startActivity(intent)
+            startReport.launch(intent)
         }
         /*
         view.idgotoPDF.setOnClickListener {
@@ -93,4 +94,28 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun genPDF(view: View?) = startActivity(Intent(this, pdfActivity::class.java))
+
+    private val startReport =
+        registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) {
+            if(it.resultCode == 441) {
+                Log.d("debug message", "reports should be received")
+                //If report is completed, retrieve latest report
+                val report = it.data?.getParcelableExtra<reportObj>("Report Info")
+
+                //If new report exists, add to report list and go to preview
+                if(report != null) {
+                    reportList.addReport(report)
+
+                    val intent = Intent(this, reportPreview::class.java)
+                    intent.putExtra("Report Info", report)
+                    intent.putExtra("Report List", reportList)
+                    startActivity(intent)
+                }
+            }
+            else {
+                Log.d("debug message", "Report List lost")
+            }
+        }
 }
