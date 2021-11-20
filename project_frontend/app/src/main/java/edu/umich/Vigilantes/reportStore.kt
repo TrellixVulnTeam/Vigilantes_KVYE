@@ -2,6 +2,7 @@ package edu.umich.Vigilantes
 
 import android.content.Context
 import android.net.Uri
+import android.telecom.Call
 import android.widget.TextView
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaType
@@ -50,8 +51,6 @@ object reportStore {
 
             override fun onResponse(call: Call, response: Response) {
                 if (response.isSuccessful) {
-                    completion("Chatt posted!")
-                    //println(response.body!!.string())
                     carLabels.clear()
                     val cars = try { JSONObject(response.body?.string() ?: "").getJSONArray("prediction") } catch (e: JSONException) { JSONArray() }
                     for(i in 0..2){
