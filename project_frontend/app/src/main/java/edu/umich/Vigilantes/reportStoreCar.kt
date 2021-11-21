@@ -19,7 +19,7 @@ import kotlin.reflect.full.declaredMemberProperties
 import androidx.appcompat.app.AppCompatActivity
 
 
-object reportStore {
+object reportStoreCar {
 
     private val serverUrl = "https://3.137.139.79/"
 
@@ -27,7 +27,7 @@ object reportStore {
 
     val carLabels = arrayListOf<Int>()
 
-    fun postImages(context: Context, imageUri: Uri?,
+    fun postImagesCar(context: Context, imageUri: Uri?,
                   completion: (String) -> Unit?) {
         val mpFD = MultipartBody.Builder().setType(MultipartBody.FORM)
         imageUri?.run {
@@ -45,11 +45,11 @@ object reportStore {
         context.toast("Posting . . .")
 
         client.newCall(request).enqueue(object : Callback {
-            override fun onFailure(call: Call, e: IOException) {
+            override fun onFailure(call: okhttp3.Call, e: IOException) {
                 completion(e.localizedMessage ?: "Posting failed")
             }
 
-            override fun onResponse(call: Call, response: Response) {
+            override fun onResponse(call: okhttp3.Call, response: Response) {
                 if (response.isSuccessful) {
                     carLabels.clear()
                     val cars = try { JSONObject(response.body?.string() ?: "").getJSONArray("prediction") } catch (e: JSONException) { JSONArray() }

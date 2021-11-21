@@ -3,11 +3,11 @@ package edu.umich.Vigilantes
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import edu.umich.Vigilantes.reportStore.postImages
+import edu.umich.Vigilantes.reportStoreCar.postImagesCar
 import android.content.Context
 import android.content.Intent
 import edu.umich.Vigilantes.databinding.ActivityRecognizeBinding
-import edu.umich.Vigilantes.reportStore.carLabels
+import edu.umich.Vigilantes.reportStoreCar.carLabels
 import android.widget.*
 import org.json.JSONArray
 import org.json.JSONException
@@ -26,7 +26,7 @@ class recognizeActivity : AppCompatActivity() {
         val car2 = findViewById<TextView>(R.id.predictionTwo)
         val car3 = findViewById<TextView>(R.id.predictionThree)
         val uri: Uri? = reportProgress.getParcelable("car")!!
-        postImages(applicationContext,uri) { msg ->
+        postImagesCar(applicationContext,uri) { msg ->
             runOnUiThread {
                 toast(msg)
                 car1.text = carMap[carLabels[0].toString()].toString()
