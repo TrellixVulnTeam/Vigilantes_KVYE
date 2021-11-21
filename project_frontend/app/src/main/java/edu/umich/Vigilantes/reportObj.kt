@@ -1,6 +1,7 @@
 package edu.umich.Vigilantes
 
 import android.os.Parcelable
+import android.util.Log
 import kotlinx.android.parcel.Parcelize
 import java.util.*
 
@@ -15,6 +16,23 @@ data class reportObj(
     var participantList: MutableList<ParticipantInfo> = mutableListOf(),
     var witnessList: MutableList<WitnessInfo> = mutableListOf()
 ) : Parcelable {
+    fun updateTo(report: reportObj) {
+        this.setPos(report.getPos())
+        report.getDateTime()?.let { this.setDateTime(it) }
+        report.getLoc()?.let { this.setLoc(it) }
+        report.setVehicles(report.getVehicles())
+        report.setParticipants(report.getParticipants())
+        report.setWitnesses(report.getWitnesses())
+
+        report.getVehicles()[0].makemodel?.let { it1 ->
+            Log.d("in updateTo",
+                it1
+            )
+        }
+
+        Log.d("reportObj", "report updated")
+    }
+
     fun setPos(position: Int) {
         this.position = position
     }
@@ -48,6 +66,7 @@ data class reportObj(
     }
 
     fun setVehicles(vehicleList: MutableList<VehicleInfo>) {
+        Log.d("debug message", this.vehicleList[0].makemodel + " vs " + vehicleList[0].makemodel)
         this.vehicleList = vehicleList
     }
 
