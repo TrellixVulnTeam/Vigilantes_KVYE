@@ -73,7 +73,7 @@ class MainActivity : AppCompatActivity() {
         reportsButton.setOnClickListener {
             val intent = Intent(this, pastReports::class.java)
             intent.putExtra("Report List", reportList)
-            startActivity(intent)
+            startReport.launch(intent)
         }
         locationButton.setOnClickListener {
             val intent = Intent(this, addLoc::class.java)

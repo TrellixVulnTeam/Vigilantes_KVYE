@@ -9,6 +9,12 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_report_participant.*
+import android.view.View
+import android.view.ViewGroup
+import android.widget.*
+import edu.umich.Vigilantes.databinding.ActivityMainBinding
+import edu.umich.Vigilantes.databinding.ActivityReportParticipantBinding
+import kotlinx.android.synthetic.main.activity_report_participant.*
 
 class pastReports : AppCompatActivity(), reportListAdapter.OnItemClickListener {
     private lateinit var adapter: reportListAdapter
@@ -42,6 +48,24 @@ class pastReports : AppCompatActivity(), reportListAdapter.OnItemClickListener {
         val intent = Intent(this, reportPreview::class.java)
         intent.putExtra("Report Info", report)
         intent.putExtra("Report List", reportList)
-        startActivity(intent)
+        proceed.launch(intent)
     }
+    private val proceed =
+        registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) {
+            if(it.resultCode == 441) {
+                //If report is completed, retrieve report list
+                reportList = it.data?.getParcelableExtra("Report List")!!
+                val reportList = it.data?.getParcelableExtra<reportList>("Report List")
+                //val report = it.data?.getParcelableExtra<reportObj>("Report Info")
+
+                val intent = Intent()
+                intent.putExtra("Report List", reportList)
+                setResult(441, intent)
+            }
+            else {
+                Log.d("debug message", "Report List lost")
+            }
+        }
 }

@@ -35,7 +35,6 @@ class recognizeActivity : AppCompatActivity() {
                 //val debugInfo = carLabels[0]
                 //val debugdInfo = carLabels[1]
             }
-            finish()
         }
         val car1button = findViewById<Button>(R.id.carOne)
         val car2button = findViewById<Button>(R.id.carTwo)
