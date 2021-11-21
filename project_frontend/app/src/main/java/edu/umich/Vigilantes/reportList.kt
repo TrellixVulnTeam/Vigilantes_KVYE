@@ -36,7 +36,10 @@ data class reportList(
     }
 
     fun editReport(report: reportObj) {
-        this.reportList[report.getPos()] = report
+        var r = report
+        this.reportList[r.getPos()].updateTo(r)
+
+        this.reportList[0].getVehicles()[0].makemodel?.let { Log.d("in editReport", it) }
     }
 
     fun deleteReport(report: reportObj) {

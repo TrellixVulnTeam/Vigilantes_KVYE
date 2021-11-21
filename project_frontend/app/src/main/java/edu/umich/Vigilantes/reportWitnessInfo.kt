@@ -48,16 +48,18 @@ class reportWitnessInfo : AppCompatActivity(), witnessAdapter.OnItemClickListene
             report?.setWitnesses(reportWitnesses) //Set updated witnesses list to report
 
             if(reportList.find(report) != -1) {
+                Log.d("debug message", "report exists and will be edited")
                 reportList.editReport(report)       //If exists, edit report
             }
             else {
+                Log.d("debug message", "report does not exist and will be added")
                 reportList.addReport(report)        //If not exists, add report
             }
 
             //Return updated report/list to MainActivity
             val intent = Intent()
-            //intent.putExtra("Report List", reportList)
-            intent.putExtra("Report Info", report)  //Parcelize report
+            intent.putExtra("Report List", reportList)
+            //intent.putExtra("Report Info", report)  //Parcelize report
             setResult(441, intent)
             finish()
         }

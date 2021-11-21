@@ -102,8 +102,8 @@ class MainActivity : AppCompatActivity() {
             if(it.resultCode == 441) {
                 Log.d("debug message", "reports should be received")
                 //If report is completed, retrieve latest report
-                val report = it.data?.getParcelableExtra<reportObj>("Report Info")
-
+                reportList = it.data?.getParcelableExtra("Report List")!!
+                /*
                 //If new report exists, add to report list and go to preview
                 if(report != null) {
                     reportList.addReport(report)
@@ -112,7 +112,7 @@ class MainActivity : AppCompatActivity() {
                     intent.putExtra("Report Info", report)
                     intent.putExtra("Report List", reportList)
                     startActivity(intent)
-                }
+                }*/
             }
             else {
                 Log.d("debug message", "Report List lost")
