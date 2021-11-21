@@ -86,11 +86,6 @@ class MainActivity : AppCompatActivity() {
             intent.putExtra("Report Info", report)
             startReport.launch(intent)
         }
-        /*
-        view.idgotoPDF.setOnClickListener {
-            print("Headed to pdf activity")
-            startActivity(Intent(this, pdfActivity::class.java))
-        }*/
     }
 
     fun genPDF(view: View?) = startActivity(Intent(this, pdfActivity::class.java))

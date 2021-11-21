@@ -32,8 +32,8 @@ class recognizeActivity : AppCompatActivity() {
                 car1.text = carMap[carLabels[0].toString()].toString()
                 car2.text = carMap[carLabels[1].toString()].toString()
                 car3.text = carMap[carLabels[2].toString()].toString()
-                val debugInfo = carLabels[0]
-                val debugdInfo = carLabels[1]
+                //val debugInfo = carLabels[0]
+                //val debugdInfo = carLabels[1]
             }
             finish()
         }
