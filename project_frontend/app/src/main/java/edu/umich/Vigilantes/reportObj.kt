@@ -18,11 +18,11 @@ data class reportObj(
 ) : Parcelable {
     fun updateTo(report: reportObj) {
         this.setPos(report.getPos())
-        report.getDateTime()?.let { this.setDateTime(it) }
-        report.getLoc()?.let { this.setLoc(it) }
-        report.setVehicles(report.getVehicles())
-        report.setParticipants(report.getParticipants())
-        report.setWitnesses(report.getWitnesses())
+        getDateTime()?.let { this.setDateTime(it) }
+        getLoc()?.let { this.setLoc(it) }
+        setVehicles(report.getVehicles())
+        setParticipants(report.getParticipants())
+        setWitnesses(report.getWitnesses())
 
         report.getVehicles()[0].makemodel?.let { it1 ->
             Log.d("in updateTo",

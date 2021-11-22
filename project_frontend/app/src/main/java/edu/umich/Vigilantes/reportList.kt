@@ -37,8 +37,9 @@ data class reportList(
 
     fun editReport(report: reportObj) {
         var r = report
+        val debug = r.getPos()
         this.reportList[r.getPos()].updateTo(r)
-
+        val debug2 = this.reportList[0].getVehicles()[0].makemodel
         this.reportList[0].getVehicles()[0].makemodel?.let { Log.d("in editReport", it) }
     }
 
