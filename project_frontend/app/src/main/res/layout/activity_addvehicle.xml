@@ -16,15 +16,15 @@
         android:clickable="true"
 
         android:contentDescription="@string/addLicensePlate"
+        android:drawableRight="@android:drawable/checkbox_off_background"
+        android:gravity="center"
         android:text="Take License Plate Photo"
-        app:backgroundTint="#FFC107"
+        app:backgroundTint="@color/purple_700"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHeight_percent="0.25"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_percent="0.9"
-        android:gravity="center"
-        android:drawableRight="@android:drawable/checkbox_off_background"/>
+        app:layout_constraintWidth_percent="0.9" />
 
     <Button
         android:id="@+id/addCarImageButton"
@@ -35,14 +35,14 @@
         android:clickable="true"
 
         android:contentDescription="@string/addCar"
+        android:drawableRight="@android:drawable/checkbox_off_background"
         android:text="Take Car Photo"
-        app:backgroundTint="#FFC107"
+        app:backgroundTint="@color/purple_700"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHeight_percent="0.25"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/addPlateImageButton"
-        app:layout_constraintWidth_percent="0.9"
-        android:drawableRight="@android:drawable/checkbox_off_background"/>
+        app:layout_constraintWidth_percent="0.9" />
 
     <Button
         android:id="@+id/addVINImageButton"
@@ -53,14 +53,14 @@
         android:clickable="true"
 
         android:contentDescription="@string/addVin"
+        android:drawableRight="@android:drawable/checkbox_off_background"
         android:text="Take VIN Photo"
-        app:backgroundTint="#FFC107"
+        app:backgroundTint="@color/purple_700"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHeight_percent="0.25"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/addCarImageButton"
-        app:layout_constraintWidth_percent="0.9"
-        android:drawableRight="@android:drawable/checkbox_off_background"/>
+        app:layout_constraintWidth_percent="0.9" />
 
     <Button
         android:id="@+id/ContinueButton"
@@ -72,7 +72,7 @@
         android:text="Continue"
 
         android:textSize="32sp"
-        app:backgroundTint="#FFC107"
+        app:backgroundTint="@color/purple_700"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHeight_percent="0.12"
         app:layout_constraintStart_toStartOf="parent"

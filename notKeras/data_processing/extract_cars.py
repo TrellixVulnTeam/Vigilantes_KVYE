@@ -32,6 +32,7 @@ if __name__ == '__main__':
 
         x_max = img_[2][0][0]
         y_max = img_[3][0][0]
+        # label = [4][0][0]
 
         if len(img_) == 6:
             img_name = img_[5][0]

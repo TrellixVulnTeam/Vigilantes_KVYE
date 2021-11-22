@@ -31,7 +31,7 @@ class addVehicle : AppCompatActivity() {
     private lateinit var forCropResult: ActivityResultLauncher<Intent>
     private lateinit var takePicture: ActivityResultLauncher<Uri>
     private var popupExists = false
-    private var imageUri: Uri? = null
+    private var vinImageUri: Uri? = null
     private var carImageUri: Uri? = null
     private var plateImageUri: Uri? = null
     private var choice: Int = 0
@@ -39,9 +39,11 @@ class addVehicle : AppCompatActivity() {
     private var check2: Boolean = false
     private var check3: Boolean = false
     var report : Bundle = Bundle()
+    var finishedCar: VehicleInfo = VehicleInfo()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        changeVisuals(intent)
         Log.d("ONCREATE", "onCreate for addVehicle")
         setContentView(R.layout.activity_addvehicle)
 
@@ -53,14 +55,14 @@ class addVehicle : AppCompatActivity() {
                     Log.d("CROPPING", "Cropping")
                     result.data?.data.let {
                         if(choice == 0){
-                            imageUri?.run {
+                            vinImageUri?.run {
                                 if (!toString().contains("ORIGINAL")) {
                                     // delete uncropped photo taken for posting
                                     contentResolver.delete(this, null, null)
                                 }
                             }
-                            imageUri = it
-                            report.putParcelable("vin",imageUri)
+                            vinImageUri = it
+                            report.putParcelable("vinImageUri",vinImageUri)
                         }
                         else if (choice == 1){
                             plateImageUri?.run {
@@ -70,7 +72,7 @@ class addVehicle : AppCompatActivity() {
                                 }
                             }
                             plateImageUri = it
-                            report.putParcelable("plate",plateImageUri)
+                            report.putParcelable("plateImageUri",plateImageUri)
                         }
                         else{
                             carImageUri?.run {
@@ -80,7 +82,7 @@ class addVehicle : AppCompatActivity() {
                                 }
                             }
                             carImageUri = it
-                            report.putParcelable("car",carImageUri)
+                            report.putParcelable("carImageUri",carImageUri)
                             sendToResultsPage()
                         }
 
@@ -122,13 +124,13 @@ class addVehicle : AppCompatActivity() {
             choice = 1;
             plateImageUri = mediaStoreAlloc("image/jpeg")
             takePicture.launch(plateImageUri)
-            check1 = true
             plateButton.setCompoundDrawablesWithIntrinsicBounds(0,0,android.R.drawable.checkbox_on_background,0)
+            check1 = true
         }
         vinButton.setOnClickListener {
             choice = 0;
-            imageUri = mediaStoreAlloc("image/jpeg")
-            takePicture.launch(imageUri)
+            vinImageUri = mediaStoreAlloc("image/jpeg")
+            takePicture.launch(vinImageUri)
             check3 = true;
             vinButton.setCompoundDrawablesWithIntrinsicBounds(0,0,android.R.drawable.checkbox_on_background,0)
         }
@@ -254,7 +256,7 @@ class addVehicle : AppCompatActivity() {
         }
 
         if(choice == 0){
-            imageUri?.let { // Vin
+            vinImageUri?.let { // Vin
                 intent.data = it
                 forCropResult.launch(intent)
             }
@@ -273,11 +275,6 @@ class addVehicle : AppCompatActivity() {
         }
 
     } // Ditto
-    fun sendToPDF(){
-        val reportIntent: Intent = Intent(this,pdfActivity::class.java)
-        reportIntent.putExtras(report)
-        startActivity(reportIntent)
-    }
     private fun sendToResultsPage(){
         val reportIntent: Intent = Intent(this,recognizeActivity::class.java)
         reportIntent.putExtras(report)
@@ -311,5 +308,38 @@ class addVehicle : AppCompatActivity() {
         if(check3){
             vinButton.setCompoundDrawablesWithIntrinsicBounds(0,0,android.R.drawable.checkbox_on_background,0)
         }
+    }
+
+    fun changeVisuals(intent: Intent?){
+        intent?.let{
+            report = intent.extras!!
+            report?.let{
+                carImageUri = report.getParcelable("carImageUri")
+                vinImageUri = report.getParcelable("vinImageUri")
+                plateImageUri = report.getParcelable("plateImageUri")
+                check1 = report.getBoolean("check1",check1)
+                check2 = report.getBoolean("check2",check2)
+                check3 = report.getBoolean("check3",check3)
+            }
+            var carButton = findViewById<Button>(R.id.addCarImageButton)
+            var plateButton = findViewById<Button>(R.id.addPlateImageButton)
+            var vinButton = findViewById<Button>(R.id.addVINImageButton)
+            if(check1){
+                plateButton.setCompoundDrawablesWithIntrinsicBounds(0,0,android.R.drawable.checkbox_on_background,0)
+            }
+            if(check2){
+                carButton.setCompoundDrawablesWithIntrinsicBounds(0,0,android.R.drawable.checkbox_on_background,0)
+            }
+            if(check3){
+                vinButton.setCompoundDrawablesWithIntrinsicBounds(0,0,android.R.drawable.checkbox_on_background,0)
+            }
+        }
+
+        fun proceed(){
+            finishedCar.makemodel = report.getString("prediction")
+            finishedCar.VIN = report.getString("vin")
+            finishedCar.plateNumber
+        }
+
     }
 }
