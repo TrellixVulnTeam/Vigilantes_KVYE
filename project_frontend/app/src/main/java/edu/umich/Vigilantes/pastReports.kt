@@ -58,7 +58,11 @@ class pastReports : AppCompatActivity(), reportListAdapter.OnItemClickListener {
             if(it.resultCode == 441) {
                 //If report is completed, retrieve report list
                 reportList = it.data?.getParcelableExtra("Report List")!!
-                //val report = it.data?.getParcelableExtra<reportObj>("Report Info")
+
+                //Update recyclerview
+                adapter = reportListAdapter(reportList, this)
+                adapter.notifyDataSetChanged()
+                recycler_view.adapter = adapter
 
                 val intent = Intent()
                 intent.putExtra("Report List", reportList)

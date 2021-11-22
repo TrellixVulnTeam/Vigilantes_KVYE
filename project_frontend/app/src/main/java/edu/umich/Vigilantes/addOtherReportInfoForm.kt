@@ -46,6 +46,7 @@ class addOtherReportInfoForm : AppCompatActivity() {
             report?.setLoc(locationEntry.getText().toString())
             report?.setDateTime(datetimeEntry.getText().toString())
             report?.setDesc(descriptionEntry.getText().toString())
+            Log.d("debug message", report.getLoc() + report.getDateTime() + report.getDesc())
 
             //Check if report exists
             if(reportList.find(report) != -1) {
