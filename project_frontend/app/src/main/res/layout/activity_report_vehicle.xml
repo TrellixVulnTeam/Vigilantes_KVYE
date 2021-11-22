@@ -11,13 +11,16 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/purple_700"
+        android:background="@android:color/transparent"
         android:elevation="1dp"
+
         app:title="Vehicle Information"
-        app:titleTextColor="@android:color/white"
+        app:titleTextColor="@android:color/black"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent" >
+
+    </androidx.appcompat.widget.Toolbar>
 
     <Button
         android:id="@+id/addVehicleButton"
@@ -28,7 +31,7 @@
         android:clickable="true"
         android:text="Add Vehicle"
         android:textSize="24sp"
-        android:background="@color/purple_700"
+        android:background="@drawable/blue_rounded_button"
 
         app:layout_constraintTop_toBottomOf="@+id/toolbar"
         app:layout_constraintEnd_toEndOf="parent"
@@ -44,9 +47,10 @@
         android:layout_marginBottom="16dp"
         android:clickable="true"
         android:text="Continue"
-        android:textSize="24sp"
-        android:background="@color/purple_700"
+        android:textSize="18sp"
         android:includeFontPadding="false"
+        android:background="@drawable/blue_rounded_button"
+        android:drawableRight="@drawable/ic_baseline_arrow_forward_32"
 
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

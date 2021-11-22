@@ -7,10 +7,7 @@ import android.transition.Slide
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
-import android.widget.Button
-import android.widget.LinearLayout
-import android.widget.PopupWindow
-import android.widget.TextView
+import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -68,9 +65,9 @@ class reportPreview : AppCompatActivity() {
         witness_recycler_view.layoutManager = LinearLayoutManager(this)
         witness_recycler_view.setHasFixedSize(true)
 
-        val editButton = findViewById<Button>(R.id.editButton)
-        val deleteButton = findViewById<Button>(R.id.deleteButton)
-        val exportButton = findViewById<Button>(R.id.exportButton)
+        val editButton = findViewById<ImageButton>(R.id.editButton)
+        val deleteButton = findViewById<ImageButton>(R.id.deleteButton)
+        val exportButton = findViewById<ImageButton>(R.id.exportButton)
 
         editButton.setOnClickListener {
             //Return to vehicles page

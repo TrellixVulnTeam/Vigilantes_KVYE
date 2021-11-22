@@ -6,7 +6,8 @@
     android:layout_height="wrap_content"
     android:layout_margin="4dp"
 
-    app:cardBackgroundColor="@color/purple_700">
+    app:cardBackgroundColor="@android:color/transparent"
+    app:cardElevation="0dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -17,7 +18,8 @@
             android:id="@+id/report1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:background="@drawable/grey_rounded_button">
 
             <TextView
                 android:id="@+id/rep_datetime"

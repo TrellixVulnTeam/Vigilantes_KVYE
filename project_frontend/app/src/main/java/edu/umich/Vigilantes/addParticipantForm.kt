@@ -7,10 +7,7 @@ import android.transition.Slide
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
-import android.widget.Button
-import android.widget.EditText
-import android.widget.LinearLayout
-import android.widget.PopupWindow
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.google.android.material.button.MaterialButton
@@ -77,8 +74,8 @@ class addParticipantForm : AppCompatActivity() {
         val agentNumberEntry = findViewById<EditText>(R.id.agentNumberInput)
 
 
-        val saveButton = findViewById<Button>(R.id.saveButton)
-        val discardButton = findViewById<Button>(R.id.disdelButton)
+        val saveButton = findViewById<ImageButton>(R.id.saveButton)
+        val discardButton = findViewById<ImageButton>(R.id.disdelButton)
 
         saveButton.setOnClickListener {
             Log.d("debug message", "save button pressed")
