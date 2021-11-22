@@ -18,7 +18,7 @@ def clean(inpath, outpath, confidence, res_low, res_up, cut ):
 			if (t%cut[1]==cut[0]):
 				try:
 					img=cv2.imread(os.path.join(root, name))
-					output = model.predict(image=img, visualization=False)
+					output = model.predict(image=img, visualization=True)
 					print(name)
 					for i in range (output['segm'].shape[0]):
 						if (output['label'][i]==2 and output['score'][i]>=confidence-0.01):
@@ -32,8 +32,7 @@ def clean(inpath, outpath, confidence, res_low, res_up, cut ):
 							print(img2[...,0].shape)
 							print(mask.shape)
 							if (img2[...,0].shape != mask.shape):
-								t+=1
-								continue
+								break
 							img2[...,0]=img2[...,0]*mask
 							img2[...,1]=img2[...,1]*mask
 							img2[...,2]=img2[...,2]*mask
@@ -56,9 +55,10 @@ def clean(inpath, outpath, confidence, res_low, res_up, cut ):
 							imageVar = cv2.Laplacian(img2gray, cv2.CV_64F).var()
 							print(imageVar)
 					
-							if (imageVar>=res_low and imageVar<=res_up):
-								cv2.imwrite(outpath+'/car-'+str(j)+'---'+str(imageVar)+'.png',img2)						
-								j+=1
+							if (imageVar>=res_low and imageVar<=res_up and img2.shape[0]>100 and img2.shape[1]>100):
+								print(outpath+'/'+root.split("\\")[1]+'-'+str(t)+'---'+str(i)+'.png')
+								cv2.imwrite(outpath+'/'+root.split("\\")[1]+'-'+str(t)+'---'+str(i)+'.png',img2)						
+								break
 
 				except:
 					print("error in", name)
