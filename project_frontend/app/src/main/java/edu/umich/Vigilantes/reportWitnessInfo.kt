@@ -35,7 +35,7 @@ class reportWitnessInfo : AppCompatActivity(), witnessAdapter.OnItemClickListene
         recycler_view.setHasFixedSize(true)
 
         val addWitnessButton = findViewById<Button>(R.id.addWitnessButton)
-        val generateReportButton = findViewById<Button>(R.id.generateReportButton)
+        val continueButton = findViewById<Button>(R.id.continueButton)
 
         addWitnessButton.setOnClickListener {
             val witness = WitnessInfo()
@@ -44,28 +44,13 @@ class reportWitnessInfo : AppCompatActivity(), witnessAdapter.OnItemClickListene
             addWitness.launch(intent)
         }
 
-        generateReportButton.setOnClickListener {
-            report?.setWitnesses(reportWitnesses) //Set updated witnesses list to report
-
-            if(reportList.find(report) != -1) {
-                Log.d("debug message", "report exists and will be edited")
-                reportList.editReport(report)       //If exists, edit report
-            }
-            else {
-                Log.d("debug message", "report does not exist and will be added")
-                reportList.addReport(report)        //If not exists, add report
-            }
-
-            //Return updated report/list to MainActivity
-            val intent = Intent()
+        continueButton.setOnClickListener {
+            //Send report to next page
+            val intent = Intent(this, addOtherReportInfoForm::class.java)
             intent.putExtra("Report List", reportList)
-            //intent.putExtra("Report Info", report)  //Parcelize report
-            setResult(441, intent)
-            finish()
+            intent.putExtra("Report Info", report)  //Parcelize report
+            proceed.launch(intent)
         }
-
-        val incidentDescription = findViewById<TextView>(R.id.incidentDescription)
-        incidentDescription.movementMethod = ScrollingMovementMethod()
     }
 
     override fun onItemClick(position: Int) {

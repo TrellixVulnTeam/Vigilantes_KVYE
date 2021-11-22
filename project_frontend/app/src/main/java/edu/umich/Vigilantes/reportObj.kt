@@ -66,7 +66,6 @@ data class reportObj(
     }
 
     fun setVehicles(vehicleList: MutableList<VehicleInfo>) {
-        Log.d("debug message", this.vehicleList[0].makemodel + " vs " + vehicleList[0].makemodel)
         this.vehicleList = vehicleList
     }
 

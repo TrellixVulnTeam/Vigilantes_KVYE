@@ -114,6 +114,10 @@
             android:name=".reportPreview"
             android:theme="@style/Theme.Design.NoActionBar">
         </activity>
+        <activity
+            android:name=".addOtherReportInfoForm"
+            android:theme="@style/Theme.Design.NoActionBar">
+        </activity>
     </application>
 
 </manifest>

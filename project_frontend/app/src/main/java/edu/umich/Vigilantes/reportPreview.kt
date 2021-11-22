@@ -50,9 +50,9 @@ class reportPreview : AppCompatActivity() {
         val incidentDesc = findViewById<TextView>(R.id.incidentDescription)
 
         //Display report information
-        location.setText(report?.getLoc()?: "N/A")
-        time.setText(report?.getDateTime()?: "N/A")
-        incidentDesc.setText(report?.getDesc()?: "")
+        location.text = report?.getLoc()?: ""
+        time.text = report?.getDateTime()?: ""
+        incidentDesc.text = report?.getDesc()?: ""
 
         //Set recycler view adapters
         vehicle_recycler_view.adapter = vAdapter

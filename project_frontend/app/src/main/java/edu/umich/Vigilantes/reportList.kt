@@ -31,15 +31,12 @@ data class reportList(
     fun addReport(report: reportObj) {
         var r = report
         r.setPos(getLength())
-        Log.d("new report added at", r.getPos().toString())
         this.reportList.add(r)
     }
 
     fun editReport(report: reportObj) {
         var r = report
         this.reportList[r.getPos()].updateTo(r)
-
-        this.reportList[0].getVehicles()[0].makemodel?.let { Log.d("in editReport", it) }
     }
 
     fun deleteReport(report: reportObj) {

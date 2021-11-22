@@ -81,6 +81,12 @@ class MainActivity : AppCompatActivity() {
         }
         debugButton.setOnClickListener {
             var report = reportObj()
+
+            val sdf = SimpleDateFormat("yyyy.MM.dd G 'at' HH:mm:ss z")
+            val currentDateandTime: String = sdf.format(Date())
+
+            report.setDateTime(currentDateandTime)
+
             val intent = Intent(this, reportVehicleInfo::class.java)   //Change page to page being tested
             intent.putExtra("Report List", reportList)
             intent.putExtra("Report Info", report)
