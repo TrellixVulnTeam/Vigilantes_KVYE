@@ -8,10 +8,7 @@ import android.transition.Slide
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
-import android.widget.Button
-import android.widget.LinearLayout
-import android.widget.PopupWindow
-import android.widget.TextView
+import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -40,8 +37,8 @@ class vehiclePreview : AppCompatActivity() {
             colorPreview.setText(retrVehicle.color)
         }
 
-        val editButton = findViewById<Button>(R.id.editButton)
-        val deleteButton = findViewById<Button>(R.id.deleteButton)
+        val editButton = findViewById<ImageButton>(R.id.editButton)
+        val deleteButton = findViewById<ImageButton>(R.id.deleteButton)
 
         editButton.setOnClickListener {
             val intent = Intent(this, addVehicleForm::class.java)

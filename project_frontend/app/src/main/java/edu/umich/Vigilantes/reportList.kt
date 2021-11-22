@@ -31,12 +31,12 @@ data class reportList(
     fun addReport(report: reportObj) {
         var r = report
         r.setPos(getLength())
-        Log.d("new report added at", r.getPos().toString())
         this.reportList.add(r)
     }
 
     fun editReport(report: reportObj) {
-        this.reportList[report.getPos()] = report
+        var r = report
+        this.reportList[r.getPos()].updateTo(r)
     }
 
     fun deleteReport(report: reportObj) {

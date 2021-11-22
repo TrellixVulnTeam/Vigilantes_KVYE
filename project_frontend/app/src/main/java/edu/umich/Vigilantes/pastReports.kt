@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
+import android.widget.ImageButton
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -29,7 +30,7 @@ class pastReports : AppCompatActivity(), reportListAdapter.OnItemClickListener {
         recycler_view.setHasFixedSize(true)
 
         //Find home button
-        var homeButton = findViewById<Button>(R.id.homeButton)
+        var homeButton = findViewById<ImageButton>(R.id.homeButton)
 
         //Listener for home click
         homeButton.setOnClickListener {
@@ -37,11 +38,38 @@ class pastReports : AppCompatActivity(), reportListAdapter.OnItemClickListener {
         }
     }
 
+    //Override native back button
+    override fun onBackPressed() {
+        finish()    //End current activity
+    }
+
     override fun onItemClick(position: Int) {
         val report = reportList.getList()[position]
         val intent = Intent(this, reportPreview::class.java)
         intent.putExtra("Report Info", report)
         intent.putExtra("Report List", reportList)
-        startActivity(intent)
+        proceed.launch(intent)
     }
+
+    private val proceed =
+        registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) {
+            if(it.resultCode == 441) {
+                //If report is completed, retrieve report list
+                reportList = it.data?.getParcelableExtra("Report List")!!
+
+                //Update recyclerview
+                adapter = reportListAdapter(reportList, this)
+                adapter.notifyDataSetChanged()
+                recycler_view.adapter = adapter
+
+                val intent = Intent()
+                intent.putExtra("Report List", reportList)
+                setResult(441, intent)
+            }
+            else {
+                Log.d("debug message", "Report List lost")
+            }
+        }
 }

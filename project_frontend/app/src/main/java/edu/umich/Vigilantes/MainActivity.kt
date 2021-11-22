@@ -73,7 +73,7 @@ class MainActivity : AppCompatActivity() {
         reportsButton.setOnClickListener {
             val intent = Intent(this, pastReports::class.java)
             intent.putExtra("Report List", reportList)
-            startActivity(intent)
+            startReport.launch(intent)
         }
         locationButton.setOnClickListener {
             val intent = Intent(this, addLoc::class.java)
@@ -81,16 +81,17 @@ class MainActivity : AppCompatActivity() {
         }
         debugButton.setOnClickListener {
             var report = reportObj()
+
+            val sdf = SimpleDateFormat("yyyy.MM.dd G 'at' HH:mm:ss z")
+            val currentDateandTime: String = sdf.format(Date())
+
+            report.setDateTime(currentDateandTime)
+
             val intent = Intent(this, reportVehicleInfo::class.java)   //Change page to page being tested
             intent.putExtra("Report List", reportList)
             intent.putExtra("Report Info", report)
             startReport.launch(intent)
         }
-        /*
-        view.idgotoPDF.setOnClickListener {
-            print("Headed to pdf activity")
-            startActivity(Intent(this, pdfActivity::class.java))
-        }*/
     }
 
     fun genPDF(view: View?) = startActivity(Intent(this, pdfActivity::class.java))
@@ -102,8 +103,8 @@ class MainActivity : AppCompatActivity() {
             if(it.resultCode == 441) {
                 Log.d("debug message", "reports should be received")
                 //If report is completed, retrieve latest report
-                val report = it.data?.getParcelableExtra<reportObj>("Report Info")
-
+                reportList = it.data?.getParcelableExtra("Report List")!!
+                /*
                 //If new report exists, add to report list and go to preview
                 if(report != null) {
                     reportList.addReport(report)
@@ -112,7 +113,7 @@ class MainActivity : AppCompatActivity() {
                     intent.putExtra("Report Info", report)
                     intent.putExtra("Report List", reportList)
                     startActivity(intent)
-                }
+                }*/
             }
             else {
                 Log.d("debug message", "Report List lost")

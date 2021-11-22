@@ -3,16 +3,12 @@ package edu.umich.Vigilantes
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import edu.umich.Vigilantes.reportStore.postImages
+import edu.umich.Vigilantes.reportStoreCar.postImagesCar
 import android.content.Context
 import android.content.Intent
-import kotlinx.serialization.json.*
-import com.google.gson.*
 import edu.umich.Vigilantes.databinding.ActivityRecognizeBinding
-import edu.umich.Vigilantes.reportStore.carLabels
+import edu.umich.Vigilantes.reportStoreCar.carLabels
 import android.widget.*
-import kotlinx.android.synthetic.main.activity_recognize.*
-import kotlinx.android.synthetic.main.list_report.*
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
@@ -30,14 +26,14 @@ class recognizeActivity : AppCompatActivity() {
         val car2 = findViewById<TextView>(R.id.predictionTwo)
         val car3 = findViewById<TextView>(R.id.predictionThree)
         val uri: Uri? = reportProgress.getParcelable("car")!!
-        postImages(applicationContext,uri) { msg ->
+        postImagesCar(applicationContext,uri) { msg ->
             runOnUiThread {
                 toast(msg)
                 car1.text = carMap[carLabels[0].toString()].toString()
                 car2.text = carMap[carLabels[1].toString()].toString()
                 car3.text = carMap[carLabels[2].toString()].toString()
-                val debugInfo = carLabels[0]
-                val debugdInfo = carLabels[1]
+                //val debugInfo = carLabels[0]
+                //val debugdInfo = carLabels[1]
             }
         }
         val car1button = findViewById<Button>(R.id.carOne)

@@ -7,10 +7,8 @@ import android.transition.Slide
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
-import android.widget.Button
-import android.widget.LinearLayout
-import android.widget.PopupWindow
-import android.widget.TextView
+import android.widget.*
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -50,9 +48,9 @@ class reportPreview : AppCompatActivity() {
         val incidentDesc = findViewById<TextView>(R.id.incidentDescription)
 
         //Display report information
-        location.setText(report?.getLoc()?: "N/A")
-        time.setText(report?.getDateTime()?: "N/A")
-        incidentDesc.setText(report?.getDesc()?: "")
+        location.text = report?.getLoc()?: ""
+        time.text = report?.getDateTime()?: ""
+        incidentDesc.text = report?.getDesc()?: ""
 
         //Set recycler view adapters
         vehicle_recycler_view.adapter = vAdapter
@@ -67,17 +65,16 @@ class reportPreview : AppCompatActivity() {
         witness_recycler_view.layoutManager = LinearLayoutManager(this)
         witness_recycler_view.setHasFixedSize(true)
 
-        val editButton = findViewById<Button>(R.id.editButton)
-        val deleteButton = findViewById<Button>(R.id.deleteButton)
-        val exportButton = findViewById<Button>(R.id.exportButton)
+        val editButton = findViewById<ImageButton>(R.id.editButton)
+        val deleteButton = findViewById<ImageButton>(R.id.deleteButton)
+        val exportButton = findViewById<ImageButton>(R.id.exportButton)
 
         editButton.setOnClickListener {
             //Return to vehicles page
             val intent = Intent(this, reportVehicleInfo::class.java)
             intent.putExtra("Report List", reportList)
             intent.putExtra("Report Info", report)  //Parcelize report
-            startActivity(intent)
-            finish()
+            proceed.launch(intent)
         }
 
         deleteButton.setOnClickListener {
@@ -136,4 +133,22 @@ class reportPreview : AppCompatActivity() {
         var root_layout = findViewById<ConstraintLayout>(R.id.root_layout)
         popupWindow.showAtLocation(root_layout, Gravity.CENTER, 0, 0)
     }
+    private val proceed =
+        registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) {
+            if(it.resultCode == 441) {
+                //If report is completed, retrieve report list
+                val reportList = it.data?.getParcelableExtra<reportList>("Report List")
+                //val report = it.data?.getParcelableExtra<reportObj>("Report Info")
+
+                val intent = Intent()
+                intent.putExtra("Report List", reportList)
+                setResult(441, intent)
+                finish()
+            }
+            else {
+                Log.d("debug message", "Report List lost")
+            }
+        }
 }
