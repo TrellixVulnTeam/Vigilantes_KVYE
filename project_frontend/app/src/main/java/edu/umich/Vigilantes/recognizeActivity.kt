@@ -25,7 +25,7 @@ class recognizeActivity : AppCompatActivity() {
         val car1 = findViewById<TextView>(R.id.predictionOne)
         val car2 = findViewById<TextView>(R.id.predictionTwo)
         val car3 = findViewById<TextView>(R.id.predictionThree)
-        val uri: Uri? = reportProgress.getParcelable("car")!!
+        val uri: Uri? = reportProgress.getParcelable("carImageUri")
         postImagesCar(applicationContext,uri) { msg ->
             runOnUiThread {
                 toast(msg)
