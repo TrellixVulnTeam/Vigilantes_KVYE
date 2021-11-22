@@ -25,7 +25,8 @@ if __name__ == '__main__':
     extracted_folder = parsed.output
 
     labels_meta = mat_io.loadmat(metas)
-
+    print(labels_meta)
+    exit(1)
     for img_ in labels_meta['annotations'][0]:
         x_min = img_[0][0][0]
         y_min = img_[1][0][0]
