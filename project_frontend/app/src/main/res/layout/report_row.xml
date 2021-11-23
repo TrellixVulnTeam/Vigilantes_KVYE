@@ -21,39 +21,62 @@
             android:orientation="vertical"
             android:background="@drawable/grey_rounded_button">
 
-            <TextView
-                android:id="@+id/rep_datetime"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="datetime"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:layout_weight="1">
+                android:layout_height="match_parent"
+                android:paddingTop="8dp"
+                android:paddingBottom="4dp"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp">
 
-            </TextView>
+                <TextView
+                    android:id="@+id/rep_datetime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="datetime"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:layout_weight="1"/>
+            </LinearLayout>
 
-            <TextView
-                android:id="@+id/rep_location"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="location"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:layout_weight="1">
+                android:layout_height="match_parent"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp">
 
-            </TextView>
+                <TextView
+                    android:id="@+id/rep_location"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="location"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:layout_weight="1" />
 
-            <TextView
-                android:id="@+id/rep_incidentDesc"
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:text="Description here"
-                android:textSize="18sp"
-                android:layout_weight="1"
-                android:ellipsize="end"
-                android:maxLines="3">
+                android:layout_height="match_parent"
+                android:paddingTop="4dp"
+                android:paddingBottom="8dp"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp">
 
-            </TextView>
+                <TextView
+                    android:id="@+id/rep_incidentDesc"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:text="Description here"
+                    android:textSize="18sp"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:maxLines="3"/>
+
+            </LinearLayout>
 
         </LinearLayout>
     </RelativeLayout>

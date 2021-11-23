@@ -104,19 +104,21 @@ class MainActivity : AppCompatActivity() {
                 Log.d("debug message", "reports should be received")
                 //If report is completed, retrieve latest report
                 reportList = it.data?.getParcelableExtra("Report List")!!
-                /*
+                var report = it.data?.getParcelableExtra<reportObj>("Report Info")!!
                 //If new report exists, add to report list and go to preview
                 if(report != null) {
-                    reportList.addReport(report)
-
-                    val intent = Intent(this, reportPreview::class.java)
-                    intent.putExtra("Report Info", report)
-                    intent.putExtra("Report List", reportList)
-                    startActivity(intent)
-                }*/
+                    goToPreview(reportList, report)
+                }
             }
             else {
                 Log.d("debug message", "Report List lost")
             }
         }
+
+    private fun goToPreview(reportList: reportList, report: reportObj) {
+        val intent = Intent(this, reportPreview::class.java)
+        intent.putExtra("Report List", reportList)
+        intent.putExtra("Report Info", report)
+        startReport.launch(intent)
+    }
 }

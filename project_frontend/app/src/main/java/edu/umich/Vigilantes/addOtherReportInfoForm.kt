@@ -61,7 +61,7 @@ class addOtherReportInfoForm : AppCompatActivity() {
             //Return updated report/list to MainActivity
             val intent = Intent()
             intent.putExtra("Report List", reportList)
-            //intent.putExtra("Report Info", report)  //Parcelize report
+            intent.putExtra("Report Info", report)  //Parcelize report
             setResult(441, intent)
             finish()
         }
