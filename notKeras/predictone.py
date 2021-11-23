@@ -3,7 +3,7 @@ from torchvision import transforms
 from torch import topk, load
 
 if __name__ == "__main__":
-    img = Image.open("00076.jpg").convert('RGB')
+    img = Image.open("download.jpg").convert('RGB')
     #trans2 = transforms.Resize((299,299))
     #trans3 = transforms.ToTensor()
     #normalize = transforms.Normalize(mean=[0.5, 0.5, 0.5],
@@ -30,5 +30,18 @@ if __name__ == "__main__":
     #print(im_tense.shape)
     #output = functional.softmax(output)
     #gpu_output = gpumodel(gpu_tense.expand(1,gpu_tense.shape[0],gpu_tense.shape[1],gpu_tense.shape[2]))
-    print(topk(output,3)[1][0].tolist())
+    results = topk(output,30)[1][0].tolist()
+    predictions = []
+    for i in range(30):
+        if(results[i] > 195):
+            predictions.append(results[i])
+            break
+    if len(predictions) == 1:
+        predictions.append(results[0])
+        predictions.append(results[1])
+    if len(predictions) == 0:
+        predictions.append(results[0])
+        predictions.append(results[1])
+        predictions.append(results[2])
+    print(predictions)
     #print(topk(gpu_output, 10))

@@ -85,7 +85,9 @@ class reportPreview : AppCompatActivity() {
         }
 
         exportButton.setOnClickListener {
-
+            val intent = Intent(this, pdfActivity::class.java)
+            intent.putExtra("report", report)  //Parcelize report
+            proceed.launch(intent)
         }
     }
 

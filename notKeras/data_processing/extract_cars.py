@@ -25,13 +25,15 @@ if __name__ == '__main__':
     extracted_folder = parsed.output
 
     labels_meta = mat_io.loadmat(metas)
-
+    print(labels_meta)
+    exit(1)
     for img_ in labels_meta['annotations'][0]:
         x_min = img_[0][0][0]
         y_min = img_[1][0][0]
 
         x_max = img_[2][0][0]
         y_max = img_[3][0][0]
+        # label = [4][0][0]
 
         if len(img_) == 6:
             img_name = img_[5][0]

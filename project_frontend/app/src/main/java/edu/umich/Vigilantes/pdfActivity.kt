@@ -37,6 +37,7 @@ class pdfActivity : AppCompatActivity() {
 
     // variables for our buttons.
     private lateinit var generatePDFbtn: Button
+    private var finalReport: reportObj? = reportObj()
 
     // declaring width and height
     // for our PDF file.
@@ -54,7 +55,7 @@ class pdfActivity : AppCompatActivity() {
 
         // initializing pdf button
         generatePDFbtn = findViewById(R.id.idBtnGeneratePDF)
-        val report = intent.extras
+        finalReport = intent.extras?.getParcelable("report")
 
 
         if (!checkPermission()) {
@@ -73,8 +74,6 @@ class pdfActivity : AppCompatActivity() {
     fun generatePDF() {
         // Create PDF
         val pdfDocument = PdfDocument()
-        val carReportTemplate =
-            mutableListOf(mapOf("Name" to "Subaru", "LicensePlate" to "1234 ABC"),mapOf("Name" to "Hummer", "LicensePlate" to "123 ABC"))
 
         val paint = Paint()
         val title = Paint() // for title
@@ -122,22 +121,25 @@ class pdfActivity : AppCompatActivity() {
         val pages = mutableListOf<PdfDocument.PageInfo>()
         var number = 2
          // initialize page of reports
-        for (car in carReportTemplate){
-            pages.add(PageInfo.Builder(pagewidth, pageHeight, number).create())
-            number += 1
+        finalReport?.let{
+            for (vehicle in it.vehicleList){
+                pages.add(PageInfo.Builder(pagewidth, pageHeight, number).create())
+                number += 1
+            }
         }
+
         report.typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
         report.textSize = 15f
         report.color = ContextCompat.getColor(this, R.color.black)
         var num = 0
-        for(page in pages){
+        /*for(page in pages){
             val startedPage = pdfDocument.startPage(page)
             val reportCanvas = startedPage.canvas
             carReportTemplate[num]["Name"]?.let { reportCanvas.drawText(it,40f, 80f, report) }
             carReportTemplate[num]["LicensePlate"]?.let { reportCanvas.drawText(it,40f, 120f, report) }
             num += 1
             pdfDocument.finishPage(startedPage)
-         }
+         }*/
 
         // below line is used to set the name of
         // our PDF file and its path.
