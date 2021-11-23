@@ -142,7 +142,7 @@ class reportPreview : AppCompatActivity() {
             if(it.resultCode == 441) {
                 //If report is completed, retrieve report list
                 val reportList = it.data?.getParcelableExtra<reportList>("Report List")
-                //val report = it.data?.getParcelableExtra<reportObj>("Report Info")
+                val report = it.data?.getParcelableExtra<reportObj>("Report Info")
 
                 val intent = Intent()
                 intent.putExtra("Report List", reportList)

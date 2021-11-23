@@ -33,6 +33,7 @@ data class reportObj(
     }
 
     fun getPos(): Int {
+        Log.d("This report is at position ", this.position.toString())
         return this.position
     }
 

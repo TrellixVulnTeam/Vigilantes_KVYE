@@ -45,6 +45,7 @@ class pastReports : AppCompatActivity(), reportListAdapter.OnItemClickListener {
 
     override fun onItemClick(position: Int) {
         val report = reportList.getList()[position]
+        Log.d("This report is at position", report.getPos().toString())
         val intent = Intent(this, reportPreview::class.java)
         intent.putExtra("Report Info", report)
         intent.putExtra("Report List", reportList)

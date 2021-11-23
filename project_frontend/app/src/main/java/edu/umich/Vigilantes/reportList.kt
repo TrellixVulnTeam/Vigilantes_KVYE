@@ -30,8 +30,9 @@ data class reportList(
 
     fun addReport(report: reportObj) {
         var r = report
-        r.setPos(getLength())
+        //r.setPos(getLength())
         this.reportList.add(r)
+        updatePositions()
     }
 
     fun editReport(report: reportObj) {
