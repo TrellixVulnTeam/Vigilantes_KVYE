@@ -38,6 +38,7 @@ if __name__ == '__main__':
     images_count = 0
     label_count = 196
     for image in glob.glob("cleaned/*"):
+        fulldir = image
         dir, image = image.split('\\')
         year,model = image.split(' ',1)
         model = model.split('-')[0]
@@ -45,6 +46,9 @@ if __name__ == '__main__':
         if key not in mappings:
             mappings[key] = str(label_count)
             label_count += 1
+            img = img_io.imread(fulldir)
+            img_io.imsave(f'examples/{key}.jpg',img)
+            print('Saving...')
         images_count += 1
     with open('updated_labels.json','w+') as fp:
         json.dump(mappings,fp)
