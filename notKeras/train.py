@@ -8,7 +8,8 @@ import model.model as module_arch
 from parse_config import ConfigParser
 from trainer import Trainer
 from sklearn import metrics
-from torchvision.models.resnet import resnet34
+from torchvision.models.resnet import resnet34,resnet50
+from torchvision.models.efficientnet import efficientnet_b0
 import torch
 from PIL import  Image
 from torchvision import transforms
@@ -26,7 +27,7 @@ def main(config):
 
     # build model architecture, then print to console
     model = resnet34(pretrained=True,progress=True)
-    model.fc = torch.nn.Linear(512,196)
+    model.fc = torch.nn.Linear(512,397)
     logger.info(model)
 
     # get function handles of loss and metrics

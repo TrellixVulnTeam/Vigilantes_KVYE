@@ -10,6 +10,8 @@ import numpy as np
 import random
 from skimage import io as img_io
 import json
+import time
+import copy
 
 _logger = logging.getLogger(__name__)
 _logger.setLevel(0)
@@ -26,15 +28,15 @@ def genFilename(current_file):
     return file
 
 if __name__ == '__main__':
-    train = 1 # Set to 1 if train set... Don't have enough time for arg parsing
-    labels_meta = mat_io.loadmat("old_cars_test_annos_withlabels.mat")
+    train = 0 # Set to 1 if train set... Don't have enough time for arg parsing
+    labels_meta = mat_io.loadmat("old_cars_train_annos.mat")
     # Update our label json. Will need to assign labels later
     with open("easy_labels.json",'r') as f:
         mappings = json.load(f)
     mappings = invertJSON(mappings)
     np_images = labels_meta['annotations'][0]
     images_count = 0
-    label_count = 197
+    label_count = 196
     for image in glob.glob("cleaned/*"):
         dir, image = image.split('\\')
         year,model = image.split(' ',1)
@@ -49,28 +51,30 @@ if __name__ == '__main__':
     # Create a numpy array to assign to end of other numpy array
     num_images = int(images_count/2)
     old_data = labels_meta['annotations']
-    fresh_annotations = np.copy(old_data[0][0:num_images])
+    fresh_annotations = copy.deepcopy((old_data[0][0:num_images]))
     print(fresh_annotations.shape)
     current_file = 0
     split = 0
-    print(type(fresh_annotations[0]))
     for image in glob.glob("cleaned/*"):
         if split % 2 == train: # For validation data
-            #current_file += 1
+            # current_file += 1
             split += 1
             continue
         try:
             img = img_io.imread(image)
-            if train == 1:
-                for i,row in enumerate(img):
-                    for n,pixel in enumerate(row):
-                        if img[i][n][0] == 0 and img[i][n][1] == 0 and img[i][n][2] == 0:
-                            img[i][n][0] = int(random.random()*256)
-                            img[i][n][1] = int(random.random()*256)
-                            img[i][n][2] = int(random.random()*256)
+            """if train == 1:
+                #start = time.time()
+                black = [0,0,0]
+                indices = np.where(np.any(img == black,axis=2))
+                #middle = time.time()
+                for i in range(len(indices[0])):
+                    img[indices[0][i]][indices[1][i]][0] = int(random.random()*256)
+                    img[indices[0][i]][indices[1][i]][1] = int(random.random()*256)
+                    img[indices[0][i]][indices[1][i]][2] = int(random.random()*256)
+                #end = time.time()"""
         except:
             print('Failure to read image')
-            exit(1) # This is something that the user needs to fix
+            exit(1)
         fresh_annotations[current_file][0][0][0] = 0  # x min
         fresh_annotations[current_file][1][0][0] = 0  # y min
         fresh_annotations[current_file][2] = fresh_annotations[current_file][2].astype(np.uint16)
@@ -82,10 +86,10 @@ if __name__ == '__main__':
         model = model.split('-')[0]
         key = f'{model} {year}'
         fresh_annotations[current_file][4] = fresh_annotations[current_file][4].astype(np.uint16)
-        fresh_annotations[current_file][4][0][0] = int(mappings[key])
+        fresh_annotations[current_file][4][0][0] = int(mappings[key]) + 1
         save_spot = genFilename(current_file)
         fresh_annotations[current_file][5][0] = save_spot
-        img_io.imsave("train_images\\" + save_spot,img)
+        #img_io.imsave("train_images\\" + save_spot,img)
         print(fresh_annotations[current_file])
         current_file += 1
         split += 1
@@ -97,5 +101,5 @@ if __name__ == '__main__':
         '__globals__': [],
         'annotations': np_images
     }
-    mat_io.savemat("new_cars_test_annos_withlabels.mat",long_dict)
+    mat_io.savemat("new_cars_train_annos.mat",long_dict)
 

@@ -2,6 +2,31 @@ import numpy as np
 import torch
 from torchvision.utils import make_grid
 from base import BaseTrainer
+from scipy import io as mat_io
+def make_weights():
+    labels_meta = mat_io.loadmat("update_mat/new_cars_train_annos.mat")
+    print(labels_meta)
+    weights = {}
+    for img_ in labels_meta['annotations'][0]:
+        label = img_[4][0][0]
+        if label not in weights:
+            weights[label] = 1
+        else:
+            weights[label] += 1
+    for label, weight in weights.items():
+        weights[label] = (5294 / 397) / weights[label]
+    weights[392] = (5294 / 397)
+    weights[293] = (5294 / 397)
+    weights = sorted(weights.items())
+    tensor_weights = torch.zeros(397)
+    for i in range(len(weights)):
+        if i > 195:
+            tensor_weights[i] = weights[i][1] ** 0.5
+        else:
+            tensor_weights[i] = weights[i][1]
+    #tensor_weights = tensor_weights.expand(1,397)
+    #return tensor_weights.repeat(16,1)
+    return tensor_weights
 
 
 class Trainer(BaseTrainer):
@@ -20,6 +45,7 @@ class Trainer(BaseTrainer):
         self.do_validation = self.valid_data_loader is not None
         self.lr_scheduler = lr_scheduler
         self.log_step = int(np.sqrt(data_loader.batch_size))
+        self.weights = make_weights().to('cuda')
 
     def _eval_metrics(self, output, target):
         acc_metrics = np.zeros(len(self.metrics))
@@ -56,7 +82,7 @@ class Trainer(BaseTrainer):
 
             self.optimizer.zero_grad()
             output = self.model(data)
-            loss = self.loss(output, target)
+            loss = torch.nn.CrossEntropyLoss(weight=self.weights)(output, target)
             loss.backward()
             self.optimizer.step()
 

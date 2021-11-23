@@ -4,6 +4,7 @@ from numpy import inf
 from logger import WriterTensorboardX
 
 
+
 class BaseTrainer:
     """
     Base class for all trainers
