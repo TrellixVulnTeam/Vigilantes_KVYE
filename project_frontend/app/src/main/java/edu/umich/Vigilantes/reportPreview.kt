@@ -13,6 +13,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_report_preview.*
+import android.view.WindowManager
+
+
+
 
 class reportPreview : AppCompatActivity() {
     //Retrieve current report information
@@ -132,6 +136,7 @@ class reportPreview : AppCompatActivity() {
         //Display popup window
         var root_layout = findViewById<ConstraintLayout>(R.id.root_layout)
         popupWindow.showAtLocation(root_layout, Gravity.CENTER, 0, 0)
+        popupWindow.dimBehind()
     }
     private val proceed =
         registerForActivityResult(

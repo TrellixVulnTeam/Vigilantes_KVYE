@@ -12,20 +12,28 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="12dp">
+
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:paddingTop="12dp">
 
         <LinearLayout
             android:id="@+id/report1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:background="@drawable/grey_rounded_button">
+            android:background="@drawable/grey_rounded_button"
+            android:paddingTop="8dp"
+            android:paddingBottom="10dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp">
 
             <TextView
                 android:id="@+id/rep_datetime"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="datetime"
+                android:textColor="@color/white"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 android:layout_weight="1">
@@ -37,6 +45,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="location"
+                android:textColor="@color/white"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 android:layout_weight="1">
@@ -48,6 +57,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:text="Description here"
+                android:textColor="@color/white"
                 android:textSize="18sp"
                 android:layout_weight="1"
                 android:ellipsize="end"

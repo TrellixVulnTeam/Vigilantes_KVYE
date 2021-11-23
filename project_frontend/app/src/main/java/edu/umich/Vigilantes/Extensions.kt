@@ -5,7 +5,9 @@ import android.database.Cursor
 import android.net.Uri
 import android.util.Log
 import android.view.View
+import android.view.WindowManager
 import android.widget.ImageView
+import android.widget.PopupWindow
 import android.widget.Toast
 import java.io.File
 
@@ -46,4 +48,14 @@ fun Uri.toFile(context: Context): File? {
         }
     }
     return null
+}
+
+fun PopupWindow.dimBehind() {
+    val container = contentView.rootView
+    val context = contentView.context
+    val wm = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+    val p = container.layoutParams as WindowManager.LayoutParams
+    p.flags = p.flags or WindowManager.LayoutParams.FLAG_DIM_BEHIND
+    p.dimAmount = 0.3f
+    wm.updateViewLayout(container, p)
 }

@@ -53,8 +53,7 @@ class addVehicleForm : AppCompatActivity() {
         val VINEntry = findViewById<EditText>(R.id.VINInput)
         val colorEntry = findViewById<EditText>(R.id.colorInput)
 
-        val saveButton = findViewById<ImageButton>(R.id.saveButton)
-        val discardButton = findViewById<ImageButton>(R.id.disdelButton)
+        val saveButton = findViewById<Button>(R.id.saveButton)
 
         saveButton.setOnClickListener {
             Log.d("debug message", "save button pressed")
@@ -72,13 +71,6 @@ class addVehicleForm : AppCompatActivity() {
             val intent = Intent()
             intent.putExtra("Vehicle Info", veh)
             setResult(RESULT_OK, intent)
-            finish()
-        }
-
-        discardButton.setOnClickListener {
-            Log.d("debug message", "discard button pressed")
-            val intent = Intent()
-            setResult(RESULT_CANCELED, intent)
             finish()
         }
     }

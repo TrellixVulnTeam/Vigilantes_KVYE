@@ -7,74 +7,100 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:elevation="1dp"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/toolbar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@font/ubuntu"
+            android:text="Vigilantes"
+            android:textColor="@color/black"
+            android:textSize="32sp" />
+
+    </androidx.appcompat.widget.Toolbar>
+
     <Button
         android:id="@+id/addPlateImageButton"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="16dp"
-        android:background="@color/black"
+        android:background="@drawable/blue_rounded_button"
         android:clickable="true"
-
         android:contentDescription="@string/addLicensePlate"
+        android:drawableRight="@android:drawable/checkbox_off_background"
+
+        android:gravity="center"
         android:text="Take License Plate Photo"
-        app:backgroundTint="#FFC107"
+        android:textAllCaps="false"
+        android:textSize="28sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHeight_percent="0.25"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_percent="0.9"
-        android:gravity="center"
-        android:drawableRight="@android:drawable/checkbox_off_background"/>
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintWidth_percent="0.9" />
 
     <Button
         android:id="@+id/addCarImageButton"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="16dp"
-        android:background="@color/black"
+        android:background="@drawable/blue_rounded_button"
         android:clickable="true"
-
         android:contentDescription="@string/addCar"
+        android:drawableRight="@android:drawable/checkbox_off_background"
+
         android:text="Take Car Photo"
-        app:backgroundTint="#FFC107"
+        android:textAllCaps="false"
+        android:textSize="28sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHeight_percent="0.25"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/addPlateImageButton"
-        app:layout_constraintWidth_percent="0.9"
-        android:drawableRight="@android:drawable/checkbox_off_background"/>
+        app:layout_constraintWidth_percent="0.9" />
 
     <Button
         android:id="@+id/addVINImageButton"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="16dp"
-        android:background="@color/black"
+        android:background="@drawable/blue_rounded_button"
         android:clickable="true"
-
         android:contentDescription="@string/addVin"
+        android:drawableRight="@android:drawable/checkbox_off_background"
+
         android:text="Take VIN Photo"
-        app:backgroundTint="#FFC107"
+        android:textAllCaps="false"
+        android:textSize="28sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHeight_percent="0.25"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/addCarImageButton"
-        app:layout_constraintWidth_percent="0.9"
-        android:drawableRight="@android:drawable/checkbox_off_background"/>
+        app:layout_constraintWidth_percent="0.9" />
 
     <Button
         android:id="@+id/ContinueButton"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/blue_rounded_button"
         android:clickable="true"
         android:contentDescription="@string/continueButton"
+        android:drawableRight="@drawable/ic_white_right_24"
+        android:paddingLeft="52dp"
+        android:paddingRight="36dp"
         android:text="Continue"
+        android:textAllCaps="false"
 
-        android:textSize="32sp"
-        app:backgroundTint="#FFC107"
+        android:textSize="28sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHeight_percent="0.12"
+        app:layout_constraintHeight_percent="0.08"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/addVINImageButton"
         app:layout_constraintWidth_percent="0.9" />
