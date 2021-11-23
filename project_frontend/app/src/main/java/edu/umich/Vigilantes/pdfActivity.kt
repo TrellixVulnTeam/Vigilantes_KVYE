@@ -13,11 +13,14 @@ import android.graphics.Typeface
 import androidx.core.content.ContextCompat
 import android.os.Environment
 import android.Manifest.permission
+import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Paint
+import android.icu.text.SimpleDateFormat
 import android.os.Environment.getExternalStorageDirectory
+import android.provider.MediaStore
 import android.view.View
 import android.widget.Button
 import androidx.core.app.ActivityCompat
@@ -27,6 +30,7 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import android.util.Log
+import java.util.*
 
 // A lot of the this activity was adapted from Geeks for Geeks
 // Found at https://www.geeksforgeeks.org/how-to-generate-a-pdf-file-in-android-app/
@@ -58,9 +62,9 @@ class pdfActivity : AppCompatActivity() {
         finalReport = intent.extras?.getParcelable("report")
 
 
-        if (!checkPermission()) {
-            requestPermission()
-        }
+        //if (!checkPermission()) {
+        requestPermission()
+        //}
         view.idBtnGeneratePDF.setOnClickListener { // genPDF
             generatePDF()
         }
@@ -107,11 +111,10 @@ class pdfActivity : AppCompatActivity() {
         // below line is sued for setting color
         // of our text inside our PDF file.
         title.color = ContextCompat.getColor(this, R.color.black)
-
-        val dateTime = "December 12, 2021"
-        val location = "Ann Arbor, MI"
+        val sdf = SimpleDateFormat("yyyy.MM.dd G 'at' HH:mm:ss z")
+        val dateTime = sdf.format(Date())
         canvas.drawText(dateTime, 56f, 100f, title)
-        canvas.drawText(location, 56f, 80f, title)
+        //canvas.drawText(location, 56f, 80f, title)
         title.typeface = Typeface.defaultFromStyle(Typeface.NORMAL)
         title.textSize = 18f
         title.textAlign = Paint.Align.CENTER
@@ -128,28 +131,71 @@ class pdfActivity : AppCompatActivity() {
             }
         }
 
-        report.typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
+        report.typeface = Typeface.create(Typeface.DEFAULT_BOLD, Typeface.BOLD)
         report.textSize = 15f
         report.color = ContextCompat.getColor(this, R.color.black)
-        var num = 0
-        /*for(page in pages){
+        var pagenum = 0
+        for(page in pages){
             val startedPage = pdfDocument.startPage(page)
             val reportCanvas = startedPage.canvas
-            carReportTemplate[num]["Name"]?.let { reportCanvas.drawText(it,40f, 80f, report) }
-            carReportTemplate[num]["LicensePlate"]?.let { reportCanvas.drawText(it,40f, 120f, report) }
-            num += 1
+            //carReportTemplate[num]["Name"]?.let { reportCanvas.drawText(it,40f, 80f, report) }
+            //carReportTemplate[num]["LicensePlate"]?.let { reportCanvas.drawText(it,40f, 120f, report) }
+            finalReport?.let{
+                if(pagenum < it.vehicleList.size) {
+                    val vehicle = it.vehicleList[pagenum]
+                    vehicle.year?.let {
+                        reportCanvas.drawText("Year: " + it, 120f, 160f, report)
+                    }
+                    vehicle.makemodel?.let {
+                        reportCanvas.drawText("Model: " + it, 120f, 200f, report)
+                    }
+                    vehicle.plateNumber?.let {
+                        reportCanvas.drawText("Plate: " + it, 120f, 240f, report)
+                    }
+                    vehicle.VIN?.let {
+                        reportCanvas.drawText("VIN: " + it, 120f, 280f, report)
+                    }
+                    vehicle.color?.let {
+                        reportCanvas.drawText("Color: " + it, 120f, 320f, report)
+                    }
+                }
+                if(pagenum < it.participantList.size){
+                    val participant = it.participantList[pagenum]
+                    participant.name.let{
+                        reportCanvas.drawText("Participant name: " + it, 120f, 360f, report)
+                    }
+                }
+                if(pagenum < it.witnessList.size){
+                    val witness = it.witnessList[pagenum]
+                }
+
+
+
+            }
+            pagenum += 1
             pdfDocument.finishPage(startedPage)
-         }*/
+         }
 
         // below line is used to set the name of
         // our PDF file and its path.
-        val documentDir =
-            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)
-                .toString()
-        val file = File(documentDir, "report.pdf")
+        val pdfDetails = ContentValues().apply {
+            put(MediaStore.MediaColumns.DISPLAY_NAME,"report.pdf")
+            put(MediaStore.MediaColumns.MIME_TYPE,"application/pdf")
+            put(MediaStore.MediaColumns.RELATIVE_PATH,Environment.DIRECTORY_DOWNLOADS)
+        }
         try {
             // Try writing pdf file to documents on phone
-            pdfDocument.writeTo(FileOutputStream(file))
+            val pdfUri = contentResolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI,pdfDetails)
+            pdfUri?.let{
+                val stream = contentResolver.openOutputStream(it)
+                if (stream == null) {
+                    throw IOException("Failed to get output stream.");
+                }
+                pdfDocument.writeTo(stream)
+                stream.close()
+            }
+
+
             Toast.makeText(this@pdfActivity, "PDF file generated successfully.", Toast.LENGTH_SHORT)
                 .show()
         } catch (e: IOException) {
