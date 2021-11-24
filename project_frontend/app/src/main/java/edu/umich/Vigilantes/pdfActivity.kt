@@ -19,6 +19,8 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Paint
 import android.icu.text.SimpleDateFormat
+import android.net.Uri
+import android.os.Build
 import android.os.Environment.getExternalStorageDirectory
 import android.provider.MediaStore
 import android.view.View
@@ -31,6 +33,11 @@ import java.io.FileOutputStream
 import java.io.IOException
 import android.util.Log
 import java.util.*
+import android.os.StrictMode
+import android.os.StrictMode.VmPolicy
+import androidx.core.content.FileProvider
+import androidx.databinding.ktx.BuildConfig
+
 
 // A lot of the this activity was adapted from Geeks for Geeks
 // Found at https://www.geeksforgeeks.org/how-to-generate-a-pdf-file-in-android-app/
@@ -59,6 +66,7 @@ class pdfActivity : AppCompatActivity() {
 
         // initializing pdf button
         generatePDFbtn = findViewById(R.id.idBtnGeneratePDF)
+
         finalReport = intent.extras?.getParcelable("report")
 
 
@@ -69,6 +77,8 @@ class pdfActivity : AppCompatActivity() {
             generatePDF()
         }
 
+        val builder = VmPolicy.Builder()
+        StrictMode.setVmPolicy(builder.build())
 
     }
 
@@ -108,7 +118,7 @@ class pdfActivity : AppCompatActivity() {
         title.textSize = 15f
 
 
-        // below line is sued for setting color
+        // below line is used for setting color
         // of our text inside our PDF file.
         title.color = ContextCompat.getColor(this, R.color.black)
         val sdf = SimpleDateFormat("yyyy.MM.dd G 'at' HH:mm:ss z")
@@ -194,8 +204,6 @@ class pdfActivity : AppCompatActivity() {
                 pdfDocument.writeTo(stream)
                 stream.close()
             }
-
-
             Toast.makeText(this@pdfActivity, "PDF file generated successfully.", Toast.LENGTH_SHORT)
                 .show()
         } catch (e: IOException) {
@@ -242,6 +250,35 @@ class pdfActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    fun buttonShareFile(view: View?) {
+        try {
+            val pdfDetails = ContentValues().apply {
+                put(MediaStore.MediaColumns.DISPLAY_NAME, "report.pdf")
+                put(MediaStore.MediaColumns.MIME_TYPE, "application/pdf")
+                put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS)
+            }
+            val pdfUri = contentResolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI,pdfDetails)
+
+            val intentShare = Intent(Intent.ACTION_SEND)
+            intentShare.putExtra(
+                Intent.EXTRA_STREAM,
+                pdfUri
+            )
+            intentShare.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+            intentShare.type = "application/pdf"
+            startActivity(Intent.createChooser(intentShare, "Share Generated PDF"))
+
+            Toast.makeText(this@pdfActivity, "PDF file shared successfully.", Toast.LENGTH_SHORT)
+                .show()
+
+        }catch (e: IOException) {
+        e.printStackTrace()
+        Toast.makeText(this@pdfActivity, "Error sharing PDF", Toast.LENGTH_SHORT)
+            .show()
+        }
+
     }
 
     companion object {
