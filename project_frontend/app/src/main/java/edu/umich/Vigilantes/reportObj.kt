@@ -2,18 +2,36 @@ package edu.umich.Vigilantes
 
 import android.os.Parcelable
 import android.util.Log
+import com.google.gson.annotations.Expose
+import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 import java.util.*
 
 @Parcelize
 data class reportObj(
+    @Expose
+    @SerializedName("UID")
     var UID: UUID = UUID.randomUUID(),
+    @Expose
+    @SerializedName("position")
     var position: Int = 0,
+    @Expose
+    @SerializedName("datetime")
     var datetime: String? = "",
+    @Expose
+    @SerializedName("location")
     var location: String? = "",
+    @Expose
+    @SerializedName("incidentDesc")
     var incidentDesc: String? = "",
+    @Expose
+    @SerializedName("list of vehicles")
     var vehicleList: MutableList<VehicleInfo> = mutableListOf(),
+    @Expose
+    @SerializedName("list of participants")
     var participantList: MutableList<ParticipantInfo> = mutableListOf(),
+    @Expose
+    @SerializedName("list of witnesses")
     var witnessList: MutableList<WitnessInfo> = mutableListOf()
 ) : Parcelable {
     fun updateTo(report: reportObj) {

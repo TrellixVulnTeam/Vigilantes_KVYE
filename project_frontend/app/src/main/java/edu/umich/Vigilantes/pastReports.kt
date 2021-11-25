@@ -9,6 +9,7 @@ import android.widget.ImageButton
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_report_participant.*
 
 class pastReports : AppCompatActivity(), reportListAdapter.OnItemClickListener {
@@ -60,6 +61,8 @@ class pastReports : AppCompatActivity(), reportListAdapter.OnItemClickListener {
                 //If report is completed, retrieve report list
                 reportList = it.data?.getParcelableExtra("Report List")!!
 
+                saveList()
+
                 //Update recyclerview
                 adapter = reportListAdapter(reportList, this)
                 adapter.notifyDataSetChanged()
@@ -73,4 +76,13 @@ class pastReports : AppCompatActivity(), reportListAdapter.OnItemClickListener {
                 Log.d("debug message", "Report List lost")
             }
         }
+
+    private fun saveList() {
+        val sharedPreferences = getSharedPreferences("shared preferences", MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        val gson = Gson()
+        val json = gson.toJson(reportList)
+        editor.putString("list of reports", json)
+        editor.apply()
+    }
 }

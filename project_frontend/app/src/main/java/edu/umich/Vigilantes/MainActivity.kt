@@ -11,6 +11,8 @@ import android.icu.text.SimpleDateFormat
 import android.util.Log
 import android.widget.Button
 import android.widget.TextView
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import java.util.Date;
 
 
@@ -42,6 +44,9 @@ class MainActivity : AppCompatActivity() {
             Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.CAMERA,
             Manifest.permission.READ_EXTERNAL_STORAGE))
+
+        //Retrieve list of reports from sharedPreferences
+        loadList()
 
         //Retrieve list of reports
         if(intent.extras != null) {
@@ -104,7 +109,11 @@ class MainActivity : AppCompatActivity() {
                 Log.d("debug message", "reports should be received")
                 //If report is completed, retrieve latest report
                 reportList = it.data?.getParcelableExtra("Report List")!!
-                var report = it.data?.getParcelableExtra<reportObj>("Report Info")!!
+                var report = it.data?.getParcelableExtra<reportObj>("Report Info")
+
+                //Save report list
+                saveList()
+
                 //If new report exists, add to report list and go to preview
                 if(report != null) {
                     goToPreview(reportList, report)
@@ -120,5 +129,23 @@ class MainActivity : AppCompatActivity() {
         intent.putExtra("Report List", reportList)
         intent.putExtra("Report Info", report)
         startReport.launch(intent)
+    }
+
+    private fun saveList() {
+        val sharedPreferences = getSharedPreferences("shared preferences", MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        val gson = Gson()
+        val json = gson.toJson(reportList)
+        editor.putString("list of reports", json)
+        editor.apply()
+    }
+
+    private fun loadList() {
+        val nullList = Gson().toJson(reportList())
+        val sharedPreferences = getSharedPreferences("shared preferences", MODE_PRIVATE)
+        val gson = Gson()
+        val json = sharedPreferences.getString("list of reports", nullList)
+        val type = object: TypeToken<reportList>(){}.type
+        reportList = gson.fromJson(json, type)
     }
 }
