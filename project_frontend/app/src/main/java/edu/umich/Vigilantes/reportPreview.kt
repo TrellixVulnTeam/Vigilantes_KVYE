@@ -66,6 +66,7 @@ class reportPreview : AppCompatActivity() {
         witness_recycler_view.layoutManager = LinearLayoutManager(this)
         witness_recycler_view.setHasFixedSize(true)
 
+        var homeButton = findViewById<ImageButton>(R.id.homeButton)
         val editButton = findViewById<ImageButton>(R.id.editButton)
         val deleteButton = findViewById<ImageButton>(R.id.deleteButton)
         val exportButton = findViewById<ImageButton>(R.id.exportButton)
@@ -89,6 +90,10 @@ class reportPreview : AppCompatActivity() {
             val intent = Intent(this, pdfActivity::class.java)
             intent.putExtra("report", report)  //Parcelize report
             proceed.launch(intent)
+        }
+
+        homeButton.setOnClickListener {
+            finish()    //End current activity
         }
     }
 
