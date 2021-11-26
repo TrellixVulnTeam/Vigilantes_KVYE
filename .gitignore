@@ -503,4 +503,6 @@ trainOutput.txt
 final_models/
 node_modules/
 *.pth
+*.png
+*.jpg
 

@@ -5,6 +5,7 @@
     "arch": {
         "type": "ResNet34",
         "args": {
+            "num_classes": 397
         }
     },
     "data_processing": {
@@ -12,7 +13,7 @@
         "args":{
             "mode": "train",
             "data_dir": "data_processing/datasets/training/extracted/",
-            "metas": "data_processing/datasets/cars_metas/cars_train_annos.mat",
+            "metas": "update_mat/new_cars_train_annos.mat",
             "resize_width": 299,
             "resize_height": 299,
             "batch_size": 16,
@@ -39,14 +40,14 @@
         "type": "CyclicLR",
         "args": {
             "base_lr": 0.001,
-            "max_lr": 0.01
+            "max_lr": 0.005
         }
     },
     "trainer": {
-        "epochs": 10,
+        "epochs": 11,
 
         "save_dir": "saved/",
-        "save_period": 10,
+        "save_period": 11,
         "verbosity": 2,
 
         "monitor": "max val_accuracy",

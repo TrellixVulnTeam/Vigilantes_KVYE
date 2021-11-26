@@ -19,26 +19,27 @@ class recognizeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         view = ActivityRecognizeBinding.inflate(layoutInflater)
         setContentView(R.layout.activity_recognize)
+
         val jsonString = applicationContext.assets.open("easy_labels.json").bufferedReader().use { it.readText() }
         val carMap = JSONObject(jsonString)
         val reportProgress: Bundle = intent.extras!!
         val car1 = findViewById<TextView>(R.id.predictionOne)
         val car2 = findViewById<TextView>(R.id.predictionTwo)
         val car3 = findViewById<TextView>(R.id.predictionThree)
-        val uri: Uri? = reportProgress.getParcelable("car")!!
-        postImagesCar(applicationContext,uri) { msg ->
+        val uri: Uri? = reportProgress.getParcelable("carImageUri")
+
+        postImagesCar(applicationContext, uri) { msg ->
             runOnUiThread {
                 toast(msg)
                 car1.text = carMap[carLabels[0].toString()].toString()
                 car2.text = carMap[carLabels[1].toString()].toString()
                 car3.text = carMap[carLabels[2].toString()].toString()
-                //val debugInfo = carLabels[0]
-                //val debugdInfo = carLabels[1]
             }
         }
-        val car1button = findViewById<Button>(R.id.carOne)
-        val car2button = findViewById<Button>(R.id.carTwo)
-        val car3button = findViewById<Button>(R.id.carThree)
+        val car1button = findViewById<ImageView>(R.id.carOne)
+        val car2button = findViewById<ImageView>(R.id.carTwo)
+        val car3button = findViewById<ImageView>(R.id.carThree)
+
         car1button.setOnClickListener{
             reportProgress.putString("prediction",carMap[carLabels[0].toString()].toString())
             val intent = Intent(this, addVehicle::class.java)

@@ -6,7 +6,7 @@
         "type": "ResNet152",
         "args": {
             "use_pretrained": true,
-            "num_classes": 196
+            "num_classes": 397
         }
     },
     "data_processing": {
@@ -14,7 +14,7 @@
         "args":{
             "mode": "test",
             "data_dir": "data_processing/datasets/testing/extracted/",
-            "metas": "data_processing/datasets/cars_metas/cars_test_annos_withlabels.mat",
+            "metas": "update_mat/new_cars_test_annos_withlabels.mat",
             "resize_width": 299,
             "resize_height": 299,
             "batch_size": 128,

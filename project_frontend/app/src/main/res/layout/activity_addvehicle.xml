@@ -35,7 +35,6 @@
         android:clickable="true"
         android:contentDescription="@string/addLicensePlate"
         android:drawableRight="@android:drawable/checkbox_off_background"
-
         android:gravity="center"
         android:text="Take License Plate Photo"
         android:textAllCaps="false"
@@ -55,7 +54,6 @@
         android:clickable="true"
         android:contentDescription="@string/addCar"
         android:drawableRight="@android:drawable/checkbox_off_background"
-
         android:text="Take Car Photo"
         android:textAllCaps="false"
         android:textSize="28sp"
@@ -74,7 +72,6 @@
         android:clickable="true"
         android:contentDescription="@string/addVin"
         android:drawableRight="@android:drawable/checkbox_off_background"
-
         android:text="Take VIN Photo"
         android:textAllCaps="false"
         android:textSize="28sp"
@@ -97,7 +94,6 @@
         android:paddingRight="36dp"
         android:text="Continue"
         android:textAllCaps="false"
-
         android:textSize="28sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHeight_percent="0.08"

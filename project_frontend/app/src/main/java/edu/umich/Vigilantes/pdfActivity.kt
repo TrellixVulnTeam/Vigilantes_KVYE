@@ -13,11 +13,16 @@ import android.graphics.Typeface
 import androidx.core.content.ContextCompat
 import android.os.Environment
 import android.Manifest.permission
+import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Paint
+import android.icu.text.SimpleDateFormat
+import android.net.Uri
+import android.os.Build
 import android.os.Environment.getExternalStorageDirectory
+import android.provider.MediaStore
 import android.view.View
 import android.widget.Button
 import androidx.core.app.ActivityCompat
@@ -27,6 +32,12 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import android.util.Log
+import java.util.*
+import android.os.StrictMode
+import android.os.StrictMode.VmPolicy
+import androidx.core.content.FileProvider
+import androidx.databinding.ktx.BuildConfig
+
 
 // A lot of the this activity was adapted from Geeks for Geeks
 // Found at https://www.geeksforgeeks.org/how-to-generate-a-pdf-file-in-android-app/
@@ -37,6 +48,7 @@ class pdfActivity : AppCompatActivity() {
 
     // variables for our buttons.
     private lateinit var generatePDFbtn: Button
+    private var finalReport: reportObj? = reportObj()
 
     // declaring width and height
     // for our PDF file.
@@ -54,16 +66,19 @@ class pdfActivity : AppCompatActivity() {
 
         // initializing pdf button
         generatePDFbtn = findViewById(R.id.idBtnGeneratePDF)
-        val report = intent.extras
+
+        finalReport = intent.extras?.getParcelable("report")
 
 
-        if (!checkPermission()) {
-            requestPermission()
-        }
+        //if (!checkPermission()) {
+        requestPermission()
+        //}
         view.idBtnGeneratePDF.setOnClickListener { // genPDF
             generatePDF()
         }
 
+        val builder = VmPolicy.Builder()
+        StrictMode.setVmPolicy(builder.build())
 
     }
 
@@ -73,8 +88,6 @@ class pdfActivity : AppCompatActivity() {
     fun generatePDF() {
         // Create PDF
         val pdfDocument = PdfDocument()
-        val carReportTemplate =
-            mutableListOf(mapOf("Name" to "Subaru", "LicensePlate" to "1234 ABC"),mapOf("Name" to "Hummer", "LicensePlate" to "123 ABC"))
 
         val paint = Paint()
         val title = Paint() // for title
@@ -105,14 +118,13 @@ class pdfActivity : AppCompatActivity() {
         title.textSize = 15f
 
 
-        // below line is sued for setting color
+        // below line is used for setting color
         // of our text inside our PDF file.
         title.color = ContextCompat.getColor(this, R.color.black)
-
-        val dateTime = "December 12, 2021"
-        val location = "Ann Arbor, MI"
+        val sdf = SimpleDateFormat("yyyy.MM.dd G 'at' HH:mm:ss z")
+        val dateTime = sdf.format(Date())
         canvas.drawText(dateTime, 56f, 100f, title)
-        canvas.drawText(location, 56f, 80f, title)
+        //canvas.drawText(location, 56f, 80f, title)
         title.typeface = Typeface.defaultFromStyle(Typeface.NORMAL)
         title.textSize = 18f
         title.textAlign = Paint.Align.CENTER
@@ -122,32 +134,76 @@ class pdfActivity : AppCompatActivity() {
         val pages = mutableListOf<PdfDocument.PageInfo>()
         var number = 2
          // initialize page of reports
-        for (car in carReportTemplate){
-            pages.add(PageInfo.Builder(pagewidth, pageHeight, number).create())
-            number += 1
+        finalReport?.let{
+            for (vehicle in it.vehicleList){
+                pages.add(PageInfo.Builder(pagewidth, pageHeight, number).create())
+                number += 1
+            }
         }
-        report.typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
+
+        report.typeface = Typeface.create(Typeface.DEFAULT_BOLD, Typeface.BOLD)
         report.textSize = 15f
         report.color = ContextCompat.getColor(this, R.color.black)
-        var num = 0
+        var pagenum = 0
         for(page in pages){
             val startedPage = pdfDocument.startPage(page)
             val reportCanvas = startedPage.canvas
-            carReportTemplate[num]["Name"]?.let { reportCanvas.drawText(it,40f, 80f, report) }
-            carReportTemplate[num]["LicensePlate"]?.let { reportCanvas.drawText(it,40f, 120f, report) }
-            num += 1
+            //carReportTemplate[num]["Name"]?.let { reportCanvas.drawText(it,40f, 80f, report) }
+            //carReportTemplate[num]["LicensePlate"]?.let { reportCanvas.drawText(it,40f, 120f, report) }
+            finalReport?.let{
+                if(pagenum < it.vehicleList.size) {
+                    val vehicle = it.vehicleList[pagenum]
+                    vehicle.year?.let {
+                        reportCanvas.drawText("Year: " + it, 120f, 160f, report)
+                    }
+                    vehicle.makemodel?.let {
+                        reportCanvas.drawText("Model: " + it, 120f, 200f, report)
+                    }
+                    vehicle.plateNumber?.let {
+                        reportCanvas.drawText("Plate: " + it, 120f, 240f, report)
+                    }
+                    vehicle.VIN?.let {
+                        reportCanvas.drawText("VIN: " + it, 120f, 280f, report)
+                    }
+                    vehicle.color?.let {
+                        reportCanvas.drawText("Color: " + it, 120f, 320f, report)
+                    }
+                }
+                if(pagenum < it.participantList.size){
+                    val participant = it.participantList[pagenum]
+                    participant.name.let{
+                        reportCanvas.drawText("Participant name: " + it, 120f, 360f, report)
+                    }
+                }
+                if(pagenum < it.witnessList.size){
+                    val witness = it.witnessList[pagenum]
+                }
+
+
+
+            }
+            pagenum += 1
             pdfDocument.finishPage(startedPage)
          }
 
         // below line is used to set the name of
         // our PDF file and its path.
-        val documentDir =
-            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)
-                .toString()
-        val file = File(documentDir, "report.pdf")
+        val pdfDetails = ContentValues().apply {
+            put(MediaStore.MediaColumns.DISPLAY_NAME,"report.pdf")
+            put(MediaStore.MediaColumns.MIME_TYPE,"application/pdf")
+            put(MediaStore.MediaColumns.RELATIVE_PATH,Environment.DIRECTORY_DOWNLOADS)
+        }
         try {
             // Try writing pdf file to documents on phone
-            pdfDocument.writeTo(FileOutputStream(file))
+            val pdfUri = contentResolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI,pdfDetails)
+            pdfUri?.let{
+                val stream = contentResolver.openOutputStream(it)
+                if (stream == null) {
+                    throw IOException("Failed to get output stream.");
+                }
+                pdfDocument.writeTo(stream)
+                stream.close()
+            }
             Toast.makeText(this@pdfActivity, "PDF file generated successfully.", Toast.LENGTH_SHORT)
                 .show()
         } catch (e: IOException) {
@@ -194,6 +250,35 @@ class pdfActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    fun buttonShareFile(view: View?) {
+        try {
+            val pdfDetails = ContentValues().apply {
+                put(MediaStore.MediaColumns.DISPLAY_NAME, "report.pdf")
+                put(MediaStore.MediaColumns.MIME_TYPE, "application/pdf")
+                put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS)
+            }
+            val pdfUri = contentResolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI,pdfDetails)
+
+            val intentShare = Intent(Intent.ACTION_SEND)
+            intentShare.putExtra(
+                Intent.EXTRA_STREAM,
+                pdfUri
+            )
+            intentShare.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+            intentShare.type = "application/pdf"
+            startActivity(Intent.createChooser(intentShare, "Share Generated PDF"))
+
+            Toast.makeText(this@pdfActivity, "PDF file shared successfully.", Toast.LENGTH_SHORT)
+                .show()
+
+        }catch (e: IOException) {
+        e.printStackTrace()
+        Toast.makeText(this@pdfActivity, "Error sharing PDF", Toast.LENGTH_SHORT)
+            .show()
+        }
+
     }
 
     companion object {
