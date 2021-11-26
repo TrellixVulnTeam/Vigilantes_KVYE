@@ -15,9 +15,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_report_preview.*
 import android.view.WindowManager
 
-
-
-
 class reportPreview : AppCompatActivity() {
     //Retrieve current report information
     private lateinit var report: reportObj
