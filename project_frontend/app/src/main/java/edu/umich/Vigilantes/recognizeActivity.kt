@@ -17,7 +17,7 @@ import org.json.JSONObject
 
 class recognizeActivity : AppCompatActivity() {
     private lateinit var view: ActivityRecognizeBinding
-    private var fromMain: Boolean? = null
+    private var fromMain: Boolean = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         view = ActivityRecognizeBinding.inflate(layoutInflater)
@@ -26,9 +26,7 @@ class recognizeActivity : AppCompatActivity() {
         val jsonString = applicationContext.assets.open("easy_labels.json").bufferedReader().use { it.readText() }
         val carMap = JSONObject(jsonString)
         val reportProgress: Bundle = intent.extras!!
-        reportProgress.getBoolean("main")?.let{
-            fromMain = it
-        }
+        fromMain = reportProgress.getBoolean("main")
         val car1 = findViewById<TextView>(R.id.predictionOne)
         val car2 = findViewById<TextView>(R.id.predictionTwo)
         val car3 = findViewById<TextView>(R.id.predictionThree)
@@ -50,10 +48,12 @@ class recognizeActivity : AppCompatActivity() {
             reportProgress.putString("prediction",carMap[carLabels[0].toString()].toString())
             val intent = Intent(this, addVehicle::class.java)
             intent.putExtras(reportProgress)
-            fromMain?.let{
+            if(fromMain){
                 proceed.launch(intent)
-            } ?: run{
-                startActivity(intent)
+            }
+            else{
+                setResult(441, intent)
+                finish()
             }
 
         }
@@ -61,20 +61,24 @@ class recognizeActivity : AppCompatActivity() {
             reportProgress.putString("prediction",carMap[carLabels[1].toString()].toString())
             val intent = Intent(this, addVehicle::class.java)
             intent.putExtras(reportProgress)
-            fromMain?.let{
+            if(fromMain){
                 proceed.launch(intent)
-            } ?: run{
-                startActivity(intent)
+            }
+            else{
+                setResult(441, intent)
+                finish()
             }
         }
         car3button.setOnClickListener{
             reportProgress.putString("prediction",carMap[carLabels[2].toString()].toString())
             val intent = Intent(this, addVehicle::class.java)
             intent.putExtras(reportProgress)
-            fromMain?.let{
+            if(fromMain){
                 proceed.launch(intent)
-            } ?: run{
-                startActivity(intent)
+            }
+            else{
+                setResult(441, intent)
+                finish()
             }
         }
 
