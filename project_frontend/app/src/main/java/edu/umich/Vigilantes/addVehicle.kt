@@ -20,7 +20,6 @@ class addVehicle : AppCompatActivity() {
     private lateinit var view: ActivityAddvehicleBinding
     private lateinit var forCropResult: ActivityResultLauncher<Intent>
     private lateinit var takePicture: ActivityResultLauncher<Uri>
-    private var popupExists = false
     private var vinImageUri: Uri? = null
     private var carImageUri: Uri? = null
     private var plateImageUri: Uri? = null
@@ -31,6 +30,7 @@ class addVehicle : AppCompatActivity() {
     var reportBundle : Bundle? = Bundle()
     var finishedCar: VehicleInfo = VehicleInfo()
     var reportObject : reportObj = reportObj()
+    var reportList: reportList? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,6 +38,7 @@ class addVehicle : AppCompatActivity() {
         setContentView(R.layout.activity_addvehicle)
 
         view = ActivityAddvehicleBinding.inflate(layoutInflater)
+        reportList = intent.extras?.getParcelable("Report List")
         changeVisuals(intent)
         forCropResult =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -77,8 +78,6 @@ class addVehicle : AppCompatActivity() {
                             reportBundle?.putParcelable("carImageUri",carImageUri)
                             sendToResultsPage()
                         }
-
-                        //imageUri?.let { view.addCarImageButton.display(it) } // TODO: Generalize
                     }
                 } else {
                     Log.d("Crop", result.resultCode.toString())
@@ -146,6 +145,8 @@ class addVehicle : AppCompatActivity() {
             finishedCar.plateNumber = reportStoreLicense.state_predict + " " + reportStoreLicense.lpn_predict
             reportObject.vehicleList.add(finishedCar)
             reportBundle?.putParcelable("Report Info",reportObject)
+            reportBundle?.putParcelable("Report List",reportList)
+            intent.putExtras(reportBundle!!)
             proceed.launch(intent)
         }
     }
@@ -210,7 +211,7 @@ class addVehicle : AppCompatActivity() {
             }
         }
         else{
-            carImageUri?.let { // Plate
+            carImageUri?.let {
                 intent.data = it
                 forCropResult.launch(intent)
             }
@@ -220,7 +221,7 @@ class addVehicle : AppCompatActivity() {
     private fun sendToResultsPage(){
         val reportIntent: Intent = Intent(this,recognizeActivity::class.java)
         reportBundle?.let{reportIntent.putExtras(it)}
-        startActivity(reportIntent)
+        send.launch(reportIntent)
     }
 
     override fun onSaveInstanceState(savedInstanceState: Bundle) {
@@ -302,10 +303,10 @@ class addVehicle : AppCompatActivity() {
             if(it.resultCode == 441) {
                 //If report is completed, retrieve report list
                 val reportList = it.data?.getParcelableExtra<reportList>("Report List")
-
+                val report = it.data?.getParcelableExtra<reportObj>("Report Info")
                 val intent = Intent()
                 intent.putExtra("Report List", reportList)
-                intent.putExtra("Report Info", reportBundle)
+                intent.putExtra("Report Info", report)
                 setResult(441, intent)
                 finish()
             }
@@ -313,4 +314,15 @@ class addVehicle : AppCompatActivity() {
                 Log.d("debug message", "Report List lost")
             }
         }
+    private val send = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) {
+        if(it.resultCode == 441) {
+            //If report is completed, retrieve report list
+            reportBundle = it.data?.extras
+        }
+        else {
+            Log.d("debug message", "Report List lost")
+        }
+    }
 }

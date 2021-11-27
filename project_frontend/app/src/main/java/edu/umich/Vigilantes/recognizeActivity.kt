@@ -6,15 +6,18 @@ import android.os.Bundle
 import edu.umich.Vigilantes.reportStoreCar.postImagesCar
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import edu.umich.Vigilantes.databinding.ActivityRecognizeBinding
 import edu.umich.Vigilantes.reportStoreCar.carLabels
 import android.widget.*
+import androidx.activity.result.contract.ActivityResultContracts
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 
 class recognizeActivity : AppCompatActivity() {
     private lateinit var view: ActivityRecognizeBinding
+    private var fromMain: Boolean? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         view = ActivityRecognizeBinding.inflate(layoutInflater)
@@ -23,6 +26,9 @@ class recognizeActivity : AppCompatActivity() {
         val jsonString = applicationContext.assets.open("easy_labels.json").bufferedReader().use { it.readText() }
         val carMap = JSONObject(jsonString)
         val reportProgress: Bundle = intent.extras!!
+        reportProgress.getBoolean("main")?.let{
+            fromMain = it
+        }
         val car1 = findViewById<TextView>(R.id.predictionOne)
         val car2 = findViewById<TextView>(R.id.predictionTwo)
         val car3 = findViewById<TextView>(R.id.predictionThree)
@@ -44,22 +50,53 @@ class recognizeActivity : AppCompatActivity() {
             reportProgress.putString("prediction",carMap[carLabels[0].toString()].toString())
             val intent = Intent(this, addVehicle::class.java)
             intent.putExtras(reportProgress)
-            startActivity(intent)
+            fromMain?.let{
+                proceed.launch(intent)
+            } ?: run{
+                startActivity(intent)
+            }
+
         }
         car2button.setOnClickListener{
             reportProgress.putString("prediction",carMap[carLabels[1].toString()].toString())
             val intent = Intent(this, addVehicle::class.java)
             intent.putExtras(reportProgress)
-            startActivity(intent)
+            fromMain?.let{
+                proceed.launch(intent)
+            } ?: run{
+                startActivity(intent)
+            }
         }
         car3button.setOnClickListener{
             reportProgress.putString("prediction",carMap[carLabels[2].toString()].toString())
             val intent = Intent(this, addVehicle::class.java)
             intent.putExtras(reportProgress)
-            startActivity(intent)
+            fromMain?.let{
+                proceed.launch(intent)
+            } ?: run{
+                startActivity(intent)
+            }
         }
 
 
 
     }
+    private val proceed =
+        registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) {
+            if(it.resultCode == 441) {
+                //If report is completed, retrieve report list
+                val reportList = it.data?.getParcelableExtra<reportList>("Report List")
+                val report = it.data?.getParcelableExtra<reportObj>("Report Info")
+                val intent = Intent()
+                intent.putExtra("Report List", reportList)
+                intent.putExtra("Report Info", report)
+                setResult(441, intent)
+                finish()
+            }
+            else {
+                Log.d("debug message", "Report List lost")
+            }
+        }
 }

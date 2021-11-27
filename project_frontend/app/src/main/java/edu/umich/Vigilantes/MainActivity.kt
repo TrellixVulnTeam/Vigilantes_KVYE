@@ -30,7 +30,7 @@ import edu.umich.Vigilantes.reportStoreVin.postVin
 
 class MainActivity : AppCompatActivity() {
     private lateinit var view: ActivityMainBinding
-    private var reportList: reportList = reportList()    //List of reports
+    private var reportList: reportList = reportList()
     var reportBundle : Bundle? = Bundle()
     private lateinit var takePicture: ActivityResultLauncher<Uri>
     private lateinit var forCropResult: ActivityResultLauncher<Intent>
@@ -225,8 +225,10 @@ class MainActivity : AppCompatActivity() {
     }
     private fun sendToResultsPage(){
         val reportIntent: Intent = Intent(this,recognizeActivity::class.java)
-        reportBundle?.let{reportIntent.putExtras(it)}
-        startActivity(reportIntent)
+        reportBundle?.let{
+        it.putBoolean("main",true)
+        reportIntent.putExtras(it)}
+        startReport.launch(reportIntent)
     }
     private fun getVin(){
         postVin(applicationContext, vinImageUri) { msg ->
@@ -237,7 +239,7 @@ class MainActivity : AppCompatActivity() {
         }
         val intent = Intent(this, addVehicle::class.java)
         intent.putExtras(reportBundle!!)
-        startActivity(intent)
+        startReport.launch(intent)
     }
 
     private fun getLicense(){
@@ -250,7 +252,7 @@ class MainActivity : AppCompatActivity() {
         }
         val intent = Intent(this, addVehicle::class.java)
         intent.putExtras(reportBundle!!)
-        startActivity(intent)
+        startReport.launch(intent)
     }
     private fun mediaStoreAlloc(mediaType: String): Uri? {
         val values = ContentValues()

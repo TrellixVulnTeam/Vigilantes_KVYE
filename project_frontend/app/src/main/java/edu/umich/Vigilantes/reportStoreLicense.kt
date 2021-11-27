@@ -57,7 +57,7 @@ object reportStoreLicense {
 
             override fun onResponse(call: okhttp3.Call, response: Response) {
                 if (response.isSuccessful) {
-                    val result = try { JSONObject(response.body?.string() ?: "") } catch (e: JSONException) { JSONObject() }
+                    val result = try { JSONObject(response.body?.string() ?: "") } catch (e: JSONException) { return }
                     lpn_predict = result["lpn"] as String
                     state_predict = result["state"] as String
                     completion("Added license plate number")
