@@ -10,17 +10,19 @@ import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
-import android.widget.*
+import android.widget.Button
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import edu.umich.Vigilantes.databinding.ActivityAddvehicleBinding
+import edu.umich.Vigilantes.databinding.ActivityMoreVehiclesBinding
 
-class addVehicle : AppCompatActivity() {
-    private lateinit var view: ActivityAddvehicleBinding
+class moreVehicles : AppCompatActivity() {
+    // Looks a lot like addvehicle
+    // That's because it is
+    // Passing intents through addvehicle in too many directions was getting way too hard
+    private lateinit var view: ActivityMoreVehiclesBinding
     private lateinit var forCropResult: ActivityResultLauncher<Intent>
     private lateinit var takePicture: ActivityResultLauncher<Uri>
-    private var popupExists = false
     private var vinImageUri: Uri? = null
     private var carImageUri: Uri? = null
     private var plateImageUri: Uri? = null
@@ -28,17 +30,19 @@ class addVehicle : AppCompatActivity() {
     private var check1: Boolean = false
     private var check2: Boolean = false
     private var check3: Boolean = false
-    var reportBundle : Bundle? = Bundle()
+    var report : Bundle? = Bundle()
+    var currentReport : reportObj = reportObj()
+    var reports: reportList = reportList()
     var finishedCar: VehicleInfo = VehicleInfo()
-    var reportObject : reportObj = reportObj()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        changeVisuals(intent)
         Log.d("ONCREATE", "onCreate for addVehicle")
         setContentView(R.layout.activity_addvehicle)
 
-        view = ActivityAddvehicleBinding.inflate(layoutInflater)
-        changeVisuals(intent)
+        view = ActivityMoreVehiclesBinding.inflate(layoutInflater)
+
         forCropResult =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                 if (result.resultCode == Activity.RESULT_OK) {
@@ -52,8 +56,7 @@ class addVehicle : AppCompatActivity() {
                                 }
                             }
                             vinImageUri = it
-                            reportBundle?.putParcelable("vinImageUri",vinImageUri)
-                            getVin()
+                            report?.putParcelable("vinImageUri",vinImageUri)
                         }
                         else if (choice == 1){
                             plateImageUri?.run {
@@ -63,8 +66,7 @@ class addVehicle : AppCompatActivity() {
                                 }
                             }
                             plateImageUri = it
-                            reportBundle?.putParcelable("plateImageUri",plateImageUri)
-                            getLicense()
+                            report?.putParcelable("plateImageUri",plateImageUri)
                         }
                         else{
                             carImageUri?.run {
@@ -74,7 +76,7 @@ class addVehicle : AppCompatActivity() {
                                 }
                             }
                             carImageUri = it
-                            reportBundle?.putParcelable("carImageUri",carImageUri)
+                            report?.putParcelable("carImageUri",carImageUri)
                             sendToResultsPage()
                         }
 
@@ -111,7 +113,7 @@ class addVehicle : AppCompatActivity() {
             takePicture.launch(carImageUri)
             carButton.setCompoundDrawablesWithIntrinsicBounds(0,0,android.R.drawable.checkbox_on_background,0)
             check2 = true
-            reportBundle?.putBoolean("check2",check2)
+            report?.putBoolean("check2",check2)
         }
         plateButton.setOnClickListener {
             choice = 1;
@@ -119,34 +121,21 @@ class addVehicle : AppCompatActivity() {
             takePicture.launch(plateImageUri)
             plateButton.setCompoundDrawablesWithIntrinsicBounds(0,0,android.R.drawable.checkbox_on_background,0)
             check1 = true
-            reportBundle?.putBoolean("check1",check1)
+            report?.putBoolean("check1",check1)
         }
         vinButton.setOnClickListener {
             choice = 0;
             vinImageUri = mediaStoreAlloc("image/jpeg")
             takePicture.launch(vinImageUri)
             check3 = true;
-            reportBundle?.putBoolean("check3",check3)
+            report?.putBoolean("check3",check3)
             vinButton.setCompoundDrawablesWithIntrinsicBounds(0,0,android.R.drawable.checkbox_on_background,0)
         }
         continueButton.setOnClickListener {
-            val intent = Intent(this, reportVehicleInfo::class.java)
-            val prediction: String? = reportBundle?.getString("prediction")
-            prediction?.let {
-                val words = prediction.split(" ".toRegex())
-                val year: String = words[words.size - 1]
-                var makeModel: String = ""
-                for (i in 0..words.size - 2) {
-                    makeModel += words[i]
-                }
-                finishedCar.makemodel = makeModel
-                finishedCar.year = year
-            }
-            finishedCar.VIN = reportStoreVin.vin_predict
-            finishedCar.plateNumber = reportStoreLicense.state_predict + " " + reportStoreLicense.lpn_predict
-            reportObject.vehicleList.add(finishedCar)
-            reportBundle?.putParcelable("Report Info",reportObject)
-            proceed.launch(intent)
+            val intent = Intent(this, reportVehicleInfo::class.java)   //Change page to page being tested
+            // Need to add a vehicle to the non-null report
+
+            startActivity(intent)
         }
     }
 
@@ -219,7 +208,7 @@ class addVehicle : AppCompatActivity() {
     } // Ditto
     private fun sendToResultsPage(){
         val reportIntent: Intent = Intent(this,recognizeActivity::class.java)
-        reportBundle?.let{reportIntent.putExtras(it)}
+        report?.let{reportIntent.putExtras(it)}
         startActivity(reportIntent)
     }
 
@@ -255,9 +244,9 @@ class addVehicle : AppCompatActivity() {
     fun changeVisuals(intent: Intent?){
         intent?.let{
             intent.extras?.let{
-                reportBundle = intent.extras
+                report = intent.extras
             }
-            reportBundle?.let{
+            report?.let{
                 carImageUri = it.getParcelable("carImageUri")
                 vinImageUri = it.getParcelable("vinImageUri")
                 plateImageUri = it.getParcelable("plateImageUri")
@@ -281,20 +270,6 @@ class addVehicle : AppCompatActivity() {
 
 
     }
-    private fun getVin(){
-        reportStoreVin.postVin(applicationContext, vinImageUri) { msg ->
-            runOnUiThread {
-                toast(msg)
-            }
-        }
-    }
-    private fun getLicense() {
-        reportStoreLicense.postImagesLicense(applicationContext, plateImageUri) { msg ->
-            runOnUiThread {
-                toast(msg)
-            }
-        }
-    }
     private val proceed =
         registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()
@@ -302,10 +277,30 @@ class addVehicle : AppCompatActivity() {
             if(it.resultCode == 441) {
                 //If report is completed, retrieve report list
                 val reportList = it.data?.getParcelableExtra<reportList>("Report List")
+                val prediction: String? = report?.getString("prediction")
+                prediction?.let{
+                    val words = prediction.split(" ".toRegex())
+                    val year: String = words[words.size-1]
+                    var makeModel: String = ""
+                    for(i in 0..words.size-2){
+                        makeModel += words[i]
+                    }
+                    finishedCar.makemodel = makeModel
+                    finishedCar.year = year
+                }
+                report?.getString("vin")?.let{
+                    finishedCar.VIN = it
+                }
+                report?.getString("plateNumber")?.let{
+                    finishedCar.plateNumber = it
+                }
+                var passableReport: reportObj = reportObj()
+                passableReport.vehicleList = mutableListOf()
+                passableReport.vehicleList.add(finishedCar)
 
                 val intent = Intent()
                 intent.putExtra("Report List", reportList)
-                intent.putExtra("Report Info", reportBundle)
+                intent.putExtra("Report Info", report)
                 setResult(441, intent)
                 finish()
             }

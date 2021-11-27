@@ -17,15 +17,21 @@ import org.json.JSONException
 import org.json.JSONObject
 import kotlin.reflect.full.declaredMemberProperties
 import androidx.appcompat.app.AppCompatActivity
+import java.util.concurrent.TimeUnit
 
 
 object reportStoreLicense {
 
     private val serverUrl = "https://3.137.139.79/"
 
-    private val client = OkHttpClient()
+    private val client = OkHttpClient.Builder()
+        .connectTimeout(20, TimeUnit.SECONDS)
+        .writeTimeout(20, TimeUnit.SECONDS)
+        .readTimeout(30, TimeUnit.SECONDS)
+        .build()
 
     var lpn_predict = ""
+    var state_predict = ""
 
     fun postImagesLicense(context: Context, imageUri: Uri?,
                    completion: (String) -> Unit?) {
@@ -38,7 +44,7 @@ object reportStoreLicense {
         }
 
         val request = Request.Builder()
-            .url(serverUrl+"postimages/")
+            .url(serverUrl+"postplates/")
             .post(mpFD.build())
             .build()
 
@@ -51,8 +57,9 @@ object reportStoreLicense {
 
             override fun onResponse(call: okhttp3.Call, response: Response) {
                 if (response.isSuccessful) {
-                    val result = try { JSONObject(response.body?.string() ?: "").getJSONObject("predict?") } catch (e: JSONException) { JSONObject() }
-                    lpn_predict = result.toString()
+                    val result = try { JSONObject(response.body?.string() ?: "") } catch (e: JSONException) { JSONObject() }
+                    lpn_predict = result["lpn"] as String
+                    state_predict = result["state"] as String
                     completion("Added license plate number")
                 }
                 else{
