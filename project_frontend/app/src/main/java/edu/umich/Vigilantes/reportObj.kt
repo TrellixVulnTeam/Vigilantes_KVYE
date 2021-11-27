@@ -1,5 +1,6 @@
 package edu.umich.Vigilantes
 
+import android.net.Uri
 import android.os.Parcelable
 import android.util.Log
 import com.google.gson.annotations.Expose
@@ -12,6 +13,15 @@ data class reportObj(
     @Expose
     @SerializedName("UID")
     var UID: UUID = UUID.randomUUID(),
+    @Expose
+    @SerializedName("vehicleImage")
+    var vehicleImage: Uri? = null,
+    @Expose
+    @SerializedName("vinImage")
+    var vinImage: Uri? = null,
+    @Expose
+    @SerializedName("plateImage")
+    var plateImage: Uri? = null,
     @Expose
     @SerializedName("position")
     var position: Int = 0,
