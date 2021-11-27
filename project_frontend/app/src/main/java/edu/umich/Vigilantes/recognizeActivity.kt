@@ -6,15 +6,19 @@ import android.os.Bundle
 import edu.umich.Vigilantes.reportStoreCar.postImagesCar
 import android.content.Context
 import android.content.Intent
+import android.net.Uri.fromFile
+import android.util.Log
 import edu.umich.Vigilantes.databinding.ActivityRecognizeBinding
 import edu.umich.Vigilantes.reportStoreCar.carLabels
 import android.widget.*
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
+import java.io.File
 
 class recognizeActivity : AppCompatActivity() {
     private lateinit var view: ActivityRecognizeBinding
+    private var imageUri: Uri? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         view = ActivityRecognizeBinding.inflate(layoutInflater)
@@ -35,10 +39,17 @@ class recognizeActivity : AppCompatActivity() {
                 car2.text = carMap[carLabels[1].toString()].toString()
                 car3.text = carMap[carLabels[2].toString()].toString()
             }
+            imageUri = getImage(car1.text.toString())
+            imageUri?.let {
+                Log.d("DISPLAYING CAR1", "This should display car1")
+                view.carOne.display(it)
+            }
         }
+
         val car1button = findViewById<ImageView>(R.id.carOne)
         val car2button = findViewById<ImageView>(R.id.carTwo)
         val car3button = findViewById<ImageView>(R.id.carThree)
+
 
         car1button.setOnClickListener{
             reportProgress.putString("prediction",carMap[carLabels[0].toString()].toString())
@@ -58,8 +69,14 @@ class recognizeActivity : AppCompatActivity() {
             intent.putExtras(reportProgress)
             startActivity(intent)
         }
-
-
-
+    }
+    private fun getImage(carName : String) : Uri? {
+        val fileName = carName + ".jpg"
+        toast("LOOKING FOR " + fileName)
+        File("examples/").walk().forEach {
+            if (it.name == fileName) return fromFile(it)
+        }
+        toast("Predicted car invalid")
+        return fromFile(File(""))
     }
 }
