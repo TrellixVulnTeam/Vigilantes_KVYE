@@ -134,7 +134,7 @@ class reportVehicleInfo : AppCompatActivity(), vehicleAdapter.OnItemClickListene
 
                 val intent = Intent()
                 intent.putExtra("Report List", reportList)
-                intent.putExtra("Report Info", report)  //Parcelize report
+                intent.putExtra("Report Info", report)
                 setResult(441, intent)
                 finish()
             }

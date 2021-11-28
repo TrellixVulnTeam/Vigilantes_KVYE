@@ -11,6 +11,7 @@ import android.util.Log
 import edu.umich.Vigilantes.databinding.ActivityRecognizeBinding
 import edu.umich.Vigilantes.reportStoreCar.carLabels
 import android.widget.*
+import androidx.activity.result.contract.ActivityResultContracts
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
@@ -18,6 +19,7 @@ import java.io.File
 
 class recognizeActivity : AppCompatActivity() {
     private lateinit var view: ActivityRecognizeBinding
+    private var fromMain: Boolean = false
     private var imageUri: Uri? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,6 +29,7 @@ class recognizeActivity : AppCompatActivity() {
         val jsonString = applicationContext.assets.open("easy_labels.json").bufferedReader().use { it.readText() }
         val carMap = JSONObject(jsonString)
         val reportProgress: Bundle = intent.extras!!
+        fromMain = reportProgress.getBoolean("main")
         val car1 = findViewById<TextView>(R.id.predictionOne)
         val car2 = findViewById<TextView>(R.id.predictionTwo)
         val car3 = findViewById<TextView>(R.id.predictionThree)
@@ -55,19 +58,38 @@ class recognizeActivity : AppCompatActivity() {
             reportProgress.putString("prediction",carMap[carLabels[0].toString()].toString())
             val intent = Intent(this, addVehicle::class.java)
             intent.putExtras(reportProgress)
-            startActivity(intent)
+            if(fromMain){
+                proceed.launch(intent)
+            }
+            else{
+                setResult(441, intent)
+                finish()
+            }
+
         }
         car2button.setOnClickListener{
             reportProgress.putString("prediction",carMap[carLabels[1].toString()].toString())
             val intent = Intent(this, addVehicle::class.java)
             intent.putExtras(reportProgress)
-            startActivity(intent)
+            if(fromMain){
+                proceed.launch(intent)
+            }
+            else{
+                setResult(441, intent)
+                finish()
+            }
         }
         car3button.setOnClickListener{
             reportProgress.putString("prediction",carMap[carLabels[2].toString()].toString())
             val intent = Intent(this, addVehicle::class.java)
             intent.putExtras(reportProgress)
-            startActivity(intent)
+            if(fromMain){
+                proceed.launch(intent)
+            }
+            else{
+                setResult(441, intent)
+                finish()
+            }
         }
     }
     private fun getImage(carName : String) : Uri? {
@@ -79,4 +101,22 @@ class recognizeActivity : AppCompatActivity() {
         toast("Predicted car invalid")
         return fromFile(File(""))
     }
+    private val proceed =
+        registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) {
+            if(it.resultCode == 441) {
+                //If report is completed, retrieve report list
+                val reportList = it.data?.getParcelableExtra<reportList>("Report List")
+                val report = it.data?.getParcelableExtra<reportObj>("Report Info")
+                val intent = Intent()
+                intent.putExtra("Report List", reportList)
+                intent.putExtra("Report Info", report)
+                setResult(441, intent)
+                finish()
+            }
+            else {
+                Log.d("debug message", "Report List lost")
+            }
+        }
 }
