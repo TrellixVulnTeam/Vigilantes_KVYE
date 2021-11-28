@@ -119,5 +119,6 @@ class vehiclePreview : AppCompatActivity() {
         //Display popup window
         var root_layout = findViewById<ConstraintLayout>(R.id.root_layout)
         popupWindow.showAtLocation(root_layout, Gravity.CENTER, 0, 0)
+        popupWindow.dimBehind()
     }
 }

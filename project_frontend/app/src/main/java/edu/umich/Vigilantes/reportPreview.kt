@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_report_preview.*
+import android.view.WindowManager
 
 class reportPreview : AppCompatActivity() {
     //Retrieve current report information
@@ -65,6 +66,7 @@ class reportPreview : AppCompatActivity() {
         witness_recycler_view.layoutManager = LinearLayoutManager(this)
         witness_recycler_view.setHasFixedSize(true)
 
+        var homeButton = findViewById<ImageButton>(R.id.homeButton)
         val editButton = findViewById<ImageButton>(R.id.editButton)
         val deleteButton = findViewById<ImageButton>(R.id.deleteButton)
         val exportButton = findViewById<ImageButton>(R.id.exportButton)
@@ -88,6 +90,10 @@ class reportPreview : AppCompatActivity() {
             val intent = Intent(this, pdfActivity::class.java)
             intent.putExtra("report", report)  //Parcelize report
             proceed.launch(intent)
+        }
+
+        homeButton.setOnClickListener {
+            finish()    //End current activity
         }
     }
 
@@ -134,6 +140,7 @@ class reportPreview : AppCompatActivity() {
         //Display popup window
         var root_layout = findViewById<ConstraintLayout>(R.id.root_layout)
         popupWindow.showAtLocation(root_layout, Gravity.CENTER, 0, 0)
+        popupWindow.dimBehind()
     }
     private val proceed =
         registerForActivityResult(

@@ -29,11 +29,15 @@
         android:layout_marginBottom="16dp"
         android:clickable="true"
         android:text="Generate Report"
+        android:textAllCaps="false"
         android:textColor="@color/black"
         android:textSize="18sp"
         android:includeFontPadding="false"
         android:background="@drawable/generate_report_button"
-        android:drawableRight="@drawable/ic_baseline_arrow_forward_32"
+        android:drawableRight="@drawable/ic_black_right_24"
+        android:drawableTint="#000000"
+        android:paddingRight="36dp"
+        android:paddingLeft="52dp"
 
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -84,18 +88,19 @@
                     android:id="@+id/locationField"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColorHint="@color/purple_700"
+                    android:textColorHint="#A7AAB2"
                     android:layout_weight="8"
                     android:padding="4dp"
                     android:hint="Address"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    app:boxStrokeColor="@color/purple_700"
+                    app:boxStrokeColor="#A7AAB2"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/locationInput"
-                        android:textColor="@color/purple_700"
+                        android:textColor="#606060"
+                        android:textCursorDrawable="@null"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
                 </com.google.android.material.textfield.TextInputLayout>
@@ -106,7 +111,7 @@
                 android:id="@+id/DateTimeSection"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Date Time"
+                android:text="Date/Time"
                 android:textSize="24sp"
                 android:textStyle="bold"
                 android:textColor="@color/black"
@@ -129,16 +134,17 @@
                     android:id="@+id/datetimeField"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColorHint="@color/purple_700"
+                    android:textColorHint="#A7AAB2"
                     android:layout_weight="1"
                     android:padding="4dp"
-                    android:hint="Date Time"
+                    android:hint="Date/Time"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    app:boxStrokeColor="@color/purple_700">
+                    app:boxStrokeColor="#A7AAB2">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/datetimeInput"
-                        android:textColor="@color/purple_700"
+                        android:textColor="#606060"
+                        android:textCursorDrawable="@null"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
                 </com.google.android.material.textfield.TextInputLayout>
@@ -172,17 +178,18 @@
                     android:id="@+id/descriptionField"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColorHint="@color/purple_700"
+                    android:textColorHint="#A7AAB2"
                     android:padding="4dp"
                     android:hint="Description"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    app:boxStrokeColor="@color/purple_700"
+                    app:boxStrokeColor="#A7AAB2"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/descriptionInput"
-                        android:textColor="@color/purple_700"
+                        android:textColor="#606060"
+                        android:textCursorDrawable="@null"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
                 </com.google.android.material.textfield.TextInputLayout>
