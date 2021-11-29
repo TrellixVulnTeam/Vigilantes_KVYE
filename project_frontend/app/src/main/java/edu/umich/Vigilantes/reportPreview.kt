@@ -26,6 +26,9 @@ import android.widget.Toast
 import java.lang.Exception
 
 
+
+
+
 class reportPreview : AppCompatActivity() {
     //Retrieve current report information
     private lateinit var report: reportObj
@@ -89,10 +92,11 @@ class reportPreview : AppCompatActivity() {
                     val address =
                         addresses[0]!!.getAddressLine(0) // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
                     val locality = addresses[0]!!.locality
+                    val street = addresses[0]!!.thoroughfare
                     val state = addresses[0]!!.adminArea
                     val country = addresses[0]!!.countryName
                     val postalCode = addresses[0]!!.postalCode
-                    location.text = "$locality $state, $postalCode $country"
+                    location.text = "$street $locality $state, $postalCode $country"
                 }
             }
         } catch (e: Exception) {
