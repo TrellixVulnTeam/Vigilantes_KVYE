@@ -1,7 +1,11 @@
 package edu.umich.Vigilantes
 
+import android.Manifest
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.location.Address
+import android.location.LocationManager
 import android.os.Bundle
 import android.transition.Slide
 import android.util.Log
@@ -14,6 +18,13 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_report_preview.*
 import android.view.WindowManager
+import androidx.core.app.ActivityCompat
+import android.location.Geocoder
+import android.provider.SyncStateContract
+import java.util.*
+import android.widget.Toast
+import java.lang.Exception
+
 
 class reportPreview : AppCompatActivity() {
     //Retrieve current report information
@@ -49,7 +60,46 @@ class reportPreview : AppCompatActivity() {
         val incidentDesc = findViewById<TextView>(R.id.incidentDescription)
 
         //Display report information
-        location.text = report?.getLoc()?: ""
+        val locationManager = getSystemService(LOCATION_SERVICE) as LocationManager
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            return
+        }
+        val gps_loc = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
+        val gcd = Geocoder(
+            baseContext,
+            Locale.getDefault()
+        )
+        var addresses: List<Address?>
+
+        try {
+            if (gps_loc != null) {
+                addresses = gcd.getFromLocation(
+                    gps_loc.latitude,
+                    gps_loc.longitude, 1
+                )
+                if (addresses.size > 0) {
+                    val address =
+                        addresses[0]!!.getAddressLine(0) // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+                    val locality = addresses[0]!!.locality
+                    val state = addresses[0]!!.adminArea
+                    val country = addresses[0]!!.countryName
+                    val postalCode = addresses[0]!!.postalCode
+                    location.text = "$locality $state, $postalCode $country"
+                }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
+                // report?.getLoc()?: ""
         time.text = report?.getDateTime()?: ""
         incidentDesc.text = report?.getDesc()?: ""
 
