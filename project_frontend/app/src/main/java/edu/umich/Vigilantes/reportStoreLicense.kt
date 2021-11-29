@@ -17,6 +17,7 @@ import org.json.JSONException
 import org.json.JSONObject
 import kotlin.reflect.full.declaredMemberProperties
 import androidx.appcompat.app.AppCompatActivity
+import java.lang.Exception
 import java.util.concurrent.TimeUnit
 
 
@@ -58,8 +59,18 @@ object reportStoreLicense {
             override fun onResponse(call: okhttp3.Call, response: Response) {
                 if (response.isSuccessful) {
                     val result = try { JSONObject(response.body?.string() ?: "") } catch (e: JSONException) { return }
-                    lpn_predict = result["lpn"] as String
-                    state_predict = result["state"] as String
+                    try{
+                        lpn_predict = result["lpn"] as String
+                    }
+                    catch (e: Exception){
+
+                    }
+                    try{
+                        state_predict = result["state"] as String
+                    }
+                    catch (e: Exception){
+
+                    }
                     completion("Added license plate number")
                 }
                 else{
