@@ -1,5 +1,6 @@
 package edu.umich.Vigilantes
 
+import android.app.Activity
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -35,17 +36,19 @@ class recognizeActivity : AppCompatActivity() {
         val carMap = JSONObject(jsonString)
         val reportProgress: Bundle = intent.extras!!
         fromMain = reportProgress.getBoolean("main")
-        val car1 = findViewById<TextView>(R.id.predictionOne)
-        val car2 = findViewById<TextView>(R.id.predictionTwo)
-        val car3 = findViewById<TextView>(R.id.predictionThree)
         val uri: Uri? = reportProgress.getParcelable("carImageUri")
+
+        val car1button = findViewById<Button>(R.id.carOne)
+        val car2button = findViewById<Button>(R.id.carTwo)
+        val car3button = findViewById<Button>(R.id.carThree)
+        val nonebutton = findViewById<Button>(R.id.noneOfTheAbove)
 
         postImagesCar(applicationContext, uri) { msg ->
             runOnUiThread {
                 toast(msg)
-                car1.text = carMap[carLabels[0].toString()].toString()
-                car2.text = carMap[carLabels[1].toString()].toString()
-                car3.text = carMap[carLabels[2].toString()].toString()
+                car1button.text = carMap[carLabels[0].toString()].toString()
+                car2button.text = carMap[carLabels[1].toString()].toString()
+                car3button.text = carMap[carLabels[2].toString()].toString()
                 /*val fileOne = "examples/" + car1.text as String + ".jpg"
                 val fileTwo = "examples/" + car2.text as String + ".jpg"
                 val fileThree = "examples/" + car3.text as String + ".jpg"
@@ -96,10 +99,6 @@ class recognizeActivity : AppCompatActivity() {
 
         }
 
-        val car1button = findViewById<Button>(R.id.carOne)
-        val car2button = findViewById<Button>(R.id.carTwo)
-        val car3button = findViewById<Button>(R.id.carThree)
-
 
         car1button.setOnClickListener{
             reportProgress.putString("prediction",carMap[carLabels[0].toString()].toString())
@@ -128,6 +127,18 @@ class recognizeActivity : AppCompatActivity() {
         }
         car3button.setOnClickListener{
             reportProgress.putString("prediction",carMap[carLabels[2].toString()].toString())
+            val intent = Intent(this, addVehicle::class.java)
+            intent.putExtras(reportProgress)
+            if(fromMain){
+                proceed.launch(intent)
+            }
+            else{
+                setResult(441, intent)
+                finish()
+            }
+        }
+        nonebutton.setOnClickListener{
+            reportProgress.putString("prediction","")
             val intent = Intent(this, addVehicle::class.java)
             intent.putExtras(reportProgress)
             if(fromMain){

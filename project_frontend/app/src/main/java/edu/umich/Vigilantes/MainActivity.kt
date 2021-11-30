@@ -101,10 +101,11 @@ class MainActivity : AppCompatActivity() {
             }
         }
         setContentView(R.layout.activity_main)
-        val textView = findViewById<TextView>(R.id.date)
+
         val sdf = SimpleDateFormat("yyyy.MM.dd G 'at' HH:mm:ss z")
         val currentDateandTime: String = sdf.format(Date())
-        textView.text = currentDateandTime
+        // val textView = findViewById<TextView>(R.id.date)
+        // textView.text = currentDateandTime
 
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { results ->
             results.forEach {
@@ -132,7 +133,7 @@ class MainActivity : AppCompatActivity() {
         var vinButton = findViewById<Button>(R.id.addVinNumberButton)
         var reportsButton = findViewById<Button>(R.id.getPastReports)
         var debugButton = findViewById<Button>(R.id.debugButton)
-        var locationButton = findViewById<Button>(R.id.addLocationButton)
+        // var locationButton = findViewById<Button>(R.id.addLocationButton)
 
 
         //Listener button clicks
@@ -157,17 +158,12 @@ class MainActivity : AppCompatActivity() {
             intent.putExtra("Report List", reportList)
             startReport.launch(intent)
         }
-        locationButton.setOnClickListener {
-            val intent = Intent(this, addLoc::class.java)
-            startActivity(intent)
-        }
+//        locationButton.setOnClickListener {
+//            val intent = Intent(this, addLoc::class.java)
+//            startActivity(intent)
+//        }
         debugButton.setOnClickListener {
             var report = reportObj()
-
-            val sdf = SimpleDateFormat("yyyy.MM.dd G 'at' HH:mm:ss z")
-            val currentDateandTime: String = sdf.format(Date())
-
-            report.setDateTime(currentDateandTime)
 
             val intent = Intent(this, reportVehicleInfo::class.java)   //Change page to page being tested
             intent.putExtra("Report List", reportList)
