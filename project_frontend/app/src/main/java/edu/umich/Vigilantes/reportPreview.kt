@@ -1,7 +1,11 @@
 package edu.umich.Vigilantes
 
+import android.Manifest
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.location.Address
+import android.location.LocationManager
 import android.os.Bundle
 import android.transition.Slide
 import android.util.Log
@@ -14,6 +18,13 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_report_preview.*
 import android.view.WindowManager
+import androidx.core.app.ActivityCompat
+import android.location.Geocoder
+import android.provider.SyncStateContract
+import java.util.*
+import android.widget.Toast
+import java.lang.Exception
+
 
 class reportPreview : AppCompatActivity() {
     //Retrieve current report information
@@ -48,7 +59,6 @@ class reportPreview : AppCompatActivity() {
         val time = findViewById<TextView>(R.id.timePreview)
         val incidentDesc = findViewById<TextView>(R.id.incidentDescription)
 
-        //Display report information
         location.text = report?.getLoc()?: ""
         time.text = report?.getDateTime()?: ""
         incidentDesc.text = report?.getDesc()?: ""

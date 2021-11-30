@@ -23,7 +23,7 @@ class reportListAdapter(
     override fun onBindViewHolder(holder: reportListViewHolder, position: Int) {
         val currentItem = reportList.getList()[position]
 
-        holder.image.setImageURI(currentItem.vehicleImage)
+        holder.image.setImageURI(currentItem.getUri())
         holder.datetime.text = currentItem.datetime
         holder.location.text = currentItem.location
         holder.incidentDesc.text = currentItem.incidentDesc

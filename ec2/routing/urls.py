@@ -20,4 +20,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('healthcheck/', views.healthcheck, name='healthcheck'),
     path('postimages/', views.postimages, name='postimages'),
+    path('postplates/', views.postplates, name='postplates'),
+    path('postvin/',views.postvin,name='postvin'),
 ]
