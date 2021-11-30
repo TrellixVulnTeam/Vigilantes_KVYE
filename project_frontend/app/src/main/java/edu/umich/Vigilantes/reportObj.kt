@@ -15,13 +15,13 @@ data class reportObj(
     var UID: UUID = UUID.randomUUID(),
     @Expose
     @SerializedName("vehicleImage")
-    var vehicleImage: Uri? = null,
+    var vehicleImage: String? = null,
     @Expose
     @SerializedName("vinImage")
-    var vinImage: Uri? = null,
+    var vinImage: String? = null,
     @Expose
     @SerializedName("plateImage")
-    var plateImage: Uri? = null,
+    var plateImage: String? = null,
     @Expose
     @SerializedName("position")
     var position: Int = 0,
@@ -63,6 +63,14 @@ data class reportObj(
     fun getPos(): Int {
         Log.d("This report is at position ", this.position.toString())
         return this.position
+    }
+
+    fun setUri(uri: Uri) {
+        this.vehicleImage = uri.toString()
+    }
+
+    fun getUri(): Uri? {
+        return Uri.parse(this.vehicleImage)
     }
 
     fun setDateTime(datetime: String) {

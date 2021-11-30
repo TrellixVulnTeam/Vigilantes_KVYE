@@ -40,6 +40,7 @@ class addOtherReportInfoForm : AppCompatActivity() {
         //Retrieve datetime
         val sdf = SimpleDateFormat("yyyy.MM.dd G 'at' HH:mm:ss z")
         val currentDateandTime: String = sdf.format(Date())
+
         //Set datetime
         report.setDateTime(currentDateandTime)
 
@@ -76,7 +77,7 @@ class addOtherReportInfoForm : AppCompatActivity() {
                     val state = addresses[0]!!.adminArea
                     val country = addresses[0]!!.countryName
                     val postalCode = addresses[0]!!.postalCode
-                    report.setLoc("$locality $state, $postalCode $country")
+                    report.setLoc("$locality $state, $postalCode $country") //Set report location
                 }
             }
         } catch (e: Exception) {
