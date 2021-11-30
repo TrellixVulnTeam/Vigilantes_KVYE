@@ -2,6 +2,7 @@ package edu.umich.Vigilantes
 
 import android.content.Context
 import android.content.Intent
+import android.icu.text.SimpleDateFormat
 import android.os.Bundle
 import android.transition.Slide
 import android.util.Log
@@ -15,6 +16,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.google.android.material.button.MaterialButton
+import java.util.*
 
 class addOtherReportInfoForm : AppCompatActivity() {
     private lateinit var report: reportObj
@@ -23,6 +25,11 @@ class addOtherReportInfoForm : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_add_other_report_info_form)
+
+        val sdf = SimpleDateFormat("yyyy.MM.dd G 'at' HH:mm:ss z")
+        val currentDateandTime: String = sdf.format(Date())
+
+        report.setDateTime(currentDateandTime)
 
         //Retrieve report list
         var reportList = intent.getParcelableExtra<reportList>("Report List")!!
