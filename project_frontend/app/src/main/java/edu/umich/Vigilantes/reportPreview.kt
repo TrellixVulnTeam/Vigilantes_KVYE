@@ -1,7 +1,11 @@
 package edu.umich.Vigilantes
 
+import android.Manifest
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.location.Address
+import android.location.LocationManager
 import android.os.Bundle
 import android.transition.Slide
 import android.util.Log
@@ -13,6 +17,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_report_preview.*
+import android.view.WindowManager
+import androidx.core.app.ActivityCompat
+import android.location.Geocoder
+import android.provider.SyncStateContract
+import java.util.*
+import android.widget.Toast
+import java.lang.Exception
+
 
 class reportPreview : AppCompatActivity() {
     //Retrieve current report information
@@ -47,7 +59,6 @@ class reportPreview : AppCompatActivity() {
         val time = findViewById<TextView>(R.id.timePreview)
         val incidentDesc = findViewById<TextView>(R.id.incidentDescription)
 
-        //Display report information
         location.text = report?.getLoc()?: ""
         time.text = report?.getDateTime()?: ""
         incidentDesc.text = report?.getDesc()?: ""
@@ -65,6 +76,7 @@ class reportPreview : AppCompatActivity() {
         witness_recycler_view.layoutManager = LinearLayoutManager(this)
         witness_recycler_view.setHasFixedSize(true)
 
+        var homeButton = findViewById<ImageButton>(R.id.homeButton)
         val editButton = findViewById<ImageButton>(R.id.editButton)
         val deleteButton = findViewById<ImageButton>(R.id.deleteButton)
         val exportButton = findViewById<ImageButton>(R.id.exportButton)
@@ -85,7 +97,13 @@ class reportPreview : AppCompatActivity() {
         }
 
         exportButton.setOnClickListener {
+            val intent = Intent(this, pdfActivity::class.java)
+            intent.putExtra("report", report)  //Parcelize report
+            proceed.launch(intent)
+        }
 
+        homeButton.setOnClickListener {
+            finish()    //End current activity
         }
     }
 
@@ -132,6 +150,7 @@ class reportPreview : AppCompatActivity() {
         //Display popup window
         var root_layout = findViewById<ConstraintLayout>(R.id.root_layout)
         popupWindow.showAtLocation(root_layout, Gravity.CENTER, 0, 0)
+        popupWindow.dimBehind()
     }
     private val proceed =
         registerForActivityResult(
@@ -140,10 +159,11 @@ class reportPreview : AppCompatActivity() {
             if(it.resultCode == 441) {
                 //If report is completed, retrieve report list
                 val reportList = it.data?.getParcelableExtra<reportList>("Report List")
-                //val report = it.data?.getParcelableExtra<reportObj>("Report Info")
+                val report = it.data?.getParcelableExtra<reportObj>("Report Info")
 
                 val intent = Intent()
                 intent.putExtra("Report List", reportList)
+                intent.putExtra("Report Info", report)  //Parcelize report
                 setResult(441, intent)
                 finish()
             }

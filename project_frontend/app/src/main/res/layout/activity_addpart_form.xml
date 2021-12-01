@@ -21,34 +21,25 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
+    <Button
+        android:id="@+id/saveButton"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_centerHorizontal="true"
         android:layout_marginBottom="16dp"
-        android:layout_marginEnd="16dp"
-        android:elevation="10dp"
+        android:clickable="true"
+        android:text="Save"
+        android:textColor="@color/white"
+        android:textAllCaps="false"
+        android:textSize="18sp"
+        android:includeFontPadding="false"
+        android:background="@drawable/blue_rounded_button"
 
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <ImageButton
-            android:id="@+id/saveButton"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:background="@drawable/circle_button"
-            android:src="@drawable/ic_baseline_save_32"
-
-            android:layout_marginBottom="8dp" />
-
-        <ImageButton
-            android:id="@+id/disdelButton"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:background="@drawable/circle_button"
-            android:src="@drawable/ic_baseline_delete_32"/>
-
-    </LinearLayout>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.06"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintWidth_percent="0.9" />
 
     <ScrollView
         android:id="@+id/scroll"
@@ -91,19 +82,20 @@
                     android:id="@+id/nameField"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColorHint="@color/purple_700"
+                    android:textColorHint="#A7AAB2"
                     android:layout_weight="8"
                     android:padding="4dp"
                     android:hint="Name"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    app:boxStrokeColor="@color/purple_700"
+                    app:boxStrokeColor="#A7AAB2"
                     app:layout_constraintTop_toBottomOf="@+id/driversSection"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/nameInput"
-                        android:textColor="@color/purple_700"
+                        android:textColor="#606060"
+                        android:textCursorDrawable="@null"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
                 </com.google.android.material.textfield.TextInputLayout>
@@ -121,19 +113,20 @@
                     android:id="@+id/addrField"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColorHint="@color/purple_700"
+                    android:textColorHint="#A7AAB2"
                     android:layout_weight="8"
                     android:padding="4dp"
                     android:hint="Address"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    app:boxStrokeColor="@color/purple_700"
+                    app:boxStrokeColor="#A7AAB2"
                     app:layout_constraintTop_toBottomOf="@+id/fnField"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/addrInput"
-                        android:textColor="@color/purple_700"
+                        android:textColor="#606060"
+                        android:textCursorDrawable="@null"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
                 </com.google.android.material.textfield.TextInputLayout>
@@ -142,17 +135,18 @@
                     android:id="@+id/zipField"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColorHint="@color/purple_700"
+                    android:textColorHint="#A7AAB2"
                     android:layout_weight="2"
                     android:padding="4dp"
                     android:hint="Zip Code"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    app:boxStrokeColor="@color/purple_700"
+                    app:boxStrokeColor="#A7AAB2"
                     app:layout_constraintTop_toBottomOf="@+id/AddrField">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/zipInput"
-                        android:textColor="@color/purple_700"
+                        android:textColor="#606060"
+                        android:textCursorDrawable="@null"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
                 </com.google.android.material.textfield.TextInputLayout>
@@ -171,17 +165,18 @@
                     android:id="@+id/cityField"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColorHint="@color/purple_700"
+                    android:textColorHint="#A7AAB2"
                     android:layout_weight="9"
                     android:padding="4dp"
                     android:hint="City"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    app:boxStrokeColor="@color/purple_700"
+                    app:boxStrokeColor="#A7AAB2"
                     app:layout_constraintTop_toBottomOf="@+id/AddrField">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/cityInput"
-                        android:textColor="@color/purple_700"
+                        android:textColor="#606060"
+                        android:textCursorDrawable="@null"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
                 </com.google.android.material.textfield.TextInputLayout>
@@ -190,17 +185,18 @@
                     android:id="@+id/stateField"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColorHint="@color/purple_700"
+                    android:textColorHint="#A7AAB2"
                     android:layout_weight="1"
                     android:padding="4dp"
                     android:hint="State"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    app:boxStrokeColor="@color/purple_700"
+                    app:boxStrokeColor="#606060"
                     app:layout_constraintTop_toBottomOf="@+id/AddrField">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/stateInput"
-                        android:textColor="@color/purple_700"
+                        android:textColor="#606060"
+                        android:textCursorDrawable="@null"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
                 </com.google.android.material.textfield.TextInputLayout>
@@ -219,18 +215,19 @@
                     android:id="@+id/licenseField"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColorHint="@color/purple_700"
+                    android:textColorHint="#A7AAB2"
                     android:padding="4dp"
                     android:hint="License Number"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    app:boxStrokeColor="@color/purple_700"
+                    app:boxStrokeColor="#A7AAB2"
                     app:layout_constraintTop_toBottomOf="@+id/line3"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/licenseInput"
-                        android:textColor="@color/purple_700"
+                        android:textColor="#606060"
+                        android:textCursorDrawable="@null"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
                 </com.google.android.material.textfield.TextInputLayout>
@@ -249,18 +246,19 @@
                     android:id="@+id/phoneField"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColorHint="@color/purple_700"
+                    android:textColorHint="#A7AAB2"
                     android:padding="4dp"
                     android:hint="Phone Number"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    app:boxStrokeColor="@color/purple_700"
+                    app:boxStrokeColor="#A7AAB2"
                     app:layout_constraintTop_toBottomOf="@+id/line4"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/phoneInput"
-                        android:textColor="@color/purple_700"
+                        android:textColor="#606060"
+                        android:textCursorDrawable="@null"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
                 </com.google.android.material.textfield.TextInputLayout>
@@ -293,18 +291,19 @@
                     android:id="@+id/insuranceField"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColorHint="@color/purple_700"
+                    android:textColorHint="#A7AAB2"
                     android:padding="4dp"
                     android:hint="Insurance Provider"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    app:boxStrokeColor="@color/purple_700"
+                    app:boxStrokeColor="#A7AAB2"
                     app:layout_constraintTop_toBottomOf="@+id/insuranceSection"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/insuranceInput"
-                        android:textColor="@color/purple_700"
+                        android:textColor="#606060"
+                        android:textCursorDrawable="@null"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
                 </com.google.android.material.textfield.TextInputLayout>
@@ -323,17 +322,18 @@
                     android:id="@+id/policyField"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColorHint="@color/purple_700"
+                    android:textColorHint="#A7AAB2"
                     android:layout_weight="6"
                     android:padding="4dp"
                     android:hint="Policy Number"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    app:boxStrokeColor="@color/purple_700"
+                    app:boxStrokeColor="#A7AAB2"
                     app:layout_constraintTop_toBottomOf="@+id/line6">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/policyInput"
-                        android:textColor="@color/purple_700"
+                        android:textColor="#606060"
+                        android:textCursorDrawable="@null"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
                 </com.google.android.material.textfield.TextInputLayout>
@@ -342,17 +342,18 @@
                     android:id="@+id/expirationField"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColorHint="@color/purple_700"
+                    android:textColorHint="#A7AAB2"
                     android:layout_weight="4"
                     android:padding="4dp"
                     android:hint="Expiration Date"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    app:boxStrokeColor="@color/purple_700"
+                    app:boxStrokeColor="#A7AAB2"
                     app:layout_constraintTop_toBottomOf="@+id/line6">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/expirationInput"
-                        android:textColor="@color/purple_700"
+                        android:textColor="#606060"
+                        android:textCursorDrawable="@null"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
                 </com.google.android.material.textfield.TextInputLayout>
@@ -372,18 +373,19 @@
                     android:id="@+id/agentNumberField"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColorHint="@color/purple_700"
+                    android:textColorHint="#A7AAB2"
                     android:padding="4dp"
                     android:hint="Agent Phone Number"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    app:boxStrokeColor="@color/purple_700"
+                    app:boxStrokeColor="#A7AAB2"
                     app:layout_constraintTop_toBottomOf="@+id/line7"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/agentNumberInput"
-                        android:textColor="@color/purple_700"
+                        android:textColor="#606060"
+                        android:textCursorDrawable="@null"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
                 </com.google.android.material.textfield.TextInputLayout>

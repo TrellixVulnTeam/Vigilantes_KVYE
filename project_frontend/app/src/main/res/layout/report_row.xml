@@ -12,48 +12,83 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="12dp">
+
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:paddingTop="12dp">
 
         <LinearLayout
             android:id="@+id/report1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:background="@drawable/grey_rounded_button">
+            android:background="@drawable/grey_rounded_button"
+            android:paddingTop="8dp"
+            android:paddingBottom="10dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp">
 
-            <TextView
-                android:id="@+id/rep_datetime"
-                android:layout_width="match_parent"
+            <LinearLayout
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="datetime"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:layout_weight="1">
+                android:orientation="horizontal">
 
-            </TextView>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingEnd="16dp">
 
-            <TextView
-                android:id="@+id/rep_location"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="location"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:layout_weight="1">
+                    <ImageView
+                        android:id="@+id/vehicleImage"
+                        android:layout_width="120dp"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/ic_baseline_directions_car_120">
 
-            </TextView>
+                    </ImageView>
 
-            <TextView
-                android:id="@+id/rep_incidentDesc"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:text="Description here"
-                android:textSize="18sp"
-                android:layout_weight="1"
-                android:ellipsize="end"
-                android:maxLines="3">
+                </LinearLayout>
 
-            </TextView>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/rep_datetime"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="datetime"
+                        android:textColor="@color/white"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/rep_location"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="location"
+                        android:textColor="@color/white"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:layout_weight="1" />
+
+                    <TextView
+                        android:id="@+id/rep_incidentDesc"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:text="Description here"
+                        android:textColor="@color/white"
+                        android:textSize="18sp"
+                        android:layout_weight="1"
+                        android:ellipsize="end"
+                        android:maxLines="3">
+
+                    </TextView>
+
+                </LinearLayout>
+
+            </LinearLayout>
 
         </LinearLayout>
     </RelativeLayout>

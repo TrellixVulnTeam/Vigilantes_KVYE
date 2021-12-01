@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <!--
     <TextView
         android:id="@+id/date"
         android:layout_width="wrap_content"
@@ -35,7 +36,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-        <!-- app:srcCompat="@android:drawable/ic_input_add"-->
 
     <Button
         android:id="@+id/addCarButton"
@@ -66,20 +66,6 @@
         app:layout_constraintTop_toTopOf="@id/addCarButton" />
 
     <Button
-        android:id="@+id/getPastReports"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="130dp"
-        android:width="360dp"
-        android:height="100dp"
-        android:clickable="true"
-        android:contentDescription="@string/getPastReports"
-        android:text="@string/getPastReports"
-        app:backgroundTint="#FFC107"
-        app:layout_constraintStart_toStartOf="@id/addVinNumberButton"
-        app:layout_constraintTop_toTopOf="@id/addVinNumberButton" />
-
-    <Button
         android:id="@+id/addLocationButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -92,30 +78,131 @@
         app:layout_constraintStart_toStartOf="@id/getPastReports"
         app:layout_constraintTop_toTopOf="@id/getPastReports" />
 
-    <!--DEBUGGING BUTTON, DO NOT REMOVE-->
     <Button
-        android:id="@+id/debugButton"
+        android:id="@+id/getPastReports"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="130dp"
         android:width="360dp"
         android:height="100dp"
         android:clickable="true"
-        android:text="FOR DEBUGGING ONLY"
+        android:contentDescription="@string/getPastReports"
+        android:text="@string/getPastReports"
         app:backgroundTint="#FFC107"
-        app:layout_constraintStart_toStartOf="@id/getPastReports"
-        app:layout_constraintTop_toTopOf="@id/getPastReports" />
+        app:layout_constraintStart_toStartOf="@id/addVinNumberButton"
+        app:layout_constraintTop_toTopOf="@id/addVinNumberButton" />
+    -->
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:elevation="1dp"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <!--DEBUGGING BUTTON, DO NOT REMOVE-->
+        <Button
+            android:id="@+id/debugButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:width="80dp"
+            android:height="30dp"
+            android:clickable="true"
+            android:text="DEBUG"
+            app:backgroundTint="#FFC107"
+            app:layout_constraintTop_toTopOf="@+id/toolbar_title" />
+
+        <TextView
+            android:id="@+id/toolbar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@font/ubuntu"
+            android:text="Vigilantes"
+            android:textColor="@color/black"
+            android:textSize="32sp" />
+
+    </androidx.appcompat.widget.Toolbar>
 
     <Button
-        android:id="@+id/idgotoPDF"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_marginStart="16dp"
-        android:layout_marginBottom="16dp"
-        android:onClick="genPDF"
-        android:text="Generate PDF"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:id="@+id/addLicensePlateButton"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/blue_rounded_button"
+        android:clickable="true"
+        android:contentDescription="@string/addLicensePlate"
+        android:drawableRight="@android:drawable/checkbox_off_background"
+        android:paddingRight="20dp"
+        android:paddingLeft="38dp"
+        android:gravity="center"
+        android:text="Take License Plate Photo"
+        android:textColor="@color/white"
+        android:textAllCaps="false"
+        android:textSize="36sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.25"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/ic_pdf_generate" />
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintWidth_percent="0.9" />
+
+    <Button
+        android:id="@+id/addCarButton"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/blue_rounded_button"
+        android:clickable="true"
+        android:contentDescription="@string/addCar"
+        android:drawableRight="@android:drawable/checkbox_off_background"
+        android:paddingRight="20dp"
+        android:paddingLeft="38dp"
+        android:text="Take Car Photo"
+        android:textColor="@color/white"
+        android:textAllCaps="false"
+        android:textSize="36sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.25"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/addLicensePlateButton"
+        app:layout_constraintWidth_percent="0.9" />
+
+    <Button
+        android:id="@+id/addVinNumberButton"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/blue_rounded_button"
+        android:clickable="true"
+        android:contentDescription="@string/addVin"
+        android:drawableRight="@android:drawable/checkbox_off_background"
+        android:paddingRight="20dp"
+        android:paddingLeft="38dp"
+        android:text="Take VIN Photo"
+        android:textColor="@color/white"
+        android:textAllCaps="false"
+        android:textSize="36sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.25"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/addCarButton"
+        app:layout_constraintWidth_percent="0.9" />
+
+    <Button
+        android:id="@+id/getPastReports"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/blue_rounded_button"
+        android:clickable="true"
+        android:contentDescription="@string/getPastReports"
+        android:text="@string/getPastReports"
+        android:textColor="@color/white"
+        android:textAllCaps="false"
+        android:textSize="36sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.08"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/addVinNumberButton"
+        app:layout_constraintWidth_percent="0.9" />
 </androidx.constraintlayout.widget.ConstraintLayout>

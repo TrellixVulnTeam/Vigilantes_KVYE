@@ -3,42 +3,34 @@ package edu.umich.Vigilantes
 import android.app.Activity
 import android.content.ComponentName
 import android.content.ContentValues
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
-import android.transition.Slide
-import android.transition.TransitionManager
 import android.util.Log
-import android.view.Gravity
-import android.view.LayoutInflater
 import android.widget.*
-import androidx.activity.ComponentActivity
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.view.isNotEmpty
 import edu.umich.Vigilantes.databinding.ActivityAddvehicleBinding
-import java.net.URI
 
 class addVehicle : AppCompatActivity() {
     private lateinit var view: ActivityAddvehicleBinding
     private lateinit var forCropResult: ActivityResultLauncher<Intent>
     private lateinit var takePicture: ActivityResultLauncher<Uri>
-    private var popupExists = false
-    private var imageUri: Uri? = null
+    private var vinImageUri: Uri? = null
     private var carImageUri: Uri? = null
     private var plateImageUri: Uri? = null
     private var choice: Int = 0
     private var check1: Boolean = false
     private var check2: Boolean = false
     private var check3: Boolean = false
-    var report : Bundle = Bundle()
+    var reportBundle : Bundle? = Bundle()
+    var finishedCar: VehicleInfo = VehicleInfo()
+    var reportObject : reportObj = reportObj()
+    var reportList: reportList? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,21 +38,23 @@ class addVehicle : AppCompatActivity() {
         setContentView(R.layout.activity_addvehicle)
 
         view = ActivityAddvehicleBinding.inflate(layoutInflater)
-
+        reportList = intent.extras?.getParcelable("Report List")
+        changeVisuals(intent)
         forCropResult =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                 if (result.resultCode == Activity.RESULT_OK) {
                     Log.d("CROPPING", "Cropping")
                     result.data?.data.let {
                         if(choice == 0){
-                            imageUri?.run {
+                            vinImageUri?.run {
                                 if (!toString().contains("ORIGINAL")) {
                                     // delete uncropped photo taken for posting
                                     contentResolver.delete(this, null, null)
                                 }
                             }
-                            imageUri = it
-                            report.putParcelable("vin",imageUri)
+                            vinImageUri = it
+                            reportBundle?.putParcelable("vinImageUri",vinImageUri)
+                            getVin()
                         }
                         else if (choice == 1){
                             plateImageUri?.run {
@@ -70,7 +64,8 @@ class addVehicle : AppCompatActivity() {
                                 }
                             }
                             plateImageUri = it
-                            report.putParcelable("plate",plateImageUri)
+                            reportBundle?.putParcelable("plateImageUri",plateImageUri)
+                            getLicense()
                         }
                         else{
                             carImageUri?.run {
@@ -80,11 +75,9 @@ class addVehicle : AppCompatActivity() {
                                 }
                             }
                             carImageUri = it
-                            report.putParcelable("car",carImageUri)
+                            reportBundle?.putParcelable("carImageUri",carImageUri)
                             sendToResultsPage()
                         }
-
-                        //imageUri?.let { view.addCarImageButton.display(it) } // TODO: Generalize
                     }
                 } else {
                     Log.d("Crop", result.resultCode.toString())
@@ -117,24 +110,45 @@ class addVehicle : AppCompatActivity() {
             takePicture.launch(carImageUri)
             carButton.setCompoundDrawablesWithIntrinsicBounds(0,0,android.R.drawable.checkbox_on_background,0)
             check2 = true
+            reportBundle?.putBoolean("check2",check2)
         }
         plateButton.setOnClickListener {
             choice = 1;
             plateImageUri = mediaStoreAlloc("image/jpeg")
             takePicture.launch(plateImageUri)
-            check1 = true
             plateButton.setCompoundDrawablesWithIntrinsicBounds(0,0,android.R.drawable.checkbox_on_background,0)
+            check1 = true
+            reportBundle?.putBoolean("check1",check1)
         }
         vinButton.setOnClickListener {
             choice = 0;
-            imageUri = mediaStoreAlloc("image/jpeg")
-            takePicture.launch(imageUri)
+            vinImageUri = mediaStoreAlloc("image/jpeg")
+            takePicture.launch(vinImageUri)
             check3 = true;
+            reportBundle?.putBoolean("check3",check3)
             vinButton.setCompoundDrawablesWithIntrinsicBounds(0,0,android.R.drawable.checkbox_on_background,0)
         }
         continueButton.setOnClickListener {
-            val intent = Intent(this, MainActivity::class.java)   //Change page to page being tested
-            startActivity(intent)
+            val intent = Intent(this, reportVehicleInfo::class.java)
+            val prediction: String? = reportBundle?.getString("prediction")
+            prediction?.let {
+                val words = prediction.split(" ".toRegex())
+                val year: String = words[words.size - 1]
+                var makeModel: String = ""
+                for (i in 0..words.size - 2) {
+                    makeModel += words[i]
+                }
+                finishedCar.makemodel = makeModel
+                finishedCar.year = year
+            }
+            finishedCar.VIN = reportStoreVin.vin_predict
+            finishedCar.plateNumber = reportStoreLicense.state_predict + " " + reportStoreLicense.lpn_predict
+            reportObject.vehicleList.add(finishedCar)
+            carImageUri?.let { it1 -> reportObject.setUri(it1) }    //Store image taken
+            reportBundle?.putParcelable("Report Info",reportObject)
+            reportBundle?.putParcelable("Report List",reportList)
+            intent.putExtras(reportBundle!!)
+            proceed.launch(intent)
         }
     }
 
@@ -150,74 +164,6 @@ class addVehicle : AppCompatActivity() {
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
             values)
     }
-
-    /*private fun createPopUp(picType : Int) {
-        //Initialize popup window
-        Log.d("createPopUp", "Calling createPopUp")
-        val inflater:LayoutInflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val view = inflater.inflate(R.layout.photo_popup_box, null)
-        val popupWindow = PopupWindow(
-            view,
-            LinearLayout.LayoutParams.WRAP_CONTENT,
-            LinearLayout.LayoutParams.WRAP_CONTENT)
-        //Set popup window on top of parent view
-        popupWindow.elevation = 10.0F
-
-        val slideIn = Slide()
-        slideIn.slideEdge = Gravity.START
-        popupWindow.exitTransition = slideIn
-
-        val slideOut = Slide()
-        slideOut.slideEdge = Gravity.RIGHT
-        popupWindow.exitTransition = slideOut
-
-        val cameraOpt = view.findViewById<Button>(R.id.CameraOption)
-        val galleryOpt = view.findViewById<Button>(R.id.GalleryOption)
-        //Camera option chosen
-        cameraOpt.setOnClickListener{
-            //Implement camera
-            Log.d("CAMERA", "Camera chosen")
-            imageUri = mediaStoreAlloc("image/jpeg") // Do something here?
-            takePicture.launch(imageUri)
-            when(picType) {
-                1 -> {
-
-                }
-                2 -> {
-
-                }
-                3 -> {
-
-                }
-            }
-            //Dismiss popup window after
-            popupWindow.dismiss()
-            popupExists = false
-        }
-        //Gallery option chosen
-        galleryOpt.setOnClickListener{
-            //Implement gallery
-
-            when(picType) {
-                1 -> {
-
-                }
-                2 -> {
-
-                }
-                3 -> {
-
-                }
-            }
-            //Dismiss popup window after
-            popupWindow.dismiss()
-            popupExists = false
-        }
-
-        //Display popup window
-        var root_layout = findViewById<ConstraintLayout>(R.id.root_layout)
-        popupWindow.showAtLocation(root_layout, Gravity.CENTER, 0, 0)
-    }*/
 
     private fun initCropIntent(): Intent? {
         // Is there any published Activity on device to do image cropping?
@@ -254,7 +200,7 @@ class addVehicle : AppCompatActivity() {
         }
 
         if(choice == 0){
-            imageUri?.let { // Vin
+            vinImageUri?.let { // Vin
                 intent.data = it
                 forCropResult.launch(intent)
             }
@@ -266,22 +212,17 @@ class addVehicle : AppCompatActivity() {
             }
         }
         else{
-            carImageUri?.let { // Plate
+            carImageUri?.let {
                 intent.data = it
                 forCropResult.launch(intent)
             }
         }
 
     } // Ditto
-    fun sendToPDF(){
-        val reportIntent: Intent = Intent(this,pdfActivity::class.java)
-        reportIntent.putExtras(report)
-        startActivity(reportIntent)
-    }
     private fun sendToResultsPage(){
         val reportIntent: Intent = Intent(this,recognizeActivity::class.java)
-        reportIntent.putExtras(report)
-        startActivity(reportIntent)
+        reportBundle?.let{reportIntent.putExtras(it)}
+        send.launch(reportIntent)
     }
 
     override fun onSaveInstanceState(savedInstanceState: Bundle) {
@@ -310,6 +251,79 @@ class addVehicle : AppCompatActivity() {
         }
         if(check3){
             vinButton.setCompoundDrawablesWithIntrinsicBounds(0,0,android.R.drawable.checkbox_on_background,0)
+        }
+    }
+
+    fun changeVisuals(intent: Intent?){
+        intent?.let{
+            intent.extras?.let{
+                reportBundle = intent.extras
+            }
+            reportBundle?.let{
+                carImageUri = it.getParcelable("carImageUri")
+                vinImageUri = it.getParcelable("vinImageUri")
+                plateImageUri = it.getParcelable("plateImageUri")
+                check1 = it.getBoolean("check1",check1)
+                check2 = it.getBoolean("check2",check2)
+                check3 = it.getBoolean("check3",check3)
+            }
+            var carButton = findViewById<Button>(R.id.addCarImageButton)
+            var plateButton = findViewById<Button>(R.id.addPlateImageButton)
+            var vinButton = findViewById<Button>(R.id.addVINImageButton)
+            if(check1){
+                plateButton.setCompoundDrawablesWithIntrinsicBounds(0,0,android.R.drawable.checkbox_on_background,0)
+            }
+            if(check2){
+                carButton.setCompoundDrawablesWithIntrinsicBounds(0,0,android.R.drawable.checkbox_on_background,0)
+            }
+            if(check3){
+                vinButton.setCompoundDrawablesWithIntrinsicBounds(0,0,android.R.drawable.checkbox_on_background,0)
+            }
+        }
+
+
+    }
+    private fun getVin(){
+        reportStoreVin.postVin(applicationContext, vinImageUri) { msg ->
+            runOnUiThread {
+                toast(msg)
+            }
+        }
+    }
+    private fun getLicense() {
+        reportStoreLicense.postImagesLicense(applicationContext, plateImageUri) { msg ->
+            runOnUiThread {
+                toast(msg)
+            }
+        }
+    }
+    private val proceed =
+        registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) {
+            if(it.resultCode == 441) {
+                //If report is completed, retrieve report list
+                val reportList = it.data?.getParcelableExtra<reportList>("Report List")
+                val report = it.data?.getParcelableExtra<reportObj>("Report Info")
+                val intent = Intent()
+                intent.putExtra("Report List", reportList)
+                intent.putExtra("Report Info", report)
+                setResult(441, intent)
+                finish()
+            }
+            else {
+                Log.d("debug message", "Report List lost")
+            }
+        }
+    private val send = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) {
+        if(it.resultCode == 441) {
+            //If report is completed, retrieve report list
+            reportBundle = it.data?.extras
+        }
+        else {
+            Log.d("debug message", "Report List lost")
         }
     }
 }

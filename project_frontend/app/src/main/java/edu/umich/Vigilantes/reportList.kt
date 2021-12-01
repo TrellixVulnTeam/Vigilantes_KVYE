@@ -2,10 +2,14 @@ package edu.umich.Vigilantes
 
 import android.os.Parcelable
 import android.util.Log
+import com.google.gson.annotations.Expose
+import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class reportList(
+    @Expose
+    @SerializedName("list of reports")
     var reportList: MutableList<reportObj> = mutableListOf()
 ) : Parcelable {
 
@@ -30,8 +34,9 @@ data class reportList(
 
     fun addReport(report: reportObj) {
         var r = report
-        r.setPos(getLength())
+        //r.setPos(getLength())
         this.reportList.add(r)
+        updatePositions()
     }
 
     fun editReport(report: reportObj) {
