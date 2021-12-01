@@ -1,0 +1,11 @@
+prefix=C:/441/clean/upload/Library
+exec_prefix=C:/441/clean/upload/Library
+libdir=C:/441/clean/upload/Library/lib
+includedir=C:/441/clean/upload/Library/include
+
+Name: Protocol Buffers
+Description: Google's Data Interchange Format
+Version: 3.17.2.0
+Libs: -L${libdir} -lprotobuf 
+Cflags: -I${includedir}
+Conflicts: protobuf-lite

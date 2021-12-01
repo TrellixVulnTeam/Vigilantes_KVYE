@@ -1,0 +1,25 @@
+Metadata-Version: 2.1
+Name: paddlefsl
+Version: 1.0.0
+Summary: Few-shot learning(FSL) software tools and examples, building on top of PaddlePaddle2.0.
+Home-page: https://github.com/tata1661/FSL-Mate
+Author: wangyaqing
+Author-email: wangyaqing01@baidu.com
+License: Apache 2.0
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.6
+Description-Content-Type: text/plain
+Requires-Dist: numpy (~=1.19.2)
+Requires-Dist: requests (~=2.24.0)
+Requires-Dist: pillow (==8.2.0)
+Requires-Dist: tqdm (~=4.27.0)
+
+Few-shot learning(FSL) software tools and examples, building on top of PaddlePaddle2.0.
+
+
