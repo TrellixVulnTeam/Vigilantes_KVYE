@@ -1,6 +1,6 @@
 # Vigilantes Data Infra!
 
-The `cdk.json` file tells the CDK Toolkit how to execute your app.
+Refer to https://aws.amazon.com/cdk/ for setting up CDK
 
 ## Useful commands
 
