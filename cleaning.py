@@ -66,8 +66,8 @@ def clean(inpath, outpath, confidence, res_low, res_up, cut ):
 			t+=1
 
 if __name__ == '__main__':
-	pool = multiprocessing.Pool(processes = 20)
-	n = 25
+	pool = multiprocessing.Pool(processes = 25)
+	n = 40
 	for i in range(n):
         	msg = "hello %d" %(i)
         	pool.apply_async(clean, ("./tes","./cleaned", 0.65, 400, 5000,[i,n]))
