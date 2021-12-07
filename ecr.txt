@@ -1,0 +1,17 @@
+C:\Users\barufaruku>aws ecr create-repository --repository-name cleaning-lambda --image-scanning-configuration scanOnPush=true --image-tag-mutability MUTABLE
+{
+    "repository": {
+        "repositoryArn": "arn:aws:ecr:us-east-1:310832193980:repository/cleaning-lambda",
+        "registryId": "310832193980",
+        "repositoryName": "cleaning-lambda",
+        "repositoryUri": "310832193980.dkr.ecr.us-east-1.amazonaws.com/cleaning-lambda",
+        "createdAt": "2021-11-16T15:20:48+08:00",
+        "imageTagMutability": "MUTABLE",
+        "imageScanningConfiguration": {
+            "scanOnPush": true
+        },
+        "encryptionConfiguration": {
+            "encryptionType": "AES256"
+        }
+    }
+}

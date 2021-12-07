@@ -1,0 +1,11 @@
+prefix=C:/441/clean/upload/Library
+exec_prefix=C:/441/clean/upload/Library
+libdir=C:/441/clean/upload/Library/lib
+includedir=C:/441/clean/upload/Library/include
+
+Name: libtiff
+Description:  Tag Image File Format (TIFF) library.
+Version: 4.2.0
+Libs: -LC:/441/clean/upload/Library/lib -ltiff
+Libs.private: 
+Cflags: -IC:/441/clean/upload/Library/include

@@ -7,6 +7,6 @@
 ![Elevator Pitch](/assets/elevatorPitch.png)
 ![Team](/assets/team.png)
 
-[demo_page]: https://youtu.be/sample
+[demo_page]: https://www.youtube.com/watch?v=V65ELaFVXTo
 [wiki_page]: https://github.com/wassinkl/Vigilantes/wiki
 [process_page]: https://trello.com/vigilantes13

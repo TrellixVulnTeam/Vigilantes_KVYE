@@ -144,6 +144,7 @@ class addVehicle : AppCompatActivity() {
             finishedCar.VIN = reportStoreVin.vin_predict
             finishedCar.plateNumber = reportStoreLicense.state_predict + " " + reportStoreLicense.lpn_predict
             reportObject.vehicleList.add(finishedCar)
+            carImageUri?.let { it1 -> reportObject.setUri(it1) }    //Store image taken
             reportBundle?.putParcelable("Report Info",reportObject)
             reportBundle?.putParcelable("Report List",reportList)
             intent.putExtras(reportBundle!!)
