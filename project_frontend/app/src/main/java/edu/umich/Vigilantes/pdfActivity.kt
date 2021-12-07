@@ -1,5 +1,6 @@
 package edu.umich.Vigilantes
 
+import android.Manifest
 import androidx.appcompat.app.AppCompatActivity
 import android.graphics.Bitmap
 import android.os.Bundle
@@ -19,6 +20,9 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Paint
 import android.icu.text.SimpleDateFormat
+import android.location.Address
+import android.location.Geocoder
+import android.location.LocationManager
 import android.net.Uri
 import android.os.Build
 import android.os.Environment.getExternalStorageDirectory
@@ -35,8 +39,10 @@ import android.util.Log
 import java.util.*
 import android.os.StrictMode
 import android.os.StrictMode.VmPolicy
+import android.widget.TextView
 import androidx.core.content.FileProvider
 import androidx.databinding.ktx.BuildConfig
+import java.lang.Exception
 
 
 // A lot of the this activity was adapted from Geeks for Geeks
@@ -121,6 +127,49 @@ class pdfActivity : AppCompatActivity() {
         // below line is used for setting color
         // of our text inside our PDF file.
         title.color = ContextCompat.getColor(this, R.color.black)
+        val location = findViewById<TextView>(R.id.locationPreview)
+
+        //Display report information
+        val locationManager = getSystemService(LOCATION_SERVICE) as LocationManager
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            return
+        }
+        val gps_loc = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
+        val gcd = Geocoder(
+            baseContext,
+            Locale.getDefault()
+        )
+        var addresses: List<Address?>
+
+        try {
+            if (gps_loc != null) {
+                addresses = gcd.getFromLocation(
+                    gps_loc.latitude,
+                    gps_loc.longitude, 1
+                )
+                if (addresses.size > 0) {
+                    val address =
+                        addresses[0]!!.getAddressLine(0) // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+                    val locality = addresses[0]!!.locality
+                    val street = addresses[0]!!.thoroughfare
+                    val state = addresses[0]!!.adminArea
+                    val country = addresses[0]!!.countryName
+                    val postalCode = addresses[0]!!.postalCode
+                    canvas.drawText("$street $locality $state, $postalCode $country", 120f, 80f, title)
+                }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
         val sdf = SimpleDateFormat("yyyy.MM.dd G 'at' HH:mm:ss z")
         val dateTime = sdf.format(Date())
         canvas.drawText(dateTime, 56f, 100f, title)
