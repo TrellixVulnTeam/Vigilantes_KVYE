@@ -40,15 +40,6 @@
             android:name=".recognizeActivity"
             android:exported="true" />
         <activity
-            android:name=".fillActivity"
-            android:exported="true" />
-        <activity
-            android:name=".recognizeActivity"
-            android:exported="true" />
-        <activity
-            android:name=".recognize"
-            android:exported="true" />
-        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
@@ -67,12 +58,6 @@
         </activity>
         <activity
             android:name=".addVehicle">
-        </activity>
-        <activity
-            android:name=".startReport">
-        </activity>
-        <activity
-            android:name=".addLoc">
         </activity>
         <activity
             android:name=".addVehicleForm"

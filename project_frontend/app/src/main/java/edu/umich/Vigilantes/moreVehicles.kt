@@ -132,7 +132,7 @@ class moreVehicles : AppCompatActivity() {
             vinButton.setCompoundDrawablesWithIntrinsicBounds(0,0,android.R.drawable.checkbox_on_background,0)
         }
         continueButton.setOnClickListener {
-            val intent = Intent(this, reportVehicleInfo::class.java)   //Change page to page being tested
+            val intent = Intent(this, reportVehicleInfo::class.java)
             // Need to add a vehicle to the non-null report
 
             startActivity(intent)

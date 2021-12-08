@@ -132,9 +132,6 @@ class MainActivity : AppCompatActivity() {
         var plateButton = findViewById<Button>(R.id.addLicensePlateButton)
         var vinButton = findViewById<Button>(R.id.addVinNumberButton)
         var reportsButton = findViewById<Button>(R.id.getPastReports)
-        var debugButton = findViewById<Button>(R.id.debugButton)
-        // var locationButton = findViewById<Button>(R.id.addLocationButton)
-
 
         //Listener button clicks
         carButton.setOnClickListener {
@@ -156,18 +153,6 @@ class MainActivity : AppCompatActivity() {
         reportsButton.setOnClickListener {
             val intent = Intent(this, pastReports::class.java)
             intent.putExtra("Report List", reportList)
-            startReport.launch(intent)
-        }
-//        locationButton.setOnClickListener {
-//            val intent = Intent(this, addLoc::class.java)
-//            startActivity(intent)
-//        }
-        debugButton.setOnClickListener {
-            var report = reportObj()
-
-            val intent = Intent(this, reportVehicleInfo::class.java)   //Change page to page being tested
-            intent.putExtra("Report List", reportList)
-            intent.putExtra("Report Info", report)
             startReport.launch(intent)
         }
     }

@@ -74,8 +74,6 @@
                 app:layout_constraintStart_toStartOf="parent">
             </TextView>
 
-            <!-- NEED TO ADD MAP PREVIEW HERE -->
-
             <!--Line 1-->
             <LinearLayout
                 android:id="@+id/line1"
