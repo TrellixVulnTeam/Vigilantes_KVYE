@@ -38,7 +38,7 @@ class addOtherReportInfoForm : AppCompatActivity() {
         report = intent.getParcelableExtra("Report Info")!!
 
         //Retrieve datetime
-        val sdf = SimpleDateFormat("yyyy.MM.dd G 'at' HH:mm:ss z")
+        val sdf = SimpleDateFormat("yyyy.MM.dd 'at' HH:mm:ss z")
         val currentDateandTime: String = sdf.format(Date())
 
         //Set datetime

@@ -14,6 +14,7 @@ import android.graphics.Typeface
 import androidx.core.content.ContextCompat
 import android.os.Environment
 import android.Manifest.permission
+import android.content.ContentUris
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
