@@ -506,3 +506,7 @@ node_modules/
 *.png
 *.jpg
 
+# Keep assets folder
+!/assets/
+!/assets/*
+!/assets/**/*
