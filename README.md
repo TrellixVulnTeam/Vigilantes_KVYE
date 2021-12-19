@@ -9,4 +9,4 @@
 
 [demo_page]: https://www.youtube.com/watch?v=V65ELaFVXTo
 [wiki_page]: https://github.com/wassinkl/Vigilantes/wiki
-[process_page]: https://trello.com/vigilantes13
+[process_page]: https://trello.com/b/Aj1QGbyE/vigilantes
